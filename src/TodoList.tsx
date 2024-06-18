@@ -1,41 +1,42 @@
-import { TaskEl} from "./TaskEl"
-import {TaskPropsType} from "./db/TasksArray";
+import {TasksProps} from "./db/TasksArray";
+import {Button} from "./components/Button";
+import styled from "styled-components";
+import {Tasks} from "./components/Tasks";
 
-type TodoListPropsType = {
-    title: string
-    tasks: TaskPropsType[]
-    //tasks:Array<Task>
+type TodoListProps = {
+	title: string
+	taskList: TasksProps[]
 }
 
-
-export const Todolist = ({title, tasks}: TodoListPropsType) => {
-  const mappedTasks=  !tasks.length
-        ? <div>Empty</div>
-        : tasks.map((el, index) => {
-            // debugger
-            return (
-                <TaskEl fura={el}/>
-              )
-        })
-
-    return (
-        <div>
-            <h3>{title}</h3>
-            <div>
-                <input/>
-                <button>+</button>
-            </div>
-            <ul>
-                {mappedTasks}
-            </ul>
-            <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
-            </div>
-        </div>
-    )
+export const Todolist = ({title, taskList}: TodoListProps) => {
+	debugger
+	return (
+		<StyledTodoList>
+			<h3>{title}</h3>
+			<div>
+				<input/>
+				<button>+</button>
+			</div>
+			<Tasks tasks={taskList}/>
+			<ButtonGr>
+				<Button>All</Button>
+				<Button>Active</Button>
+				<Button>Completed</Button>
+			</ButtonGr>
+		</StyledTodoList>
+	)
 }
 
+const StyledTodoList = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(27, 24, 212, 0.36);
+`
 
-
+const ButtonGr = styled.div`
+  display: flex;
+  gap: 3px;
+`
