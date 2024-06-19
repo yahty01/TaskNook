@@ -17,8 +17,12 @@ export const GlobalStyle = createGlobalStyle`
     font-family: "Fira Code", -apple-system, monospace, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+	  & > div > div {
+		  display: flex;
+		  gap: 10px;
+	  }
   }
-
+  
   a {
     text-decoration: none;
   }

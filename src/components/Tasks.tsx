@@ -1,16 +1,26 @@
 // @flow
 import * as React from 'react';
-// import {TasksProps} from "../db/TasksArray";
+import {TasksProps} from "../db/TasksArray";
+import styled from "styled-components";
 
-export const Tasks = (props: any) => {
-	const {title, id, isDone} = props.tasks
-	debugger
-		return (
-		<ul>
-			<li key={id}>
-				<input type="checkbox" checked={isDone}/>
-				<span>{title}</span>
-			</li>
-		</ul>
-	)
+type TaskProps = {
+	tasks: TasksProps[];
+}
+
+export const Tasks = ({tasks}: TaskProps) => {
+	return (
+		<StyledTasks>
+			{tasks.map(task => (
+				<li key={task.id}>
+					<input type="checkbox" checked={task.isDone}/>
+					<span>{task.title}</span>
+				</li>))}
+		</StyledTasks>)
+		;
 };
+
+const StyledTasks = styled.ul`
+	margin-left: 15px;
+	border-left: black dotted 1px;
+	padding-left: 5px;
+`
