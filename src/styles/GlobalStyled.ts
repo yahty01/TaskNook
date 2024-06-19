@@ -13,16 +13,18 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
+    background-color: rgba(47, 107, 97, 0.33);
     margin: 0;
     font-family: "Fira Code", -apple-system, monospace, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-	  & > div > div {
-		  display: flex;
-		  gap: 10px;
-	  }
+
+    & > div > div {
+      display: flex;
+      gap: 10px;
+    }
   }
-  
+
   a {
     text-decoration: none;
   }
