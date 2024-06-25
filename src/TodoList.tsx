@@ -2,15 +2,17 @@ import styled from "styled-components";
 import {Tasks} from "./components/Tasks";
 import {Button} from "./components/Button";
 import {TasksProps} from "./db/initialTasks";
+import {filterValue} from "./hooks/useTasks";
 //Почему не работает с синтаксисом ({tasks}: TaskProps)
 
 type TodoListProps = {
 	title: string
 	taskList: TasksProps[]
 	removeTask: (id: number) => void
+	changeFilter: (value: filterValue) => void
 }
 
-export const Todolist = ({title, taskList, removeTask}: TodoListProps) => {
+export const Todolist = ({title, taskList, removeTask, changeFilter}: TodoListProps) => {
 	return (
 		<StyledTodoList>
 			<h3>{title}</h3>
@@ -20,9 +22,9 @@ export const Todolist = ({title, taskList, removeTask}: TodoListProps) => {
 			</InputArea>
 			<Tasks tasks={taskList} removeTask={removeTask}/>
 			<ButtonGr>
-				<Button>All</Button>
-				<Button>Active</Button>
-				<Button>Completed</Button>
+				<Button onClick={()=>changeFilter('all')}>All</Button>
+				<Button onClick={()=>changeFilter('active')}>Active</Button>
+				<Button onClick={()=>changeFilter('completed')}>Completed</Button>
 			</ButtonGr>
 		</StyledTodoList>
 	)
