@@ -1,16 +1,23 @@
 import React from 'react';
-import {Todolist} from "./Todolist";
-import {tasks1, tasks2, tasks3} from "./db/TasksArray";
-
+import {Todolist} from "./TodoList";
+import styled from "styled-components";
+import {useTasks} from "./hooks/useTasks"; // Обрати внимание на путь к файлу
 
 function App() {
-    return (
-        <div className="App">
-            <Todolist title='How to learn' taskList={tasks1} />
-            <Todolist title='My household chores' taskList={tasks2} />
-            <Todolist title='Свободное время' taskList={tasks3} />
-        </div>
-    );
+  const {tasks, removeTask} = useTasks();
+
+  return (
+    <StyledApp className="App">
+      <Todolist title='How to learn' taskList={tasks} removeTask={removeTask}/>
+    </StyledApp>
+  );
 }
 
 export default App;
+
+const StyledApp = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`
