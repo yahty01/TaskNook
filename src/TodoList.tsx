@@ -35,15 +35,15 @@ const StyledTodoList = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  background-color: rgba(27, 24, 212, 0.36);
-	width: 240px;
-	padding: 10px;
-	border-radius: 10px;
-	margin: 15px 0 0 0;
-	
-	&:first-child {
-		margin-left: 20px;
-	}
+  background-color: rgba(23, 20, 183, 0.36);
+  width: 240px;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 15px 0 0 0;
+
+  &:first-child {
+    margin-left: 20px;
+  }
 `
 
 const ButtonGr = styled.div`
