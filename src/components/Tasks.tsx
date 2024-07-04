@@ -14,13 +14,20 @@ export const Tasks = ({tasks, removeTask}: TaskProps) => {
 		? (<EmptyMessage>Задачи отсутствуют!</EmptyMessage>)
 		: (
 			<StyledTasks>
-				{tasks.map(task => (
-					<li key={task.id}>
-						<input type="checkbox" checked={task.isDone}/>
-						<span>{task.title}</span>
-						<TasksButton onClick={()=>removeTask(task.id)}>x</TasksButton>
-					</li>)
-				)}
+				{
+					tasks.map(task => {
+							const onRemoveClicked = () => {
+								removeTask(task.id)
+							}
+						return (
+							<li key={task.id}>
+								<input type="checkbox" checked={task.isDone}/>
+								<span>{task.title}</span>
+								<TasksButton name={'x'} callBack={onRemoveClicked}></TasksButton>
+							</li>
+						)
+					}
+					)}
 			</StyledTasks>
 		)
 
@@ -30,26 +37,26 @@ const StyledTasks = styled.ul`
   border-left: black dotted 1px;
   padding-left: 5px;
   flex-grow: 1;
-	width: 100%;
-	gap: 5px;
-	
-	li {
-		display: flex;
-		justify-content: space-between;
+  width: 100%;
+  gap: 5px;
+
+  li {
+    display: flex;
+    justify-content: space-between;
 
     span {
       flex-grow: 1;
     }
-	}
-	
-	
+  }
+
+
 
 `
 const EmptyMessage = styled.p`
-	flex-grow: 1;
+  flex-grow: 1;
   margin: 0 auto;
 `
 
 const TasksButton = styled(Button)`
-	padding: 2px 5px;
+  padding: 2px 5px;
 `

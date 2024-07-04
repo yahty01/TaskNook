@@ -16,15 +16,15 @@ export const Todolist = ({title, taskList, removeTask, changeFilter}: TodoListPr
 	return (
 		<StyledTodoList>
 			<h3>{title}</h3>
-			<InputArea>
+			<StyledInputArea>
 				<input/>
-				<Button>+</Button>
-			</InputArea>
+				<Button callBack={()=>changeFilter('all')} name={'+'}/>
+			</StyledInputArea>
 			<Tasks tasks={taskList} removeTask={removeTask}/>
 			<ButtonGr>
-				<Button onClick={()=>changeFilter('all')}>All</Button>
-				<Button onClick={()=>changeFilter('active')}>Active</Button>
-				<Button onClick={()=>changeFilter('completed')}>Completed</Button>
+				<Button name={'All'} callBack={()=>changeFilter('all')}/>
+				<Button name={'Active'} callBack={()=>changeFilter('active')}/>
+				<Button name={'completed'} callBack={()=>changeFilter('completed')}/>
 			</ButtonGr>
 		</StyledTodoList>
 	)
@@ -51,7 +51,7 @@ const ButtonGr = styled.div`
   gap: 3px;
 `
 
-const InputArea = styled.div`
+const StyledInputArea = styled.div`
 	display: flex;
 	justify-content: space-between;
 	
