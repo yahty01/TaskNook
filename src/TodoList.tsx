@@ -3,29 +3,56 @@ import {Tasks} from "./components/Tasks";
 import {Button} from "./components/Button";
 import {TasksProps} from "./db/initialTasks";
 import {filterValue} from "./hooks/useTasks";
-//Почему не работает с синтаксисом ({tasks}: TaskProps)
+import {ChangeEvent, KeyboardEvent, useState} from "react";
 
 type TodoListProps = {
 	title: string
 	taskList: TasksProps[]
-	removeTask: (id: number) => void
+	removeTask: (id: string) => void
 	changeFilter: (value: filterValue) => void
+	addTask: (title: string) => void
 }
 
-export const Todolist = ({title, taskList, removeTask, changeFilter}: TodoListProps) => {
+export const Todolist = ({title, taskList, removeTask, changeFilter, addTask}: TodoListProps) => {
+	const [inputTaskTitle, setInputTaskTitle] = useState('')
+
+	const onTittleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+		setInputTaskTitle(e.currentTarget.value)
+	}
+
+	const addTaskHandler = () => {
+		addTask(inputTaskTitle)
+		setInputTaskTitle('')
+	}
+
+	const addTaskOnKeyUpHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+		if (event.key === 'Enter') {
+			addTaskHandler()
+		}
+	}
+
+	const changeFilterHandler = (filter: filterValue) => {
+		changeFilter(filter)
+	}
+
 	return (
 		<StyledTodoList>
+
 			<h3>{title}</h3>
+
 			<StyledInputArea>
-				<input/>
-				<Button callBack={()=>changeFilter('all')} name={'+'}/>
+				<input onChange={onTittleChangeHandler} onKeyDown={addTaskOnKeyUpHandler}/>
+				<Button callBack={addTaskHandler} name={'+'}/>
 			</StyledInputArea>
+
 			<Tasks tasks={taskList} removeTask={removeTask}/>
-			<ButtonGr>
-				<Button name={'All'} callBack={()=>changeFilter('all')}/>
-				<Button name={'Active'} callBack={()=>changeFilter('active')}/>
-				<Button name={'completed'} callBack={()=>changeFilter('completed')}/>
-			</ButtonGr>
+
+			<StyledButtonGr>
+				<Button name={'All'} callBack={() => changeFilterHandler('all')}/>
+				<Button name={'Active'} callBack={() => changeFilterHandler('active')}/>
+				<Button name={'completed'} callBack={() => changeFilterHandler('completed')}/>
+			</StyledButtonGr>
+
 		</StyledTodoList>
 	)
 }
@@ -39,6 +66,7 @@ const StyledTodoList = styled.div`
   width: 240px;
   padding: 10px;
   border-radius: 10px;
+  border: 3px solid black;
   margin: 15px 0 0 0;
 
   &:first-child {
@@ -46,13 +74,13 @@ const StyledTodoList = styled.div`
   }
 `
 
-const ButtonGr = styled.div`
+const StyledButtonGr = styled.div`
   display: flex;
   gap: 3px;
 `
 
 const StyledInputArea = styled.div`
-	display: flex;
-	justify-content: space-between;
-	
+  display: flex;
+  justify-content: space-between;
+
 `

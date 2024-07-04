@@ -6,7 +6,7 @@ import {TasksProps} from "../db/initialTasks";
 
 type TaskProps = {
 	tasks: TasksProps[];
-	removeTask: (id: number) => void
+	removeTask: (id: string) => void
 }
 
 export const Tasks = ({tasks, removeTask}: TaskProps) => {
@@ -19,14 +19,14 @@ export const Tasks = ({tasks, removeTask}: TaskProps) => {
 							const onRemoveClicked = () => {
 								removeTask(task.id)
 							}
-						return (
-							<li key={task.id}>
-								<input type="checkbox" checked={task.isDone}/>
-								<span>{task.title}</span>
-								<TasksButton name={'x'} callBack={onRemoveClicked}></TasksButton>
-							</li>
-						)
-					}
+							return (
+								<li key={task.id}>
+									<input type="checkbox" checked={task.isDone}/>
+									<span>{task.title}</span>
+									<TasksButton name={'x'} callBack={onRemoveClicked}></TasksButton>
+								</li>
+							)
+						}
 					)}
 			</StyledTasks>
 		)
@@ -34,7 +34,6 @@ export const Tasks = ({tasks, removeTask}: TaskProps) => {
 };
 
 const StyledTasks = styled.ul`
-  border-left: black dotted 1px;
   padding-left: 5px;
   flex-grow: 1;
   width: 100%;
@@ -43,9 +42,17 @@ const StyledTasks = styled.ul`
   li {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+
+    &:not(:last-child) {
+      margin-bottom: 15px;
+      border-bottom: 1px solid black;
+    }
 
     span {
       flex-grow: 1;
+      max-width: 80%;
+      word-wrap: break-word;
     }
   }
 
