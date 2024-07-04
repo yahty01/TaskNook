@@ -5,11 +5,12 @@ import {v1} from "uuid";
 export type filterValue = 'all' | 'completed' | 'active'
 
 export const useTasks = () => {
-	let [tasks, setTasks] = useState<TasksProps[]>(initialTasks)
+	let [todo, setTodo] = useState<TasksProps[]>(initialTasks)
 	let [filter, setFilter] = useState<filterValue>('all')
-	let tasksForFilter = tasks
+	let tasksForFilter = todo
+
 	const removeTask = (id: string) => {
-		setTasks(tasks.filter((task) => task.id !== id))
+		setTodo(todo.filter((task) => task.id !== id))
 	}
 
 	const changeFilter = (value: filterValue) => {
@@ -23,17 +24,17 @@ export const useTasks = () => {
 			isDone: false
 		}
 		const newTasks = [newTask, ...tasksForFilter]
-		setTasks(newTasks)
+		setTodo(newTasks)
 	}
 
 	if (filter === 'all') {
-		tasksForFilter = tasks
+		tasksForFilter = todo
 	}
 	if (filter === 'active') {
-		tasksForFilter = tasks.filter((t) => !t.isDone)
+		tasksForFilter = todo.filter((t) => !t.isDone)
 	}
 	if (filter === 'completed') {
-		tasksForFilter = tasks.filter((t) => t.isDone)
+		tasksForFilter = todo.filter((t) => t.isDone)
 	}
 
 	return {tasksForFilter, removeTask, changeFilter, addTask}

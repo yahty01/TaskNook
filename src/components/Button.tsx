@@ -1,22 +1,14 @@
 import styled from "styled-components";
+import {ButtonHTMLAttributes} from "react";
 
-//Переписать на
-type ButtonProps = {
-	name?: string;
-	callBack: () => void;
-	className?: string;
-};
+type Props = ButtonHTMLAttributes<HTMLButtonElement>
 
-export const Button = ({name, callBack, className}: ButtonProps) => {
-
-	const onClickHandler = () => {
-		callBack();
-	}
-
+export const Button = ({name, onClick, className}: Props) => {
 	return (
-		<StyledButton className={className} onClick={onClickHandler}>{name}</StyledButton>
+		<StyledButton className={className} onClick={onClick}>{name}</StyledButton>
 	);
 };
+
 const StyledButton = styled.button`
   padding: 5px 10px;
   background-color: rgba(123, 118, 118, 0.4);

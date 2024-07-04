@@ -42,15 +42,15 @@ export const Todolist = ({title, taskList, removeTask, changeFilter, addTask}: T
 
 			<StyledInputArea>
 				<input onChange={onTittleChangeHandler} onKeyDown={addTaskOnKeyUpHandler}/>
-				<Button callBack={addTaskHandler} name={'+'}/>
+				<Button onClick={addTaskHandler} name={'+'}/>
 			</StyledInputArea>
 
 			<Tasks tasks={taskList} removeTask={removeTask}/>
 
 			<StyledButtonGr>
-				<Button name={'All'} callBack={() => changeFilterHandler('all')}/>
-				<Button name={'Active'} callBack={() => changeFilterHandler('active')}/>
-				<Button name={'completed'} callBack={() => changeFilterHandler('completed')}/>
+				<Button name={'All'} onClick={() => changeFilterHandler('all')}/>
+				<Button name={'Active'} onClick={() => changeFilterHandler('active')}/>
+				<Button name={'completed'} onClick={() => changeFilterHandler('completed')}/>
 			</StyledButtonGr>
 
 		</StyledTodoList>

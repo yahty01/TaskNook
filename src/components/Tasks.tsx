@@ -23,7 +23,7 @@ export const Tasks = ({tasks, removeTask}: TaskProps) => {
 								<li key={task.id}>
 									<input type="checkbox" checked={task.isDone}/>
 									<span>{task.title}</span>
-									<TasksButton name={'x'} callBack={onRemoveClicked}></TasksButton>
+									<TasksButton name={'x'} onClick={onRemoveClicked}></TasksButton>
 								</li>
 							)
 						}
