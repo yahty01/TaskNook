@@ -10,12 +10,12 @@ export const GlobalStyle = createGlobalStyle`
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
+	  line-height: 1.2;
   }
 
   body {
     background-color: rgba(47, 107, 97, 0.33);
     margin: 0;
-    font-family: "Fira Code", -apple-system, monospace, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 

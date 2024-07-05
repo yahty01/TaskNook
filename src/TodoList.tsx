@@ -16,12 +16,16 @@ type TodoListProps = {
 export const Todolist = ({title, taskList, removeTask, changeFilter, addTask}: TodoListProps) => {
 	const [inputTaskTitle, setInputTaskTitle] = useState('')
 
+	const isEmptyInput = inputTaskTitle.length === 0
+
 	const onTittleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
 		setInputTaskTitle(e.currentTarget.value)
 	}
 
 	const addTaskHandler = () => {
-		addTask(inputTaskTitle)
+		isEmptyInput
+			? alert('error')
+			: addTask(inputTaskTitle)
 		setInputTaskTitle('')
 	}
 
@@ -41,7 +45,7 @@ export const Todolist = ({title, taskList, removeTask, changeFilter, addTask}: T
 			<h3>{title}</h3>
 
 			<StyledInputArea>
-				<input onChange={onTittleChangeHandler} onKeyDown={addTaskOnKeyUpHandler}/>
+				<input onChange={onTittleChangeHandler} onKeyDown={addTaskOnKeyUpHandler} value={inputTaskTitle}/>
 				<Button onClick={addTaskHandler} name={'+'}/>
 			</StyledInputArea>
 
@@ -62,25 +66,40 @@ const StyledTodoList = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  background-color: rgba(23, 20, 183, 0.36);
-  width: 240px;
+  background-color: rgba(23, 20, 183, 0.12);
   padding: 10px;
   border-radius: 10px;
-  border: 3px solid black;
-  margin: 15px 0 0 0;
+  border: 6px solid rgba(0, 0, 0, 0.38);
+  width: 30vw;
+  height: 90vh;
 
-  &:first-child {
-    margin-left: 20px;
+  h3 {
+    font-size: 3rem;
+    align-self: center;
+    letter-spacing: -1px;
   }
 `
 
 const StyledButtonGr = styled.div`
   display: flex;
   gap: 3px;
+	align-self: center;
 `
 
 const StyledInputArea = styled.div`
   display: flex;
   justify-content: space-between;
+  align-self: center;
+  width: 90%;
+
+  input {
+    background: none;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    border-radius: 5px;
+    padding: 5px 15px;
+    outline: none;
+	  flex-grow: 1;
+	  margin-right: 20px;
+  }
 
 `
