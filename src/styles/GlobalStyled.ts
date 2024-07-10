@@ -10,7 +10,7 @@ export const GlobalStyle = createGlobalStyle`
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
-	  line-height: 1.2;
+    line-height: 1.2;
   }
 
   body {

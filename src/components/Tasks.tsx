@@ -9,7 +9,7 @@ type TaskProps = {
 	removeTask: (id: string) => void
 }
 
-export const Tasks = ({tasks, removeTask}: TaskProps) => {
+export function Tasks({tasks, removeTask}: TaskProps) {
 	return tasks.length === 0
 		? (<EmptyMessage>Задачи отсутствуют!</EmptyMessage>)
 		: (
@@ -31,7 +31,7 @@ export const Tasks = ({tasks, removeTask}: TaskProps) => {
 			</StyledTasks>
 		)
 
-};
+}
 
 const StyledTasks = styled.ul`
   padding-left: 5px;

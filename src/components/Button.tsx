@@ -3,7 +3,7 @@ import {ButtonHTMLAttributes} from "react";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement>
 
-export const Button = ({name, onClick, className}: Props) => {
+export function Button({name, onClick, className}: Props) {
 	return (
 		<StyledButton className={className} onClick={onClick}>{name}</StyledButton>
 	);

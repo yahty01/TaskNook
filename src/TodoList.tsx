@@ -13,7 +13,7 @@ type TodoListProps = {
 	addTask: (title: string) => void
 }
 
-export const Todolist = ({title, taskList, removeTask, changeFilter, addTask}: TodoListProps) => {
+function Todolist ({title, taskList, removeTask, changeFilter, addTask}: TodoListProps) {
 	const [inputTaskTitle, setInputTaskTitle] = useState('')
 
 	const isEmptyInput = inputTaskTitle.length === 0
@@ -98,8 +98,10 @@ const StyledInputArea = styled.div`
     border-radius: 5px;
     padding: 5px 15px;
     outline: none;
-	  flex-grow: 1;
-	  margin-right: 20px;
+    flex-grow: 1;
+    margin-right: 20px;
   }
 
 `
+
+export {Todolist}
