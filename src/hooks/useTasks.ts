@@ -1,6 +1,8 @@
 import {useState} from "react";
 import {initialTasks, TasksProps} from "../db/initialTasks";
 import {v1} from "uuid";
+import {Simulate} from "react-dom/test-utils";
+import change = Simulate.change;
 
 export type filterValue = 'all' | 'completed' | 'active'
 
@@ -27,6 +29,14 @@ export const useTasks = () => {
 		setTodo(newTasks)
 	}
 
+	const changeStatus = (taskID: string, isDone: boolean) => {
+			let task = todo.find(task => task.id === taskID)
+			if (task) {
+				task.isDone = isDone
+				setTodo([...todo])
+			}
+	}
+
 	if (filter === 'all') {
 		tasksForFilter = todo
 	}
@@ -37,7 +47,7 @@ export const useTasks = () => {
 		tasksForFilter = todo.filter((t) => t.isDone)
 	}
 
-	return {tasksForFilter, removeTask, changeFilter, addTask}
+	return {tasksForFilter, removeTask, changeFilter, addTask, changeStatus, filter}
 }
 
 

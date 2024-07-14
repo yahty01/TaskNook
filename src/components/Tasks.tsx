@@ -7,9 +7,13 @@ import {TasksProps} from "../db/initialTasks";
 type TaskProps = {
 	tasks: TasksProps[];
 	removeTask: (id: string) => void
+	changeStatus: (taskId: string, isDone: boolean) => void
 }
 
-export function Tasks({tasks, removeTask}: TaskProps) {
+export function Tasks({tasks, removeTask, changeStatus}: TaskProps) {
+	const onChangeHandler = (taskId: string, isDone: boolean) => {
+		changeStatus(taskId, isDone)
+	}
 	return tasks.length === 0
 		? (<EmptyMessage>Задачи отсутствуют!</EmptyMessage>)
 		: (
@@ -21,7 +25,7 @@ export function Tasks({tasks, removeTask}: TaskProps) {
 							}
 							return (
 								<li key={task.id}>
-									<input type="checkbox" checked={task.isDone}/>
+									<input type="checkbox" checked={task.isDone} onChange={(e)=>onChangeHandler(task.id, e.target.checked)}/>
 									<span>{task.title}</span>
 									<TasksButton name={'x'} onClick={onRemoveClicked}></TasksButton>
 								</li>
