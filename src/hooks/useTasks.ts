@@ -1,53 +1,32 @@
 import {useState} from "react";
-import {initialTasks, TasksProps} from "../db/initialTasks";
+import {initialTasks, TasksStateType, TaskType} from "../db/initialTasks";
 import {v1} from "uuid";
-import {Simulate} from "react-dom/test-utils";
-import change = Simulate.change;
+import {useTodoLists} from "./useTodoLists";
 
 export type filterValue = 'all' | 'completed' | 'active'
 
+// const {todoLists, setTodoLists} = useTodoLists();
+
 export const useTasks = () => {
-	let [todo, setTodo] = useState<TasksProps[]>(initialTasks)
-	let [filter, setFilter] = useState<filterValue>('all')
-	let tasksForFilter = todo
+	let [allTodoTasks, setAllTodoTasks] = useState<TasksStateType>(initialTasks)
 
-	const removeTask = (id: string) => {
-		setTodo(todo.filter((task) => task.id !== id))
+	const removeTask = (taskId: string, todolistId: string) => {
+		setAllTodoTasks({...allTodoTasks, [todolistId]: allTodoTasks[todolistId].filter(task => task.id !== taskId)})
 	}
 
-	const changeFilter = (value: filterValue) => {
-		setFilter(value)
+
+	const addTask = (title: string, todolistId: string) => {
+		const newTask: TaskType = {id: v1(), title: title, isDone: false}
+		setAllTodoTasks({...allTodoTasks, [todolistId]: [...allTodoTasks[todolistId], newTask]})
+	} // копируем таски, вносим изменения в таски с нужным id, копируя все таски и добавляя в конец новую
+
+	const changeStatus = (taskId: string, isDone: boolean, todolistId: string) => {
+		setAllTodoTasks({
+			...allTodoTasks,
+			[todolistId]: allTodoTasks[todolistId].map(task => task.id === taskId ? {...task, isDone: isDone} : task)
+		})
 	}
 
-	const addTask = (title: string) => {
-		const newTask: TasksProps = {
-			id: v1(),
-			title: title,
-			isDone: false
-		}
-		const newTasks = [newTask, ...tasksForFilter]
-		setTodo(newTasks)
-	}
+	return { removeTask, addTask, changeStatus, allTodoTasks}
 
-	const changeStatus = (taskID: string, isDone: boolean) => {
-			let task = todo.find(task => task.id === taskID)
-			if (task) {
-				task.isDone = isDone
-				setTodo([...todo])
-			}
-	}
-
-	if (filter === 'all') {
-		tasksForFilter = todo
-	}
-	if (filter === 'active') {
-		tasksForFilter = todo.filter((t) => !t.isDone)
-	}
-	if (filter === 'completed') {
-		tasksForFilter = todo.filter((t) => t.isDone)
-	}
-
-	return {tasksForFilter, removeTask, changeFilter, addTask, changeStatus, filter}
 }
-
-
