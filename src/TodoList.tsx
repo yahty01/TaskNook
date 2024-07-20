@@ -96,34 +96,23 @@ function Todolist({
 
 const StyledTodoList = styled.div`
   width: 300px;
-  min-height: 100%;
-  background-color: rgba(3, 152, 206, 0.34);
-  border-radius: 20px;
-  padding: 10px;
 
-  h3 {
-    text-align: center;
-    margin-bottom: 10px;
-  }
 `;
 
 const StyledInputArea = styled.div<{ errorInput: string | null }>`
   display: flex;
-  flex-direction: row;
-  margin-bottom: 30px;
+  flex-direction: column;
+  margin-bottom: 20px;
   outline: 2px dotted black;
   padding: 10px 20px;
   border-radius: 10px;
-  background-color: rgb(0, 116, 253);
+  background-color: rgba(34, 139, 34, 0.32);
 
   input {
     border-radius: 5px;
     border: ${props => (props.errorInput ? '4px solid red' : '1px solid #ccc')};
     padding: 10px;
-  }
-
-  button {
-    height: 37px;
+    margin-bottom: 5px;
   }
 `;
 
@@ -134,7 +123,7 @@ const StyledButtonGr = styled.div`
   outline: 2px dotted black;
   padding: 10px 20px;
   border-radius: 10px;
-  background-color: rgba(0, 115, 251, 0.34);
+  background-color: rgba(34, 139, 34, 0.32);
 `;
 
 const Error = styled.div`
