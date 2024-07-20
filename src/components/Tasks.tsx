@@ -2,10 +2,10 @@
 import * as React from 'react';
 import styled from "styled-components";
 import {Button} from "./Button";
-import {TasksProps} from "../db/initialTasks";
+import {TaskType} from "../db/initialTasks";
 
 type TaskProps = {
-	tasks: TasksProps[];
+	tasks: TaskType[];
 	removeTask: (id: string) => void
 	changeStatus: (taskId: string, isDone: boolean) => void
 }

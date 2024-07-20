@@ -14,7 +14,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-color: rgba(47, 107, 97, 0.33);
+    background-color: #EA5959;
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -37,4 +37,6 @@ export const GlobalStyle = createGlobalStyle`
     background-color: unset;
     border: none;
   }
+  
+ 
 `
