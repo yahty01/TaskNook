@@ -3,41 +3,46 @@ import styled from "styled-components";
 import {useTasks} from "./hooks/useTasks";
 import {useTodoLists} from "./hooks/useTodoLists";
 import Todolist from "./TodoList";
+import {AddItemForm} from "./components/addItemForm/AddItemForm";
 
 function App() {
-	const {removeTask, addTask, changeStatus, allTodoTasks} = useTasks();
-	const {todoLists, changeTodoFilter} = useTodoLists();
+	const {removeTask, addTask, changeStatus, allTodoTasks, addEmptyTaskList, changeTitle} = useTasks();
+
+	const {todoLists, changeTodoFilter, addTodo, removeTodo, updateTodoList} = useTodoLists(addEmptyTaskList );
+
+	const TodoLists = todoLists.map(el => {
+				let tasksForFilter = allTodoTasks[el.id]
+
+				if (el.filter === 'active') {
+					tasksForFilter = tasksForFilter.filter(task => !task.isDone)
+				}
+				if (el.filter === 'completed') {
+					tasksForFilter = tasksForFilter.filter(task => task.isDone)
+				}
+
+				return <Todolist key={el.id}
+				                 todolistId={el.id}
+				                 title={el.title}
+				                 tasksList={tasksForFilter}
+				                 removeTask={removeTask}
+				                 changeFilter={changeTodoFilter}
+				                 addTask={addTask}
+				                 changeStatus={changeStatus}
+				                 filter={el.filter}
+				                 removeTodo={removeTodo}
+				                 updateTask={changeTitle}
+				                 updateTodoList={updateTodoList}
+				/>
+			}
+		)
+
 
 	return (
 		<StyledApp className="App">
 			<Container>
-				{
-					todoLists.map(el => {
-							let tasksForFilter = allTodoTasks[el.id]
-
-							if (el.filter === 'active') {
-								tasksForFilter = tasksForFilter.filter(task => !task.isDone)
-							}
-							if (el.filter === 'completed') {
-								tasksForFilter = tasksForFilter.filter(task => task.isDone)
-							}
-
-							return <Todolist key={el.id}
-							                 todolistId={el.id}
-							                 title={el.title}
-							                 tasksList={tasksForFilter}
-							                 removeTask={removeTask}
-							                 changeFilter={changeTodoFilter}
-							                 addTask={addTask}
-							                 changeStatus={changeStatus}
-							                 filter={el.filter}
-							/>
-						}
-					)
-
-				}
+				<AddItemForm addItem={addTodo}/>
+				{TodoLists}
 			</Container>
-
 		</StyledApp>
 	)
 

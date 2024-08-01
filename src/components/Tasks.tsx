@@ -3,30 +3,35 @@ import * as React from 'react';
 import styled from "styled-components";
 import {Button} from "./Button";
 import {TaskType} from "../db/initialTasks";
+import {EditableSpan} from "./editableSpan/EditableSpan";
 
 type TaskProps = {
 	tasks: TaskType[];
 	removeTask: (id: string) => void
 	changeStatus: (taskId: string, isDone: boolean) => void
+	changeTaskTitle: (taskId: string ,title: string) => void
 }
 
-export function Tasks({tasks, removeTask, changeStatus}: TaskProps) {
+export function Tasks({tasks, removeTask, changeStatus, changeTaskTitle}: TaskProps) {
 	const onChangeHandler = (taskId: string, isDone: boolean) => {
-		changeStatus(taskId, isDone)
+		 changeStatus(taskId, isDone)
 	}
-	return tasks.length === 0
+
+	return tasks?.length === 0
 		? (<EmptyMessage>Задачи отсутствуют!</EmptyMessage>)
 		: (
 			<StyledTasks>
 				{
-					tasks.map(task => {
-							const onRemoveClicked = () => {
-								removeTask(task.id)
-							}
+					tasks?.map(task => {
+						const onRemoveClicked = () => removeTask(task.id)
+
+						const changeTitle = (title: string) => {
+							changeTaskTitle(task.id, title)
+						}
 							return (
 								<li key={task.id}>
 									<input type="checkbox" checked={task.isDone} onChange={(e)=>onChangeHandler(task.id, e.target.checked)}/>
-									<span>{task.title}</span>
+									<StyledSpan isDone={task.isDone} value={task.title} onChange={changeTitle}/>
 									<TasksButton name={'x'} onClick={onRemoveClicked}></TasksButton>
 								</li>
 							)
@@ -71,3 +76,13 @@ const EmptyMessage = styled.p`
 const TasksButton = styled(Button)`
   padding: 2px 5px;
 `
+
+// Определяем интерфейс для пропсов
+type StyledSpanProps = {
+	isDone: boolean;
+}
+
+// Определяем стилизованный компонент с типизацией пропсов
+const StyledSpan = styled(EditableSpan)<StyledSpanProps>`
+  opacity: ${props => (props.isDone ? '0.5' : '1')};
+`;
