@@ -1,4 +1,5 @@
 import {ChangeEvent, KeyboardEvent, useState} from "react";
+import styled from "styled-components";
 
 type EditableSpanProps = {
 	value: string
@@ -34,11 +35,22 @@ export function EditableSpan({value, onChange}: EditableSpanProps) {
 
 
 	return editableMode
-		? <input onChange={onChangeHandler}
+		? <StyledInput onChange={onChangeHandler}
 		         onBlur={exitEditableMod}
 		         autoFocus={true}
 		         onKeyUp={addItemOnKeyUpHandler}
 		         value={inputItemText}
 		/>
-		: <span onDoubleClick={()=>setEditableMode(true)}>{value}</span>
+		: <StyledSpan onDoubleClick={()=>setEditableMode(true)}>{value}</StyledSpan>
 }
+
+const StyledInput = styled.input`
+  &:hover {
+    cursor: pointer;
+  }	
+`
+const StyledSpan = styled.span`
+&:hover{
+	cursor: pointer;
+}
+`

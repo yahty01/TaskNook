@@ -16,6 +16,7 @@ function App() {
 				if (el.filter === 'active') {
 					tasksForFilter = tasksForFilter.filter(task => !task.isDone)
 				}
+				
 				if (el.filter === 'completed') {
 					tasksForFilter = tasksForFilter.filter(task => task.isDone)
 				}

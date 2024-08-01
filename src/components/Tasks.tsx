@@ -30,7 +30,7 @@ export function Tasks({tasks, removeTask, changeStatus, changeTaskTitle}: TaskPr
 						}
 							return (
 								<li key={task.id}>
-									<input type="checkbox" checked={task.isDone} onChange={(e)=>onChangeHandler(task.id, e.target.checked)}/>
+									<StyledInput type="checkbox" checked={task.isDone} onChange={(e)=>onChangeHandler(task.id, e.target.checked)}/>
 									<StyledSpan isDone={task.isDone} value={task.title} onChange={changeTitle}/>
 									<TasksButton name={'x'} onClick={onRemoveClicked}></TasksButton>
 								</li>
@@ -86,3 +86,9 @@ type StyledSpanProps = {
 const StyledSpan = styled(EditableSpan)<StyledSpanProps>`
   opacity: ${props => (props.isDone ? '0.5' : '1')};
 `;
+
+const StyledInput = styled.input`
+  &:hover {
+    cursor: pointer;
+  }	
+`
