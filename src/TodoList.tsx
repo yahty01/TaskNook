@@ -79,20 +79,9 @@ function Todolist({
 				       changeTaskTitle={updateTaskHandler}/>
 				<StyledButtonGroup variant="outlined" aria-label="Basic button group">
 					<FilterButton
-						name={'All'}
 						filter={filter}
-						onClick={() => changeFilterHandler('all')}
-					/>
-					<FilterButton
-						name={'Active'}
-						filter={filter}
-						onClick={() => changeFilterHandler('active')}
-					/>
-					<FilterButton
-						name={'Completed'}
-						filter={filter}
-						onClick={() => changeFilterHandler('completed')}
-					/>
+						onClick={changeFilterHandler}
+						/>
 				</StyledButtonGroup>
 			</StyledPaper>
 		</Grid>
@@ -107,7 +96,6 @@ export const StyledButtonGroup = styled(ButtonGroup)(() => ({
 }))
 
 export const StyledPaper = styled(Paper)(() => ({
-	background: theme.palette.primary.light,
 }))
 
 

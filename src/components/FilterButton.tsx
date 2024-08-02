@@ -1,34 +1,48 @@
 // FilterButton.tsx
-import React from 'react';
-import Button from "@mui/material/Button";
-import {ButtonProps} from "./Button";
-import styled from '@emotion/styled';
-import {theme} from "../App";
+import React, {SyntheticEvent, useState} from 'react';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import AllOutIcon from '@mui/icons-material/AllOut';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 // Определите интерфейс для пропсов, включающий filter и остальные пропсы кнопки
-interface FilterButtonProps extends ButtonProps {
-	filter: 'all' | 'active' | 'completed';
+type FilterType = 'all' | 'active' | 'completed'
+
+interface FilterButtonProps {
+	filter: FilterType;
+	onClick: (filter: FilterType) => void
 }
 
 // Создайте компонент FilterButton
-const FilterButton = ({ filter, name, onClick }: FilterButtonProps) => {
-	const isActive = name ? filter === name.toLowerCase() : false;
+const FilterButton = ({filter, onClick}: FilterButtonProps) => {
+	const [value, setValue] = useState<FilterType>(filter);
+
+	const handleChange = (event: SyntheticEvent, newValue: FilterType) => {
+		onClick(newValue)
+		setValue(newValue);
+	};
+
 	return (
-		<StyledButton isActive={isActive} onClick={onClick}>{name}</StyledButton>
+		<BottomNavigation sx={{width:340 , borderRadius: 10}} value={value} onChange={handleChange}>
+			<BottomNavigationAction
+				label="All"
+				value="all"
+				icon={<AllOutIcon/>}
+			/>
+			<BottomNavigationAction
+				label="Active"
+				value="active"
+				icon={<CheckBoxOutlineBlankIcon/>}
+			/>
+			<BottomNavigationAction
+				label="Completed"
+				value="completed"
+				icon={<CheckBoxIcon/>}
+			/>
+		</BottomNavigation>
+
 	);
 };
-
-type StyledButtonProps = {
-	isActive?: boolean
-}
-
-export const StyledButton = styled(Button)<StyledButtonProps>(({ isActive }) => ({
-	background: isActive ? theme.palette.primary.light : '',
-	'&:hover': {
-		background: isActive ?theme.palette.primary.light : theme.palette.primary.main,
-		color: theme.palette.primary.contrastText
-	},
-	color: theme.palette.secondary.contrastText,
-}))
 
 export default FilterButton;
