@@ -70,11 +70,15 @@ function App() {
 			<div className="App">
 				<Container fixed sx={{backgroundColor: theme.palette.secondary.main, minHeight: '100vh'}} maxWidth={'xl'} disableGutters>
 					<AppBar position="static">
-						<Toolbar>
+						<Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
 							<IconButton color="inherit">
 								<MenuIcon/>
 							</IconButton>
-							<Button color="inherit">Login</Button>
+							<div>
+								<Button color="inherit">Login</Button>
+								<Button color="inherit">Logout</Button>
+								<Button color="inherit">Faq</Button>
+							</div>
 						</Toolbar>
 					</AppBar>
 					<Container>
