@@ -4,13 +4,11 @@ import styled from 'styled-components';
 import {Tasks} from './components/Tasks';
 import {TaskType} from './db/initialTasks';
 import {filterValue} from './hooks/useTasks';
-import FilterButton from "./components/FilterButton";
+import FilterButtons from "./components/FilterButtons";
 import {AddItemForm} from "./components/addItemForm/AddItemForm";
 import {EditableSpan} from "./components/editableSpan/EditableSpan";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import Paper from '@mui/material/Paper';
-import {theme} from "./App";
 import Grid from '@mui/material/Unstable_Grid2'
 
 type TodoListProps = {
@@ -23,8 +21,9 @@ type TodoListProps = {
 	changeStatus: (taskId: string, isDone: boolean, todolistId: string) => void;
 	filter: filterValue;
 	removeTodo: (id: string) => void;
-	updateTask: (taskId: string , title: string, todolistId: string) => void;
+	updateTask: (taskId: string, title: string, todolistId: string) => void;
 	updateTodoList: (title: string, todolistId: string) => void;
+	theme: any
 };
 
 function Todolist({
@@ -38,14 +37,15 @@ function Todolist({
 	                  todolistId,
 	                  removeTodo,
 	                  updateTask,
-	                  updateTodoList
+	                  updateTodoList,
+	                  theme
                   }: TodoListProps) {
 	const changeFilterHandler = (filter: filterValue) => {
 		changeFilter(filter, todolistId);
 	};
 
 	const removeTaskHandler = (taskId: string) => {
-		removeTask(taskId ,todolistId)
+		removeTask(taskId, todolistId)
 	}
 
 	const changeStatusHandler = (taskId: string, isDone: boolean) => {
@@ -72,32 +72,17 @@ function Todolist({
 			<StyledPaper elevation={3} square={false}>
 				<Button onClick={removeTodoHandler} name={'x'}/>
 				<EditableSpan value={title} onChange={updateTodoListHandler}/>
-				<AddItemForm addItem={addTaskHandler}/>
+				<AddItemForm addItem={addTaskHandler} theme={theme}/>
 				<Tasks tasks={tasksList}
 				       removeTask={removeTaskHandler}
 				       changeStatus={changeStatusHandler}
 				       changeTaskTitle={updateTaskHandler}/>
-				<StyledButtonGroup variant="outlined" aria-label="Basic button group">
-					<FilterButton
-						filter={filter}
-						onClick={changeFilterHandler}
-						/>
-				</StyledButtonGroup>
+				<FilterButtons filter={filter} onClick={changeFilterHandler}/>
 			</StyledPaper>
 		</Grid>
 
 	);
 }
 
-export const StyledButtonGroup = styled(ButtonGroup)(() => ({
-	width: '100%',
-	marginTop: '20px',
-	justifyContent: 'center'
-}))
-
-export const StyledPaper = styled(Paper)(() => ({
-}))
-
-
-
+export const StyledPaper = styled(Paper)(() => ({}))
 export default Todolist;

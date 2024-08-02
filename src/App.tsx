@@ -15,16 +15,16 @@ import Grid from '@mui/material/Unstable_Grid2'
 export const theme = createTheme({
 	palette: {
 		primary: {
-			light: 'rgba(143,146,238,0.59)',
-			main: '#3f50b5',
-			dark: '#002884',
+			light: '#0097a7',
+			main: '#00838f',
+			dark: '#006064',
 			contrastText: '#fff',
 		},
 		secondary: {
-			light: '#ff7961',
-			main: '#f44336',
-			dark: '#ba000d',
-			contrastText: '#000',
+			light: '#90caf9',
+			main: '#42a5f5',
+			dark: '#1565c0',
+			contrastText: '#000000',
 		},
 	},
 });
@@ -59,6 +59,7 @@ function App() {
 			                 removeTodo={removeTodo}
 			                 updateTask={changeTitle}
 			                 updateTodoList={updateTodoList}
+			                 theme={theme}
 			/>
 		}
 	)
@@ -67,7 +68,7 @@ function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<div className="App">
-				<Container fixed>
+				<Container fixed sx={{backgroundColor: theme.palette.secondary.main}}>
 					<AppBar position="static">
 						<Toolbar>
 							<IconButton color="inherit">
@@ -78,7 +79,7 @@ function App() {
 					</AppBar>
 					<Container>
 						<Grid container>
-							<AddItemForm addItem={addTodo}/>
+							<AddItemForm addItem={addTodo} theme={theme}/>
 						</Grid>
 						<Grid container spacing={4}>
 							{TodoLists}

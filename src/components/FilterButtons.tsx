@@ -15,7 +15,7 @@ interface FilterButtonProps {
 }
 
 // Создайте компонент FilterButton
-const FilterButton = ({filter, onClick}: FilterButtonProps) => {
+const FilterButtons = ({filter, onClick}: FilterButtonProps) => {
 	const [value, setValue] = useState<FilterType>(filter);
 
 	const handleChange = (event: SyntheticEvent, newValue: FilterType) => {
@@ -45,4 +45,4 @@ const FilterButton = ({filter, onClick}: FilterButtonProps) => {
 	);
 };
 
-export default FilterButton;
+export default FilterButtons;

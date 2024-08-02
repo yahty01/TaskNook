@@ -1,12 +1,15 @@
-import {Button} from "../Button";
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import styled from "styled-components";
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import TextField from "@mui/material/TextField";
 
 type AddItemFormProps = {
 	addItem: (title: string) => void
+	theme: any
 }
 
-export function AddItemForm({addItem}: AddItemFormProps) {
+export function AddItemForm({addItem, theme}: AddItemFormProps) {
 	const [inputItemText, setInputItemText] = useState('');
 	const [error, setError] = useState<string | null>(null)
 
@@ -30,36 +33,19 @@ export function AddItemForm({addItem}: AddItemFormProps) {
 
 
 	return (
-		<>
-			<StyledInputArea error={error}>
-				<input onChange={onTitleChangeHandler} onKeyDown={addItemOnKeyUpHandler} value={inputItemText}/>
-				<Button onClick={addItemHandler} name={'+'}/>
-			</StyledInputArea>
-			{error && <Error>{error}</Error>}
+		<>  <TextField
+			label="Enter a title"
+			variant={'outlined'}
+			value={inputItemText}
+			size={'small'}
+			error={!!error}
+			helperText={error}
+			onChange={onTitleChangeHandler}
+			onKeyUp={addItemOnKeyUpHandler}
+		/>
+				<Button onClick={addItemHandler} aria-label="Add" variant={'contained'} sx={{backgroundColor: theme.palette.primary.main}}>
+				<AddIcon/>
+				</Button>
 		</>)
 
 }
-
-const Error = styled.div`
-  color: red;
-  font-size: 12px;
-  margin-top: -15px;
-  margin-bottom: 10px;
-`;
-
-const StyledInputArea = styled.div<{ error: string | null }>`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  outline: 2px dotted black;
-  padding: 10px 20px;
-  border-radius: 10px;
-  background-color: rgba(34, 139, 34, 0.32);
-
-  input {
-    border-radius: 5px;
-    border: ${props => (props.error ? '4px solid red' : '1px solid #ccc')};
-    padding: 10px;
-    margin-bottom: 5px;
-  }
-`;
