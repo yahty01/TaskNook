@@ -68,7 +68,7 @@ function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<div className="App">
-				<Container fixed sx={{backgroundColor: theme.palette.secondary.main}}>
+				<Container fixed sx={{backgroundColor: theme.palette.secondary.main, minHeight: '100vh'}} maxWidth={'xl'} disableGutters>
 					<AppBar position="static">
 						<Toolbar>
 							<IconButton color="inherit">

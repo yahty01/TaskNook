@@ -1,5 +1,7 @@
 import {ChangeEvent, KeyboardEvent, useState} from "react";
 import styled from "styled-components";
+import TextField from '@mui/material/TextField';
+
 
 type EditableSpanProps = {
 	value: string
@@ -16,7 +18,7 @@ export function EditableSpan({value, onChange}: EditableSpanProps) {
 	}
 
 	const exitEditableMod = () => {
-		if(inputItemText.trim().length !== 0) {
+		if (inputItemText.trim().length !== 0) {
 			onChange(inputItemText)
 			setInputItemText(inputItemText.trim())
 		}
@@ -25,7 +27,7 @@ export function EditableSpan({value, onChange}: EditableSpanProps) {
 
 	const addItemOnKeyUpHandler = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter') {
-			if(inputItemText.trim().length !== 0) {
+			if (inputItemText.trim().length !== 0) {
 				onChange(inputItemText)
 				setInputItemText(inputItemText.trim())
 			}
@@ -36,21 +38,27 @@ export function EditableSpan({value, onChange}: EditableSpanProps) {
 
 	return editableMode
 		? <StyledInput onChange={onChangeHandler}
-		         onBlur={exitEditableMod}
-		         autoFocus={true}
-		         onKeyUp={addItemOnKeyUpHandler}
-		         value={inputItemText}
+		               fullWidth
+		               variant="filled"
+		               size={'small'}
+		               onBlur={exitEditableMod}
+		               autoFocus={true}
+		               onKeyUp={addItemOnKeyUpHandler}
+		               value={inputItemText}
 		/>
-		: <StyledSpan onDoubleClick={()=>setEditableMode(true)}>{value}</StyledSpan>
+		: <StyledSpan onDoubleClick={() => setEditableMode(true)}>{value}</StyledSpan>
 }
 
-const StyledInput = styled.input`
+const StyledInput = styled(TextField)`
   &:hover {
     cursor: pointer;
-  }	
+  }
+	flex-grow: 1;
 `
 const StyledSpan = styled.span`
-&:hover{
-	cursor: pointer;
-}
+  &:hover {
+    cursor: pointer;
+  }
+  flex-grow: 1;
+
 `

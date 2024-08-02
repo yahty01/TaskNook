@@ -1,9 +1,14 @@
 // @flow
 import * as React from 'react';
 import styled from "styled-components";
-import {Button} from "./Button";
 import {TaskType} from "../db/initialTasks";
 import {EditableSpan} from "./editableSpan/EditableSpan";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Checkbox from '@mui/material/Checkbox';
+import {ChangeEvent} from "react";
+import ListItem from '@mui/material/ListItem'
+
 
 type TaskProps = {
 	tasks: TaskType[];
@@ -18,9 +23,9 @@ export function Tasks({tasks, removeTask, changeStatus, changeTaskTitle}: TaskPr
 	}
 
 	return tasks?.length === 0
-		? (<EmptyMessage>Задачи отсутствуют!</EmptyMessage>)
+		? (<p>Задачи отсутствуют!</p>)
 		: (
-			<StyledTasks>
+			<>
 				{
 					tasks?.map(task => {
 						const onRemoveClicked = () => removeTask(task.id)
@@ -28,54 +33,29 @@ export function Tasks({tasks, removeTask, changeStatus, changeTaskTitle}: TaskPr
 						const changeTitle = (title: string) => {
 							changeTaskTitle(task.id, title)
 						}
+
+						const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+							onChangeHandler(task.id, e.target.checked)
+						}
 							return (
-								<li key={task.id}>
-									<StyledInput type="checkbox" checked={task.isDone} onChange={(e)=>onChangeHandler(task.id, e.target.checked)}/>
+								<ListItem key={task.id}
+								          disableGutters
+								          disablePadding
+								          sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}
+								>
+									<Checkbox size="medium" checked={task.isDone} onChange={(e)=>changeTaskStatusHandler(e)}/>
 									<StyledSpan isDone={task.isDone} value={task.title} onChange={changeTitle}/>
-									<TasksButton name={'x'} onClick={onRemoveClicked}></TasksButton>
-								</li>
+									<IconButton aria-label="delete" onClick={onRemoveClicked}>
+										<DeleteIcon />
+									</IconButton>
+								</ListItem>
 							)
 						}
 					)}
-			</StyledTasks>
+			</>
 		)
 
 }
-
-const StyledTasks = styled.ul`
-  padding-left: 5px;
-  flex-grow: 1;
-  width: 100%;
-  gap: 5px;
-
-  li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    &:not(:last-child) {
-      margin-bottom: 15px;
-      border-bottom: 1px solid black;
-    }
-
-    span {
-      flex-grow: 1;
-      max-width: 80%;
-      word-wrap: break-word;
-    }
-  }
-
-
-
-`
-const EmptyMessage = styled.p`
-  flex-grow: 1;
-  margin: 0 auto;
-`
-
-const TasksButton = styled(Button)`
-  padding: 2px 5px;
-`
 
 // Определяем интерфейс для пропсов
 type StyledSpanProps = {
@@ -84,11 +64,7 @@ type StyledSpanProps = {
 
 // Определяем стилизованный компонент с типизацией пропсов
 const StyledSpan = styled(EditableSpan)<StyledSpanProps>`
+	flex-grow: 1;
   opacity: ${props => (props.isDone ? '0.5' : '1')};
 `;
 
-const StyledInput = styled.input`
-  &:hover {
-    cursor: pointer;
-  }	
-`

@@ -7,9 +7,11 @@ import {filterValue} from './hooks/useTasks';
 import FilterButtons from "./components/FilterButtons";
 import {AddItemForm} from "./components/addItemForm/AddItemForm";
 import {EditableSpan} from "./components/editableSpan/EditableSpan";
-import Button from "@mui/material/Button";
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2'
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import List from '@mui/material/List'
 
 type TodoListProps = {
 	todolistId: string
@@ -70,13 +72,17 @@ function Todolist({
 	return (
 		<Grid>
 			<StyledPaper elevation={3} square={false}>
-				<Button onClick={removeTodoHandler} name={'x'}/>
+				<IconButton aria-label="delete" onClick={removeTodoHandler}>
+					<DeleteIcon />
+				</IconButton>
 				<EditableSpan value={title} onChange={updateTodoListHandler}/>
 				<AddItemForm addItem={addTaskHandler} theme={theme}/>
-				<Tasks tasks={tasksList}
-				       removeTask={removeTaskHandler}
-				       changeStatus={changeStatusHandler}
-				       changeTaskTitle={updateTaskHandler}/>
+				<List>
+					<Tasks tasks={tasksList}
+					       removeTask={removeTaskHandler}
+					       changeStatus={changeStatusHandler}
+					       changeTaskTitle={updateTaskHandler}/>
+				</List>
 				<FilterButtons filter={filter} onClick={changeFilterHandler}/>
 			</StyledPaper>
 		</Grid>
@@ -84,5 +90,7 @@ function Todolist({
 	);
 }
 
-export const StyledPaper = styled(Paper)(() => ({}))
+export const StyledPaper = styled(Paper)(() => ({
+	maxWidth: 360
+}))
 export default Todolist;
