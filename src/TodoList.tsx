@@ -9,6 +9,9 @@ import {AddItemForm} from "./components/addItemForm/AddItemForm";
 import {EditableSpan} from "./components/editableSpan/EditableSpan";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
+import Paper from '@mui/material/Paper';
+import {theme} from "./App";
+import Grid from '@mui/material/Unstable_Grid2'
 
 type TodoListProps = {
 	todolistId: string
@@ -65,37 +68,48 @@ function Todolist({
 	}
 
 	return (
-		<StyledTodoList>
-			<Button onClick={removeTodoHandler} name={'x'}/>
-			<EditableSpan value={title} onChange={updateTodoListHandler}/>
-			<AddItemForm addItem={addTaskHandler}/>
-			<Tasks tasks={tasksList}
-			       removeTask={removeTaskHandler}
-			       changeStatus={changeStatusHandler}
-			       changeTaskTitle={updateTaskHandler}/>
-			<ButtonGroup variant="outlined" aria-label="Basic button group">
-				<FilterButton
-					name={'All'}
-					filter={filter}
-					onClick={() => changeFilterHandler('all')}
-				/>
-				<FilterButton
-					name={'Active'}
-					filter={filter}
-					onClick={() => changeFilterHandler('active')}
-				/>
-				<FilterButton
-					name={'Completed'}
-					filter={filter}
-					onClick={() => changeFilterHandler('completed')}
-				/>
-			</ButtonGroup>
-		</StyledTodoList>
+		<Grid>
+			<StyledPaper elevation={3} square={false}>
+				<Button onClick={removeTodoHandler} name={'x'}/>
+				<EditableSpan value={title} onChange={updateTodoListHandler}/>
+				<AddItemForm addItem={addTaskHandler}/>
+				<Tasks tasks={tasksList}
+				       removeTask={removeTaskHandler}
+				       changeStatus={changeStatusHandler}
+				       changeTaskTitle={updateTaskHandler}/>
+				<StyledButtonGroup variant="outlined" aria-label="Basic button group">
+					<FilterButton
+						name={'All'}
+						filter={filter}
+						onClick={() => changeFilterHandler('all')}
+					/>
+					<FilterButton
+						name={'Active'}
+						filter={filter}
+						onClick={() => changeFilterHandler('active')}
+					/>
+					<FilterButton
+						name={'Completed'}
+						filter={filter}
+						onClick={() => changeFilterHandler('completed')}
+					/>
+				</StyledButtonGroup>
+			</StyledPaper>
+		</Grid>
+
 	);
 }
 
-const StyledTodoList = styled.div`
-  width: 300px;
-`;
+export const StyledButtonGroup = styled(ButtonGroup)(() => ({
+	width: '100%',
+	marginTop: '20px',
+	justifyContent: 'center'
+}))
+
+export const StyledPaper = styled(Paper)(() => ({
+	background: theme.palette.primary.light,
+}))
+
+
 
 export default Todolist;
