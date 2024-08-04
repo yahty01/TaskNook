@@ -71,7 +71,7 @@ function Todolist({
 
 	return (
 		<Grid>
-			<StyledPaper elevation={3} square={false}>
+			<StyledPaper elevation={5} square={false} sx={{ padding: '1rem' }}>
 				<IconButton aria-label="delete" onClick={removeTodoHandler}>
 					<DeleteIcon />
 				</IconButton>

@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {createContext, useMemo, useState} from 'react';
 import {useTasks} from "./hooks/useTasks";
 import {useTodoLists} from "./hooks/useTodoLists";
 import Todolist from "./TodoList";
@@ -11,61 +11,67 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu';
 import Grid from '@mui/material/Unstable_Grid2'
-import CssBaseline from '@mui/material/CssBaseline'
-import {amber, deepOrange, grey} from "@mui/material/colors";
-import {PaletteMode} from "@mui/material";
-import CustomizedSwitch from "./components/switchThemeMode/CustomizedSwitch";
 
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+import {ButtonSwitchTheme} from "./components/buttonSwitchTheme/ButtonSwitchTheme";
 
-const getDesignTokens = (mode: PaletteMode) => ({
-	palette: {
-		mode,
-		...(mode === 'light'
-			? {
-				// palette values for light mode
-				primary: amber,
-				divider: amber[200],
-				text: {
-					primary: grey[900],
-					secondary: grey[800],
-				},
-			}
-			: {
-				// palette values for dark mode
-				primary: deepOrange,
-				divider: deepOrange[700],
-				background: {
-					default: deepOrange[900],
-					paper: deepOrange[900],
-				},
-				text: {
-					primary: '#fff',
-					secondary: grey[500],
-				},
-			}),
+export const ColorModeContext = createContext({ toggleColorMode: () => {} });
+
+const lightThemePalette = {
+	primary: {
+		main: '#1976d2',
 	},
-});
+	secondary: {
+		main: '#dc004e',
+	},
+	background: {
+		default: '#f5f5f5',
+		paper: '#ffffff',
+	},
+	text: {
+		primary: '#000000',
+		secondary: '#666666',
+	},
+};
+
+const darkThemePalette = {
+	primary: {
+		main: '#90caf9',
+	},
+	secondary: {
+		main: '#f48fb1',
+	},
+	background: {
+		default: '#043432',
+		paper: '#105930',
+	},
+	text: {
+		primary: '#ffffff',
+		secondary: '#bbbbbb',
+	},
+};
 
 function App() {
 
-	const [mode, setMode] = useState<PaletteMode>('light');
-
+	const [mode, setMode] = useState<'light' | 'dark'>('light');
 	const colorMode = useMemo(
 		() => ({
-			// The dark mode switch would invoke this method
 			toggleColorMode: () => {
-				setMode((prevMode: PaletteMode) =>
-					prevMode === 'light' ? 'dark' : 'light',
-				);
+				setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
 			},
 		}),
 		[],
 	);
 
-
-	// Update the theme only if the mode changes
-	const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+	const theme = useMemo(
+		() =>
+			createTheme({
+				palette: {
+					mode,
+					...(mode === 'light' ? lightThemePalette : darkThemePalette),
+				},
+			}),
+		[mode],
+	);
 
 	const {removeTask, addTask, changeStatus, allTodoTasks, addEmptyTaskList, changeTitle} = useTasks();
 
@@ -102,11 +108,10 @@ function App() {
 
 	return (
 		<ColorModeContext.Provider value={colorMode}>
-
 		<ThemeProvider theme={theme}>
-			<CssBaseline />
 			<div className="App">
-				<Container fixed sx={{backgroundColor: theme.palette.secondary.light, minHeight: '100vh'}} maxWidth={'xl'} disableGutters>
+
+				<Container fixed sx={{backgroundColor: theme.palette.background.default, minHeight: '100vh'}} maxWidth={'xl'} disableGutters>
 					<AppBar position="static">
 						<Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
 							<IconButton color="inherit">
@@ -116,11 +121,7 @@ function App() {
 								<Button color="inherit">Login</Button>
 								<Button color="inherit">Logout</Button>
 								<Button color="inherit">Faq</Button>
-								{/*{theme.palette.mode} mode*/}
-								<CustomizedSwitch
-									onChange={colorMode.toggleColorMode}
-									theme={theme}
-								/>
+								<ButtonSwitchTheme/>
 							</div>
 						</Toolbar>
 					</AppBar>
@@ -133,12 +134,11 @@ function App() {
 						</Grid>
 					</Container>
 				</Container>
+
 			</div>
 		</ThemeProvider>
 		</ColorModeContext.Provider>
-
 	)
-
 }
 
 export default App;

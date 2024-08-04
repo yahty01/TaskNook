@@ -1,8 +1,8 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import styled from "styled-components";
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
 
 type AddItemFormProps = {
 	addItem: (title: string) => void
@@ -33,7 +33,8 @@ export function AddItemForm({addItem, theme}: AddItemFormProps) {
 
 
 	return (
-		<>  <TextField
+		<Box sx={{margin:'15px 0'}} display={'flex'}>
+			<TextField
 			label="Enter a title"
 			variant={'outlined'}
 			value={inputItemText}
@@ -43,9 +44,9 @@ export function AddItemForm({addItem, theme}: AddItemFormProps) {
 			onChange={onTitleChangeHandler}
 			onKeyUp={addItemOnKeyUpHandler}
 		/>
-				<Button onClick={addItemHandler} aria-label="Add" variant={'contained'} sx={{backgroundColor: theme.palette.primary.main}}>
+				<Button onClick={addItemHandler} aria-label="Add" variant={'contained'} sx={{marginLeft: '8px' ,backgroundColor: theme.palette.primary.main}}>
 				<AddIcon/>
 				</Button>
-		</>)
+		</Box>)
 
 }
