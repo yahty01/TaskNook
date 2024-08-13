@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {Tasks} from './components/Tasks';
 import {TaskType} from './db/initialTasks';
-import {filterValue} from './hooks/useTasks';
+import {filterValue} from './store/hooks/useTasks';
 import FilterButtons from "./components/FilterButtons";
 import {AddItemForm} from "./components/addItemForm/AddItemForm";
 import {EditableSpan} from "./components/editableSpan/EditableSpan";

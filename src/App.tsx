@@ -1,6 +1,6 @@
 import React, {createContext, useMemo, useState} from 'react';
-import {useTasks} from "./hooks/useTasks";
-import {useTodoLists} from "./hooks/useTodoLists";
+import {useTasks} from "./store/hooks/useTasks";
+import {useTodoLists} from "./store/hooks/useTodoLists";
 import Todolist from "./TodoList";
 import {AddItemForm} from "./components/addItemForm/AddItemForm";
 import {createTheme, ThemeProvider} from '@mui/material/styles'

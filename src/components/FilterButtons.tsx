@@ -7,7 +7,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 // Определите интерфейс для пропсов, включающий filter и остальные пропсы кнопки
-type FilterType = 'all' | 'active' | 'completed'
+export type FilterType = 'all' | 'active' | 'completed'
 
 interface FilterButtonProps {
 	filter: FilterType;

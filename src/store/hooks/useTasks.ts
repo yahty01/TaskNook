@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {initialTasks, TasksStateType, TaskType} from "../db/initialTasks";
+import {initialTasks, TasksStateType, TaskType} from "../../db/initialTasks";
 import {v1} from "uuid";
 
 export type filterValue = 'all' | 'completed' | 'active'
