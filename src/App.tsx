@@ -74,7 +74,6 @@ function App() {
 	);
 
 	const {removeTask, addTask, changeStatus, allTodoTasks, addEmptyTaskList, changeTitle} = useTasks();
-
 	const {todoLists, changeTodoFilter, addTodo, removeTodo, updateTodoList} = useTodoLists(addEmptyTaskList);
 
 	const TodoLists = todoLists.map(el => {

@@ -1,49 +1,33 @@
 // @flow
-import {useState} from "react";
+import {useReducer, useState} from "react";
 import {initTodoLists, TodoListType} from "../../db/initialTodoLists";
 import {filterValue} from "./useTasks";
 import {
 	addTodolistAC,
-	changeTodolistFilterAC,
-	changeTodolistTitleAC,
-	removeTodolistAC,
+	changeTodolistFilterAC, changeTodolistTitleAC, removeTodolistAC,
 	todolistsReducer
 } from "../reducer/todolists-reducer";
 
 export const useTodoLists = (addEmptyTasksList: (id: string) => void) => {
-	let [todoLists, setTodoLists] = useState<TodoListType[]>(initTodoLists)
+	let [todoLists, dispatch] = useReducer(todolistsReducer,initTodoLists)
 
-	const changeTodoFilter = (filter: filterValue, todolistId: string) => {
-		setTodoLists(
-			todolistsReducer
-			(todoLists,
-				changeTodolistFilterAC
-				(todolistId,
-					filter
-				)
-			)
-		)
-	}
-
-	const updateTodoList = (title: string, todolistId: string) => {
-		setTodoLists(
-			todolistsReducer
-			(todoLists,
-				changeTodolistTitleAC
-				(todolistId,
-					title
-				)
-			)
-		)
-	}
+	const changeTodoFilter = (filter: filterValue, todolistId: string) => dispatch(changeTodolistFilterAC(todolistId, filter))
+	const updateTodoList = (title: string, todolistId: string) => dispatch(changeTodolistTitleAC(todolistId, title))
 	const addTodo = (title: string) => {
-		let newTodoLists: TodoListType[] = todolistsReducer(todoLists, addTodolistAC(title))
-		setTodoLists(newTodoLists)
-		const newTodoList = newTodoLists[newTodoLists.length - 1];
-		newTodoList ? addEmptyTasksList(newTodoList.id) : console.error('Failed to add new todo list');
+		dispatch(addTodolistAC(title))
+		if (todoLists && todoLists.length > 0) {
+			const lastTodo = todoLists[0];
+			if (lastTodo) {
+				addEmptyTasksList(lastTodo.id);
+			} else {
+				console.error('Failed to add new todo list');
+			}
+		} else {
+			console.error('Todo list is undefined or empty');
+		}
+
 	}
+	const removeTodo = (id: string) => dispatch(removeTodolistAC(id))
 
-	const removeTodo = (id: string) => setTodoLists(todolistsReducer(todoLists, removeTodolistAC(id)))
-
-	return {todoLists, setTodoLists, changeTodoFilter, addTodo, removeTodo, updateTodoList}
+	return {todoLists, dispatch, changeTodoFilter, addTodo, removeTodo, updateTodoList}
 };
