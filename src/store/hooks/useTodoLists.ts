@@ -13,10 +13,7 @@ export const useTodoLists = (addEmptyTasksList: (id: string) => void) => {
 
 	const changeTodoFilter = (filter: filterValue, todolistId: string) => dispatch(changeTodolistFilterAC(todolistId, filter))
 	const updateTodoList = (title: string, todolistId: string) => dispatch(changeTodolistTitleAC(todolistId, title))
-	const addTodo = (title: string) => {
-		dispatch(addTodolistAC(title))
-
-	}
+	const addTodo = (title: string) => { dispatch(addTodolistAC(title))}
 	const removeTodo = (id: string) => dispatch(removeTodolistAC(id))
 
 	return {todoLists, dispatch, changeTodoFilter, addTodo, removeTodo, updateTodoList}
