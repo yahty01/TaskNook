@@ -15,8 +15,8 @@ test('correct todolist should be removed', () => {
 
 	// 1. Стартовый state
 	const startState: TodoListType[] = [
-		{ id: todolistId1, title: 'What to learn', filter: 'all' },
-		{ id: todolistId2, title: 'What to buy', filter: 'all' },
+		{ todolistId: todolistId1, title: 'What to learn', filter: 'all' },
+		{ todolistId: todolistId2, title: 'What to buy', filter: 'all' },
 	]
 
 	// 2. Действие
@@ -27,7 +27,7 @@ test('correct todolist should be removed', () => {
 	// в массиве останется один тудулист
 	expect(endState.length).toBe(1)
 	// удалится нужный тудулист, а не любой
-	expect(endState[0].id).toBe(todolistId2)
+	expect(endState[0].todolistId).toBe(todolistId2)
 })
 
 test('correct todolist should be added', () => {
@@ -35,8 +35,8 @@ test('correct todolist should be added', () => {
 	let todolistId2 = v1()
 
 	const startState: TodoListType[] = [
-		{ id: todolistId1, title: 'What to learn', filter: 'all' },
-		{ id: todolistId2, title: 'What to buy', filter: 'all' },
+		{ todolistId: todolistId1, title: 'What to learn', filter: 'all' },
+		{ todolistId: todolistId2, title: 'What to buy', filter: 'all' },
 	]
 
 	const newTitle = 'New Todolist'
@@ -52,8 +52,8 @@ test('correct todolist should change its name', () => {
 	let todolistId2 = v1()
 
 	const startState: TodoListType[] = [
-		{ id: todolistId1, title: 'What to learn', filter: 'all' },
-		{ id: todolistId2, title: 'What to buy', filter: 'all' },
+		{ todolistId: todolistId1, title: 'What to learn', filter: 'all' },
+		{ todolistId: todolistId2, title: 'What to buy', filter: 'all' },
 	]
 
 	const newTitle = 'New Todolist'
@@ -70,8 +70,8 @@ test('correct filter of todolist should be changed', () => {
 	let todolistId2 = v1()
 
 	const startState: TodoListType[] = [
-		{ id: todolistId1, title: 'What to learn', filter: 'all' },
-		{ id: todolistId2, title: 'What to buy', filter: 'all' },
+		{ todolistId: todolistId1, title: 'What to learn', filter: 'all' },
+		{ todolistId: todolistId2, title: 'What to buy', filter: 'all' },
 	]
 
 	let newFilter: FilterType = 'active'

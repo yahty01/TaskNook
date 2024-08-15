@@ -15,16 +15,6 @@ export const useTodoLists = (addEmptyTasksList: (id: string) => void) => {
 	const updateTodoList = (title: string, todolistId: string) => dispatch(changeTodolistTitleAC(todolistId, title))
 	const addTodo = (title: string) => {
 		dispatch(addTodolistAC(title))
-		if (todoLists && todoLists.length > 0) {
-			const lastTodo = todoLists[0];
-			if (lastTodo) {
-				addEmptyTasksList(lastTodo.id);
-			} else {
-				console.error('Failed to add new todo list');
-			}
-		} else {
-			console.error('Todo list is undefined or empty');
-		}
 
 	}
 	const removeTodo = (id: string) => dispatch(removeTodolistAC(id))

@@ -5,7 +5,7 @@ export const todolistID1 = v1()
 export const todolistID2 = v1()
 
 export type TodoListType = {
-	id: string
+	todolistId: string
 	title: string
 	filter: filterValue
 }
@@ -13,7 +13,7 @@ export type TodoListType = {
 
 
 export const initTodoLists: TodoListType[] = [
-	{id: todolistID1, title: 'What to learn', filter: 'all'},
-	{id: todolistID2, title: 'Список покупок!', filter: 'all'},
+	{todolistId: todolistID1, title: 'What to learn', filter: 'all'},
+	{todolistId: todolistID2, title: 'Список покупок!', filter: 'all'},
 ]
 
