@@ -1,3 +1,20 @@
+/src                # Корневая директория исходного кода
+│
+├── /app            # Настройки приложения и глобальные компоненты
+│   ├── store.ts    # Настройка Redux store
+│   └── App.tsx     # Корневой React-компонент приложения
+│
+├── /common         # Хуки, утилиты и переиспользуемые компоненты
+│   └── [generic utilities and hooks]
+│
+├── /features       # Фолдеры с функциональностью для каждой отдельной фичи
+│   └── /todos      # Фича "todos"
+│       ├── todosSlice.ts  # Redux логика для todos, слайс и действия
+│       └── Todos.tsx      # React-компонент для отображения todos
+│
+└── index.tsx  # Точка входа, рендерит дерево компонентов React
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
