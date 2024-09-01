@@ -66,18 +66,18 @@ function App() {
 	const dispatch = useDispatch()
 
 	const changeTodoFilter = (filter: filterValue, todolistId: string) =>
-		dispatch(changeTodolistFilterAC(todolistId, filter))
+		dispatch(changeTodolistFilterAC({todolistId, filter}))
 
 	const updateTodoList = (title: string, todolistId: string) =>
-		dispatch(changeTodolistTitleAC(todolistId, title))
+		dispatch(changeTodolistTitleAC({todolistId, title}))
 
 	const addTodo = (title: string) => {
 		const action = addTodolistAC((title))
 		dispatch(action)
 	}
 
-	const removeTodo = (id: string) => {
-		const action = removeTodolistAC(id)
+	const removeTodo = (todolistId: string) => {
+		const action = removeTodolistAC(todolistId)
 		dispatch(action)
 	}
 

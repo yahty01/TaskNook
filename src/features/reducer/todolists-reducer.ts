@@ -74,19 +74,19 @@ export const todolistsReducer = (state: TodoListType[] = initialState, action: A
 }
 
 // функции фабрики
-export const removeTodolistAC = (todolistId: string): RemoveTodolistActionType => {
-	return { type: 'REMOVE-TODOLIST', payload: { todolistId: todolistId } } as const
+export const removeTodolistAC = (todolistId: string) => {
+	return { type: 'REMOVE-TODOLIST', payload: { todolistId } } as const
 }
 
-export const addTodolistAC = (title: string): AddTodolistActionType => {
+export const addTodolistAC = (title: string) => {
 	return { type: 'ADD-TODOLIST', payload: { title, todolistId: v1() } } as const
 }
 
-export const changeTodolistTitleAC = (id: string, title: string): ChangeTodolistTitleActionType => {
-	return { type: 'CHANGE-TODOLIST-TITLE', payload: { todolistId: id, title } } as const
+export const changeTodolistTitleAC = (payload: { todolistId: string; title: string }) => {
+	return { type: 'CHANGE-TODOLIST-TITLE', payload } as const
 }
 
-export const changeTodolistFilterAC = (id: string, filter: FilterType): ChangeTodolistFilterActionType => {
-	return { type: 'CHANGE-TODOLIST-FILTER', payload: { todolistId: id, filter } } as const
+export const changeTodolistFilterAC = (payload: { todolistId: string; filter: FilterType }) => {
+	return { type: 'CHANGE-TODOLIST-FILTER', payload } as const
 }
 
