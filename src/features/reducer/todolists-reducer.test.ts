@@ -7,7 +7,7 @@ import {
 	todolistsReducer
 } from "./todolists-reducer";
 import {TodoListType} from "../../db/initialTodoLists";
-import {FilterType} from "../../components/FilterButtons";
+import {FilterType} from "../../common/components/FilterButtons";
 
 test('correct todolist should be removed', () => {
 	let todolistId1 = v1()

@@ -1,26 +1,26 @@
 // @flow
 import * as React from 'react';
 import styled from "styled-components";
-import {TaskType} from "../db/initialTasks";
-import {EditableSpan} from "./editableSpan/EditableSpan";
+import {TaskType} from "../../db/initialTasks";
+import {EditableSpan} from "../../common/components/editableSpan/EditableSpan";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Checkbox from '@mui/material/Checkbox';
 import {ChangeEvent} from "react";
 import ListItem from '@mui/material/ListItem'
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../app/store";
+import {addTaskAC, changeTaskStatusAC, removeTaskAC} from "../reducer/tasks-reducer";
 
 
 type TaskProps = {
-	tasks: TaskType[];
-	removeTask: (id: string) => void
-	changeStatus: (taskId: string, isDone: boolean) => void
-	changeTaskTitle: (taskId: string ,title: string) => void
+	tasks: TaskType[]
+	todolistId: string
 }
 
-export function Tasks({tasks, removeTask, changeStatus, changeTaskTitle}: TaskProps) {
-	const onChangeHandler = (taskId: string, isDone: boolean) => {
-		 changeStatus(taskId, isDone)
-	}
+export function Tasks({tasks, todolistId}: TaskProps) {
+
+	const dispatch = useDispatch();
 
 	return tasks?.length === 0
 		? (<p>Задачи отсутствуют!</p>)
@@ -28,15 +28,13 @@ export function Tasks({tasks, removeTask, changeStatus, changeTaskTitle}: TaskPr
 			<>
 				{
 					tasks?.map(task => {
-						const onRemoveClicked = () => removeTask(task.id)
-
-						const changeTitle = (title: string) => {
-							changeTaskTitle(task.id, title)
-						}
+						const onClickRemove = () => dispatch(removeTaskAC(task.id, todolistId))
+						const changeTitle = (title: string) => dispatch(addTaskAC(title, todolistId))
 
 						const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-							onChangeHandler(task.id, e.target.checked)
+							dispatch(changeTaskStatusAC(task.id, e.target.checked, todolistId))
 						}
+
 							return (
 								<ListItem key={task.id}
 								          disableGutters
@@ -45,7 +43,7 @@ export function Tasks({tasks, removeTask, changeStatus, changeTaskTitle}: TaskPr
 								>
 									<Checkbox size="medium" checked={task.isDone} onChange={(e)=>changeTaskStatusHandler(e)}/>
 									<StyledSpan isDone={task.isDone} value={task.title} onChange={changeTitle}/>
-									<IconButton aria-label="delete" onClick={onRemoveClicked}>
+									<IconButton aria-label="delete" onClick={onClickRemove}>
 										<DeleteIcon />
 									</IconButton>
 								</ListItem>

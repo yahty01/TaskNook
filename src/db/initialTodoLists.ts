@@ -1,5 +1,5 @@
 import {v1} from "uuid";
-import {filterValue} from "../store/hooks/useTasks";
+import {filterValue} from "../features/todolist/TodoList";
 
 export const todolistID1 = v1()
 export const todolistID2 = v1()

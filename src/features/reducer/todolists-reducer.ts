@@ -1,5 +1,5 @@
 import {v1} from "uuid";
-import {FilterType} from "../../components/FilterButtons";
+import {FilterType} from "../../common/components/FilterButtons";
 import {TodoListType} from "../../db/initialTodoLists";
 
 export type RemoveTodolistActionType = {
@@ -40,8 +40,9 @@ export type ActionsType =
 	| ChangeTodolistFilterActionType
 
 
+const initialState: TodoListType[] = []
 
-export const todolistsReducer = (state: TodoListType[], action: ActionsType ): TodoListType[] => {
+export const todolistsReducer = (state: TodoListType[] = initialState, action: ActionsType ): TodoListType[] => {
 
 	switch (action.type) {
 		case "REMOVE-TODOLIST": {

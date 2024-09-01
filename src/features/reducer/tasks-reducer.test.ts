@@ -8,7 +8,7 @@ import {
 	tasksReducer
 } from "./tasks-reducer";
 
-test('correct task should be deleted from correct array', () => {
+test('correct tasks should be deleted from correct array', () => {
 	const startState: TasksStateType = {
 		'todolistId1': [
 			{id: '1', title: 'CSS', isDone: false},
@@ -39,7 +39,7 @@ test('correct task should be deleted from correct array', () => {
 	})
 })
 
-test('correct task should be added to correct array', () => {
+test('correct tasks should be added to correct array', () => {
 	const startState: TasksStateType = {
 		'todolistId1': [
 			{id: '1', title: 'CSS', isDone: false},
@@ -64,7 +64,7 @@ test('correct task should be added to correct array', () => {
 	expect(endState['todolistId2'][0].isDone).toBe(false)
 })
 
-test('status of specified task should be changed', () => {
+test('status of specified tasks should be changed', () => {
 	const startState: TasksStateType = {
 		'todolistId1': [
 			{id: '1', title: 'CSS', isDone: false},
@@ -87,7 +87,7 @@ test('status of specified task should be changed', () => {
 	expect(endState['todolistId2'][2].isDone).toBe(false)
 })
 
-test('title of specified task should be changed', () => {
+test('title of specified tasks should be changed', () => {
 	const startState: TasksStateType = {
 		'todolistId1': [
 			{id: '1', title: 'CSS', isDone: false},
