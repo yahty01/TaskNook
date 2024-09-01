@@ -6,7 +6,7 @@ import {
 	removeTodolistAC,
 	todolistsReducer
 } from "./todolists-reducer";
-import {TodoListType} from "../../db/initialTodoLists";
+import {TodoListType} from "./todolists-reducer";
 import {FilterType} from "../../common/components/FilterButtons";
 
 test('correct todolist should be removed', () => {

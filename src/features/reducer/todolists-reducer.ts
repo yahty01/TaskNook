@@ -1,6 +1,13 @@
 import {v1} from "uuid";
 import {FilterType} from "../../common/components/FilterButtons";
-import {TodoListType} from "../../db/initialTodoLists";
+import {filterValue} from "../todolist/TodoList";
+
+export type TodoListType = {
+	todolistId: string
+	title: string
+	filter: filterValue
+}
+
 
 export type RemoveTodolistActionType = {
 	type: 'REMOVE-TODOLIST'

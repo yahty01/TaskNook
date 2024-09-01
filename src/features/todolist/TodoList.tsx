@@ -1,8 +1,6 @@
-// Todolist.tsx
 import React from 'react';
 import styled from 'styled-components';
 import {Tasks} from '../tasks/Tasks';
-import {TaskType} from '../../db/initialTasks';
 import FilterButtons from "../../common/components/FilterButtons";
 import {AddItemForm} from "../../common/components/addItemForm/AddItemForm";
 import {EditableSpan} from "../../common/components/editableSpan/EditableSpan";
@@ -13,7 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import List from '@mui/material/List'
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../app/store";
-import {addTaskAC} from "../reducer/tasks-reducer";
+import {addTaskAC, TaskType} from "../reducer/tasks-reducer";
 
 export type filterValue = 'all' | 'completed' | 'active'
 

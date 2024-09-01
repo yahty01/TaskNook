@@ -9,18 +9,15 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu';
 import Grid from '@mui/material/Unstable_Grid2'
-
 import {ButtonSwitchTheme} from "../common/components/buttonSwitchTheme/ButtonSwitchTheme";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "./store";
-import {TodoListType} from "../db/initialTodoLists";
 import {
 	addTodolistAC,
 	changeTodolistFilterAC,
 	changeTodolistTitleAC,
-	removeTodolistAC
+	removeTodolistAC, TodoListType
 } from "../features/reducer/todolists-reducer";
-
 
 export const ColorModeContext = createContext({
 	toggleColorMode: () => {

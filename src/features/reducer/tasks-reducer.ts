@@ -1,5 +1,15 @@
 import {v1} from "uuid";
-import {initialTasks, TasksStateType, TaskType} from "../../db/initialTasks";
+
+export type TaskType = {
+	id: string
+	title: string
+	isDone: boolean
+}
+
+
+export type TasksStateType = {
+	[todolistId: string]: TaskType[]
+}
 
 export type RemoveTaskActionType = {
 	type: 'REMOVE-TASK'

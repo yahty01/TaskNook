@@ -1,4 +1,4 @@
-import {TasksStateType} from "../../db/initialTasks";
+import {TasksStateType} from "./tasks-reducer";
 import {
 	addTaskAC,
 	addTodolistAC,
