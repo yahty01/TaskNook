@@ -63,7 +63,7 @@ export const todolistsReducer = (state: TodoListType[] = initialState, action: A
 				todolistId: todolistId,
 				title: title,
 				filter: 'all'}
-			return ([...state, newTodolist])
+			return ([newTodolist, ...state])
 		}
 
 		case "CHANGE-TODOLIST-TITLE": {
