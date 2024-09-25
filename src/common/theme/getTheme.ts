@@ -1,5 +1,5 @@
 import {createTheme} from "@mui/material/styles";
-import {ThemeMode} from "../../app/app-reducer";
+import {ThemeModeT} from "../../app/app-reducer";
 
 
 
@@ -38,7 +38,7 @@ export const darkThemePalette = {
 };
 
 
-export const getTheme =(mode: ThemeMode)=> {
+export const getTheme =(mode: ThemeModeT)=> {
 	return createTheme({
 		palette: {
 			mode,

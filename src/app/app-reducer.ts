@@ -1,22 +1,21 @@
-export type ThemeMode = 'dark' | 'light'
+export type ThemeModeT = 'dark' | 'light'
 
-export type AppStateType = {
-	themeMode: ThemeMode
-}
+export type changeThemeActionType = ReturnType<typeof changeThemeAC>
 
-type ChangeThemeAT = {
-	type: 'CHANGE_THEME'
-}
 
-type ActionsType = ChangeThemeAT
+export type AppStateType =
+	typeof initialState
 
-export const changeThemeAC = () => {
-	return {type: 'CHANGE_THEME'} as const
+type ActionsType =
+	changeThemeActionType
+
+export const changeThemeAC = (theme: ThemeModeT) => {
+	return {type: 'CHANGE_THEME', payload:{theme}} as const
 }
 
 
 const initialState = {
-	themeMode: 'light' as ThemeMode,
+	themeMode: 'light' as ThemeModeT,
 }
 
 export const appReducer = (
@@ -27,7 +26,7 @@ export const appReducer = (
 		case 'CHANGE_THEME': {
 			return {
 				...state,
-				themeMode: state.themeMode === 'dark' ? 'light' : 'dark' // проверяем текущее состояние и переключаем
+				themeMode: action.payload.theme === 'dark' ? 'light' : 'dark'
 			};
 		}
 		default:

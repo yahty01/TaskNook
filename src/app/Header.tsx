@@ -7,23 +7,22 @@ import {ButtonSwitchTheme} from "../common/components/buttonSwitchTheme/ButtonSw
 import React from "react";
 import styled from "styled-components";
 
-type Props = {
-
-};
-export const Header = (props: Props) => {
+export const Header = () => {
 	return (
 		<StyledAppBar >
-			<Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
-				<IconButton color="inherit">
-					<MenuIcon/>
-				</IconButton>
-				<div>
-					<Button color="inherit">Login</Button>
-					<Button color="inherit">Logout</Button>
-					<Button color="inherit">Faq</Button>
-					<ButtonSwitchTheme/>
-				</div>
-			</Toolbar>
+			<AppBar position="static">
+				<Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
+					<IconButton color="inherit">
+						<MenuIcon/>
+					</IconButton>
+					<div>
+						<Button color="inherit">Login</Button>
+						<Button color="inherit">Logout</Button>
+						<Button color="inherit">Faq</Button>
+						<ButtonSwitchTheme/>
+					</div>
+				</Toolbar>
+			</AppBar>
 		</StyledAppBar>
 	);
 };

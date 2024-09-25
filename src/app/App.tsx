@@ -1,4 +1,4 @@
-import React, {createContext, useMemo} from 'react';
+import React from 'react';
 import Todolist, {filterValue} from "../features/todolist/TodoList";
 import {AddItemForm} from "../common/components/addItemForm/AddItemForm";
 import {ThemeProvider} from '@mui/material/styles'
@@ -10,17 +10,14 @@ import {
 	addTodolistAC,
 	changeTodolistFilterAC,
 	changeTodolistTitleAC,
-	removeTodolistAC, TodoListType
+	removeTodolistAC,
+	TodoListType
 } from "../features/reducer/todolists-reducer";
-import {changeThemeAC, ThemeMode} from "./app-reducer";
+import {ThemeModeT} from "./app-reducer";
 import {getTheme} from "../common/theme/getTheme";
 import {StyledApp} from "./StyledApp";
 import {Header} from "./Header";
 
-export const ColorModeContext = createContext({
-	toggleColorMode: () => {
-	}
-});
 
 function App() {
 	const todoLists = useSelector<RootState, TodoListType[]>(state => state.todolists)
@@ -42,16 +39,8 @@ function App() {
 		dispatch(action)
 	}
 	//theme
-	const mode = useSelector<RootState, ThemeMode>(state => state.app.themeMode);
+	const mode = useSelector<RootState, ThemeModeT>(state => state.app.themeMode);
 	const theme = getTheme(mode)
-	const colorMode = useMemo(
-		() => ({
-			toggleColorMode: () => {
-				dispatch(changeThemeAC());
-			},
-		}),
-		[dispatch]
-	);
 
 	const TodoLists = todoLists.map(el => {
 			return <Todolist key={el.todolistId}
@@ -67,12 +56,11 @@ function App() {
 	)
 
 	return (
-		<ColorModeContext.Provider value={colorMode}>
 			<ThemeProvider theme={theme}>
 				<StyledApp className="App" theme={theme}>
 
 						<Header/>
-						<Container maxWidth="xl">
+						<Container maxWidth="xl" style={{marginTop:"5rem"}}>
 							<Grid container>
 								<AddItemForm addItem={addTodo} theme={theme}/>
 							</Grid>
@@ -83,7 +71,6 @@ function App() {
 
 				</StyledApp>
 			</ThemeProvider>
-		</ColorModeContext.Provider>
 	)
 }
 
