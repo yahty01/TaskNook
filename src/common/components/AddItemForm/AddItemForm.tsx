@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import {getTheme} from "../../theme/getTheme";
 import {useAppSelector} from "../../hooks/useAppSelector";
+import {selectThemeMode} from "../../../app/model/appSelectors";
 
 type AddItemFormProps = {
 	addItem: (title: string) => void
@@ -14,7 +15,7 @@ export function AddItemForm({addItem}: AddItemFormProps) {
 	const [inputItemText, setInputItemText] = useState('');
 	const [error, setError] = useState<string | null>(null)
 
-	const themeMode = useAppSelector(state => state.app.themeMode);
+	const themeMode = useAppSelector(selectThemeMode);
 	const theme = getTheme(themeMode)
 
 	const isEmptyInput = inputItemText.trim() === '';

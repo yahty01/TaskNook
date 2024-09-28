@@ -7,11 +7,12 @@ import {changeThemeAC} from "../../../app/model/app-reducer";
 import {getTheme} from "../../theme/getTheme";
 import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {useAppSelector} from "../../hooks/useAppSelector";
+import {selectThemeMode} from "../../../app/model/appSelectors";
 
 
 export const ButtonSwitchTheme = () => {
 	const dispatch = useAppDispatch()
-	const themeMode = useAppSelector(state => state.app.themeMode)
+	const themeMode = useAppSelector(selectThemeMode)
 	const theme = getTheme(themeMode);
 
 	const toggleColorMode = () => {

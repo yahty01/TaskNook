@@ -11,6 +11,7 @@ import {FilterTasksButtons} from "./FilterTasksButtons/FilterTasksButtons";
 import {StyledPaper} from "./Todolist.styled";
 import {useAppDispatch} from "../../../../../common/hooks/useAppDispatch";
 import {useAppSelector} from "../../../../../common/hooks/useAppSelector";
+import {selectTasks} from "../../../model/tasksSelectors";
 
 export type filterValue = 'all' | 'completed' | 'active'
 
@@ -20,7 +21,8 @@ type TodoListProps = {
 };
 
 export function Todolist({todolist}: TodoListProps) {
-	const tasks = useAppSelector(state => state.tasks[todolist.id])
+	const allTasks = useAppSelector(selectTasks)
+	const tasks = allTasks[todolist.id]
 	const dispatch = useAppDispatch();
 
 
