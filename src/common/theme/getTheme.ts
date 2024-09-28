@@ -1,5 +1,5 @@
 import {createTheme} from "@mui/material/styles";
-import {ThemeModeT} from "../../app/app-reducer";
+import {ThemeModeT} from "../../app/model/app-reducer";
 
 
 

@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import {useDispatch, useSelector} from "react-redux";
-import {changeThemeAC, ThemeModeT} from "../../../app/app-reducer";
+import {changeThemeAC, ThemeModeT} from "../../../app/model/app-reducer";
 import {RootState} from "../../../app/store";
 import {getTheme} from "../../theme/getTheme";
 

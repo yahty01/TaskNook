@@ -4,7 +4,7 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import AllOutIcon from '@mui/icons-material/AllOut';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import {changeTodolistFilterAC} from "../../../../../reducer/todolists-reducer";
+import {changeTodolistFilterAC} from "../../../../model/todolists-reducer";
 import {useDispatch} from "react-redux";
 
 export type FilterType = 'all' | 'active' | 'completed'

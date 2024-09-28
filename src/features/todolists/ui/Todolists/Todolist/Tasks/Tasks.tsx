@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {TaskType} from "../../../../../reducer/tasks-reducer";
+import {TaskType} from "../../../../model/tasks-reducer";
 import {Task} from "./Task/Task";
 import List from "@mui/material/List";
 

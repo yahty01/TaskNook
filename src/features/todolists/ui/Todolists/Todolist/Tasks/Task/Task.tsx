@@ -1,13 +1,13 @@
-import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskType} from "../../../../../../reducer/tasks-reducer";
+import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskType} from "../../../../../model/tasks-reducer";
 import * as React from "react";
 import {ChangeEvent} from "react";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {useDispatch} from "react-redux";
-import styled from "styled-components";
 import {EditableSpan} from "../../../../../../../common/components/EditableSpan/EditableSpan";
 import ListItem from "@mui/material/ListItem";
+import {SpanWrapper} from "./Task.styled";
 
 type TaskProps = {
 	task: TaskType
@@ -16,7 +16,6 @@ type TaskProps = {
 }
 
 export function Task({task, todolistId, isDone}: TaskProps) {
-
 	const dispatch = useDispatch();
 	const removeTask = () => {
 		dispatch(removeTaskAC(task.id, todolistId))
@@ -41,7 +40,9 @@ export function Task({task, todolistId, isDone}: TaskProps) {
 				maxWidth: '100%',
 			}}>
 			<Checkbox size="medium" checked={task.isDone} onChange={(e) => changeTaskStatusHandler(e)}/>
-			<StyledSpan isDone={isDone} value={task.title} onChange={changeTaskTitle}/>
+			<SpanWrapper isDone={isDone}>
+				<EditableSpan value={task.title} onChange={changeTaskTitle}/>
+			</SpanWrapper>
 			<IconButton aria-label="delete" onClick={removeTask}>
 				<DeleteIcon/>
 			</IconButton>
@@ -49,12 +50,4 @@ export function Task({task, todolistId, isDone}: TaskProps) {
 	)
 }
 
-type StyledSpanProps = {
-	isDone: boolean;
-}
 
-const StyledSpan = styled(EditableSpan)<StyledSpanProps>`
-  flex: 1 1 100%;
-  opacity: ${d => (d.isDone ? '0.5' : '1')};
-  max-width: 100%;
-`;

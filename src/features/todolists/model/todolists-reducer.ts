@@ -1,6 +1,6 @@
 import {v1} from "uuid";
-import {FilterType} from "../todolists/ui/Todolists/Todolist/FilterTasksButtons/FilterTasksButtons";
-import {filterValue} from "../todolists/ui/Todolists/Todolist/Todolist";
+import {FilterType} from "../ui/Todolists/Todolist/FilterTasksButtons/FilterTasksButtons";
+import {filterValue} from "../ui/Todolists/Todolist/Todolist";
 
 export type TodoListType = {
 	id: string

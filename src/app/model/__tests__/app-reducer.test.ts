@@ -1,9 +1,9 @@
 import {
 	appReducer, changeThemeAC,
 	AppStateType, ThemeModeT
-} from "./app-reducer";
+} from "../app-reducer";
 import {useSelector} from "react-redux";
-import {RootState} from "./store";
+import {RootState} from "../../store";
 
 test('themeMode', () => {
 	// 1. Стартовый state

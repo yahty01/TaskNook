@@ -5,9 +5,9 @@ import {
 	changeTodolistTitleAC,
 	removeTodolistAC,
 	todolistsReducer
-} from "./todolists-reducer";
-import {TodoListType} from "./todolists-reducer";
-import {FilterType} from "../todolists/ui/Todolists/Todolist/FilterTasksButtons/FilterTasksButtons";
+} from "../todolists-reducer";
+import {TodoListType} from "../todolists-reducer";
+import {FilterType} from "../../ui/Todolists/Todolist/FilterTasksButtons/FilterTasksButtons";
 
 test('correct todolist should be removed', () => {
 	let todolistId1 = v1()

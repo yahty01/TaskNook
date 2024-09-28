@@ -1,6 +1,5 @@
 import {ChangeEvent, KeyboardEvent, useState} from "react";
-import styled from "styled-components";
-import TextField from '@mui/material/TextField';
+import {StyledInput, StyledSpan} from "./EditableSpan.styled";
 
 
 type EditableSpanProps = {
@@ -49,18 +48,3 @@ export function EditableSpan({value, onChange}: EditableSpanProps) {
 		: <StyledSpan onDoubleClick={() => setEditableMode(true)}>{value}</StyledSpan>
 }
 
-const StyledInput = styled(TextField)`
-  &:hover {
-    cursor: pointer;
-  }
-	flex-grow: 1;
-`
-const StyledSpan = styled.span`
-  &:hover {
-    cursor: pointer;
-  }
-  flex-grow: 1;
-	max-width: 75%;
-	word-break: break-word;
-	
-`

@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../app/store";
-import {ThemeModeT} from "../../../app/app-reducer";
+import {ThemeModeT} from "../../../app/model/app-reducer";
 import {getTheme} from "../../theme/getTheme";
 
 type AddItemFormProps = {

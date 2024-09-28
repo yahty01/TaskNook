@@ -1,17 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
 import {Tasks} from './Tasks/Tasks';
 import {AddItemForm} from "../../../../../common/components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../../../common/components/EditableSpan/EditableSpan";
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2'
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../../app/store";
-import {addTaskAC, TaskType} from "../../../../reducer/tasks-reducer";
-import {changeTodolistTitleAC, removeTodolistAC, TodoListType} from "../../../../reducer/todolists-reducer";
+import {addTaskAC, TaskType} from "../../../model/tasks-reducer";
+import {changeTodolistTitleAC, removeTodolistAC, TodoListType} from "../../../model/todolists-reducer";
 import {FilterTasksButtons} from "./FilterTasksButtons/FilterTasksButtons";
+import {StyledPaper} from "./Todolist.styled";
 
 export type filterValue = 'all' | 'completed' | 'active'
 
@@ -63,6 +62,3 @@ export function Todolist({todolist}: TodoListProps) {
 	);
 }
 
-export const StyledPaper = styled(Paper)(() => ({
-	maxWidth: 360
-}))

@@ -5,7 +5,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import {ButtonSwitchTheme} from "../ButtonSwitchTheme/ButtonSwitchTheme";
 import React from "react";
-import styled from "styled-components";
+import {StyledAppBar} from "./Header.styled";
 
 export const Header = () => {
 	return (
@@ -27,7 +27,3 @@ export const Header = () => {
 	);
 };
 
-const StyledAppBar = styled(AppBar)`
-	max-height: 200px;
-	width: 100%;
-`

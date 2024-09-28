@@ -3,9 +3,9 @@ import {ThemeProvider as ThemeProviderMUI} from '@mui/material/styles'
 import { ThemeProvider as ThemeProviderStyled} from 'styled-components';
 import {useSelector} from "react-redux";
 import {RootState} from "./store";
-import {ThemeModeT} from "./app-reducer";
+import {ThemeModeT} from "./model/app-reducer";
 import {getTheme} from "../common/theme/getTheme";
-import {StyledApp} from "./StyledApp";
+import {AppStyled} from "./App.styled";
 import {Header} from "../common/components/Header/Header";
 import {Main} from "./Main";
 
@@ -19,10 +19,10 @@ export function App() {
 	return (
 			<ThemeProviderMUI theme={theme}>
 				<ThemeProviderStyled theme={theme}>
-					<StyledApp className="App">
+					<AppStyled className="App">
 						<Header/>
 						<Main/>
-					</StyledApp>
+					</AppStyled>
 				</ThemeProviderStyled>
 			</ThemeProviderMUI>
 	)
