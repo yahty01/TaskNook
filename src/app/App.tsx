@@ -1,18 +1,16 @@
 import React from 'react';
 import {ThemeProvider as ThemeProviderMUI} from '@mui/material/styles'
-import { ThemeProvider as ThemeProviderStyled} from 'styled-components';
-import {useSelector} from "react-redux";
-import {RootState} from "./store";
-import {ThemeModeT} from "./model/app-reducer";
+import {ThemeProvider as ThemeProviderStyled} from 'styled-components';
 import {getTheme} from "../common/theme/getTheme";
 import {AppStyled} from "./App.styled";
 import {Header} from "../common/components/Header/Header";
 import {Main} from "./Main";
+import {useAppSelector} from "../common/hooks/useAppSelector";
 
 
 export function App() {
 	//theme
-	const themeMode = useSelector<RootState, ThemeModeT>(state => state.app.themeMode);
+	const themeMode = useAppSelector(state => state.app.themeMode);
 	const theme = getTheme(themeMode)
 
 

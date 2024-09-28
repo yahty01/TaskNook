@@ -5,12 +5,12 @@ import {EditableSpan} from "../../../../../common/components/EditableSpan/Editab
 import Grid from '@mui/material/Unstable_Grid2'
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../../../../app/store";
-import {addTaskAC, TaskType} from "../../../model/tasks-reducer";
+import {addTaskAC} from "../../../model/tasks-reducer";
 import {changeTodolistTitleAC, removeTodolistAC, TodoListType} from "../../../model/todolists-reducer";
 import {FilterTasksButtons} from "./FilterTasksButtons/FilterTasksButtons";
 import {StyledPaper} from "./Todolist.styled";
+import {useAppDispatch} from "../../../../../common/hooks/useAppDispatch";
+import {useAppSelector} from "../../../../../common/hooks/useAppSelector";
 
 export type filterValue = 'all' | 'completed' | 'active'
 
@@ -20,8 +20,8 @@ type TodoListProps = {
 };
 
 export function Todolist({todolist}: TodoListProps) {
-	const tasks = useSelector<RootState, TaskType[]>(state => state.tasks[todolist.id])
-	const dispatch = useDispatch();
+	const tasks = useAppSelector(state => state.tasks[todolist.id])
+	const dispatch = useAppDispatch();
 
 
 	const addTask = (title: string) => {

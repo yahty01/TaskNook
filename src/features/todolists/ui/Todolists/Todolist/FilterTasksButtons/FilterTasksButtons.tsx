@@ -5,7 +5,7 @@ import AllOutIcon from '@mui/icons-material/AllOut';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import {changeTodolistFilterAC} from "../../../../model/todolists-reducer";
-import {useDispatch} from "react-redux";
+import {useAppDispatch} from "../../../../../../common/hooks/useAppDispatch";
 
 export type FilterType = 'all' | 'active' | 'completed'
 
@@ -17,7 +17,7 @@ interface FilterButtonProps {
 export function FilterTasksButtons ({filter, id}: FilterButtonProps) {
 	const [value, setValue] = useState<FilterType>(filter);
 
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
 	const handleChange = (event: SyntheticEvent, newValue: FilterType) => {
 		dispatch(changeTodolistFilterAC({todolistId: id, filter: newValue}))

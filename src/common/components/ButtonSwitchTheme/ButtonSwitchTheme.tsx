@@ -3,15 +3,15 @@ import * as React from 'react';
 import IconButton from "@mui/material/IconButton";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
-import {useDispatch, useSelector} from "react-redux";
-import {changeThemeAC, ThemeModeT} from "../../../app/model/app-reducer";
-import {RootState} from "../../../app/store";
+import {changeThemeAC} from "../../../app/model/app-reducer";
 import {getTheme} from "../../theme/getTheme";
+import {useAppDispatch} from "../../hooks/useAppDispatch";
+import {useAppSelector} from "../../hooks/useAppSelector";
 
 
 export const ButtonSwitchTheme = () => {
-	const dispatch = useDispatch()
-	const themeMode = useSelector<RootState, ThemeModeT>(state => state.app.themeMode)
+	const dispatch = useAppDispatch()
+	const themeMode = useAppSelector(state => state.app.themeMode)
 	const theme = getTheme(themeMode);
 
 	const toggleColorMode = () => {

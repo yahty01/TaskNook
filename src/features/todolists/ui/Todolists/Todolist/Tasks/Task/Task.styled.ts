@@ -18,7 +18,7 @@ export const SpanWrapper = styled.div<StyledSpanProps>`
     left: 0;
     right: 0;
     height: 1px;
-    background: black;
+    background: ${({ theme }) => theme.palette.text.primary};
     transform-origin: left center;
     transform: scaleX(0);
     transition: transform 0.2s ease-in-out;
