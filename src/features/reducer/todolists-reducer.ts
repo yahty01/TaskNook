@@ -1,9 +1,9 @@
 import {v1} from "uuid";
-import {FilterType} from "../../common/components/FilterButtons";
-import {filterValue} from "../todolist/TodoList";
+import {FilterType} from "../todolists/ui/Todolists/Todolist/FilterTasksButtons/FilterTasksButtons";
+import {filterValue} from "../todolists/ui/Todolists/Todolist/Todolist";
 
 export type TodoListType = {
-	todolistId: string
+	id: string
 	title: string
 	filter: filterValue
 }
@@ -54,13 +54,13 @@ export const todolistsReducer = (state: TodoListType[] = initialState, action: A
 	switch (action.type) {
 		case "REMOVE-TODOLIST": {
 			const {todolistId} = action.payload
-			return state.filter(tl => tl.todolistId != todolistId)
+			return state.filter(tl => tl.id != todolistId)
 		}
 
 		case "ADD-TODOLIST": {
 			const {title, todolistId} = action.payload
 			const newTodolist: TodoListType = {
-				todolistId: todolistId,
+				id: todolistId,
 				title: title,
 				filter: 'all'}
 			return ([newTodolist, ...state])
@@ -68,12 +68,12 @@ export const todolistsReducer = (state: TodoListType[] = initialState, action: A
 
 		case "CHANGE-TODOLIST-TITLE": {
 			const { todolistId, title } = action.payload
-			return state.map(tl => tl.todolistId === todolistId ? {...tl, title} : tl)
+			return state.map(tl => tl.id === todolistId ? {...tl, title} : tl)
 		}
 
 		case "CHANGE-TODOLIST-FILTER": {
 			const {todolistId, filter} = action.payload
-			return state.map(tl => tl.todolistId === todolistId ? {...tl, filter} : tl)
+			return state.map(tl => tl.id === todolistId ? {...tl, filter} : tl)
 		}
 
 		default: return state

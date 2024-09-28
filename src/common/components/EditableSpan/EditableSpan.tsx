@@ -60,5 +60,7 @@ const StyledSpan = styled.span`
     cursor: pointer;
   }
   flex-grow: 1;
-
+	max-width: 75%;
+	word-break: break-word;
+	
 `

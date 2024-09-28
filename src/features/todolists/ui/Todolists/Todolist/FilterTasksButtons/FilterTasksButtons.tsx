@@ -1,25 +1,26 @@
-// FilterButton.tsx
 import React, {SyntheticEvent, useState} from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import AllOutIcon from '@mui/icons-material/AllOut';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import {changeTodolistFilterAC} from "../../../../../reducer/todolists-reducer";
+import {useDispatch} from "react-redux";
 
-// Определите интерфейс для пропсов, включающий filter и остальные пропсы кнопки
 export type FilterType = 'all' | 'active' | 'completed'
 
 interface FilterButtonProps {
+	id: string
 	filter: FilterType;
-	onClick: (filter: FilterType) => void
 }
 
-// Создайте компонент FilterButton
-const FilterButtons = ({filter, onClick}: FilterButtonProps) => {
+export function FilterTasksButtons ({filter, id}: FilterButtonProps) {
 	const [value, setValue] = useState<FilterType>(filter);
 
+	const dispatch = useDispatch()
+
 	const handleChange = (event: SyntheticEvent, newValue: FilterType) => {
-		onClick(newValue)
+		dispatch(changeTodolistFilterAC({todolistId: id, filter: newValue}))
 		setValue(newValue);
 	};
 
@@ -43,6 +44,4 @@ const FilterButtons = ({filter, onClick}: FilterButtonProps) => {
 		</BottomNavigation>
 
 	);
-};
-
-export default FilterButtons;
+}

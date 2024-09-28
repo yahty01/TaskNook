@@ -14,7 +14,9 @@ export const ButtonSwitchTheme = () => {
 	const themeMode = useSelector<RootState, ThemeModeT>(state => state.app.themeMode)
 	const theme = getTheme(themeMode);
 
-	const toggleColorMode = () => dispatch(changeThemeAC(themeMode));
+	const toggleColorMode = () => {
+		dispatch(changeThemeAC(themeMode));
+	}
 
 
 	return (

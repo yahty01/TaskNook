@@ -3,15 +3,21 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../app/store";
+import {ThemeModeT} from "../../../app/app-reducer";
+import {getTheme} from "../../theme/getTheme";
 
 type AddItemFormProps = {
 	addItem: (title: string) => void
-	theme: any
 }
 
-export function AddItemForm({addItem, theme}: AddItemFormProps) {
+export function AddItemForm({addItem}: AddItemFormProps) {
 	const [inputItemText, setInputItemText] = useState('');
 	const [error, setError] = useState<string | null>(null)
+
+	const themeMode = useSelector<RootState, ThemeModeT>(state => state.app.themeMode);
+	const theme = getTheme(themeMode)
 
 	const isEmptyInput = inputItemText.trim() === '';
 

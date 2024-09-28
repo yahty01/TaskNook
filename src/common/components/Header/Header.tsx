@@ -3,7 +3,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
-import {ButtonSwitchTheme} from "../common/components/buttonSwitchTheme/ButtonSwitchTheme";
+import {ButtonSwitchTheme} from "../ButtonSwitchTheme/ButtonSwitchTheme";
 import React from "react";
 import styled from "styled-components";
 
