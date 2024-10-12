@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {App} from './app/App';
 import {GlobalStyle} from "./styles/GlobalStyled";
 import {store} from "./app/store";
 import {Provider} from "react-redux";
+import {AppHttpRequests} from "./app/AppHttpRequests";
 
 
 const root = ReactDOM.createRoot(
@@ -12,7 +12,8 @@ const root = ReactDOM.createRoot(
 root.render(<React.StrictMode>
 	<Provider store={store}>
 		<GlobalStyle/>
-		<App/>
+		{/*<App/>*/}
+		<AppHttpRequests/>
 	</Provider>
 </React.StrictMode>
 
