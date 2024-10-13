@@ -11,12 +11,31 @@ export type Todolist = {
 	"order": number
 }
 
-export type Response = {
+export type Task = {
+	description: string
+	title: string
+	completed: boolean
+	status: number
+	priority: number
+	startDate: string
+	deadline: string
+	id: string
+	todoListId: string
+	order: number
+	addedDate: string
+}
+
+export type getTaskResponse = {
+	items: Task[]
+	totalCount: number
+	error: string | null
+}
+
+export type Response<T> = {
 	resultCode: number
 	messages: string[],
-	data: {
-		item: Todolist
-	}
+	fieldsErrors: string[],
+	data: T
 }
 
 export const AppHttpRequests = () => {
@@ -32,34 +51,86 @@ export const AppHttpRequests = () => {
 					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
 				}
 			}).then(res => {
-			console.log(res.data)
+				const data = res.data
+			setTodolists(data)
+			data.forEach(tl => {
+				axios.get<getTaskResponse>(
+					`https://social-network.samuraijs.com/api/1.1/todo-lists/${tl.id}/tasks`,
+					{
+						headers: {
+							Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
+						}
+					}).then(res => {
+						//{...tasks, tasks: res.data.items} попробовать без спред копирования !\
+					// Ответ на вопрос, почему нельзя засетать просто res.data.items
+					// Потому что сам ассоциативный массив храниться на бэке а именно вся его часть. И в нашем запросе мы
+					// получаем объект с тасками для конкретного массива и сетаем его в наш локальный массив который
+					// имеет туже структуру что  и на бэке
+					// Потому если мы засетаем в tasks - res.data.items, то мы перезатрем остальные таски и в массиве будут
+					// таски только для одного массива, а именно последнего из нашего списка тудулистов, потому что
+					// мы проходимся по нему фор-ичем и последний запрос
+					// за тасками
+					// последнего тудулиста единтсвенный и останется
+					setTasks({...tasks, [tl.id]: res.data.items})
+				})
+			})
+
 		})
 	}, [])
 
 	//Запрос на создание тудулиста
 	const createTodolistHandler = (title: string) => {
-		axios.post<Response>(
+		axios.post<Response<{ item: Todolist }>>(
 			'https://social-network.samuraijs.com/api/1.1/todo-lists',
 			{title},
 			{
 				headers: {
 					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
+					'API-KEY': '05ddea04-3151-4b31-a955-21fef99aa5ff'
 				}
 			}).then(res => {
-			console.log(res.data)
+			const newTodolist = res.data.data.item
+			setTodolists([newTodolist, ...todolists])
 		})
 	}
-
 	const removeTodolistHandler = (id: string) => {
-		// remove todolist
+		axios.delete<Response<{}>>(
+			`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`,
+			{
+				headers: {
+					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
+					'API-KEY': '05ddea04-3151-4b31-a955-21fef99aa5ff'
+				}
+			}).then((res) => {
+			setTodolists(todolists.filter((item: Todolist) => item.id !== id))
+		})
 	}
-
 	const updateTodolistHandler = (id: string, title: string) => {
-		// update todolist title
+		axios.put<Response<{}>>(
+			`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`,
+			{title},
+			{
+				headers: {
+					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
+					'API-KEY': '05ddea04-3151-4b31-a955-21fef99aa5ff'
+				}
+			}).then(() => {
+			setTodolists(todolists.map((item: Todolist) => item.id === id ? {...item, title} : item))
+		})
 	}
-
 	const createTaskHandler = (title: string, todolistId: string) => {
-		// create task
+		axios.post<Response<{ item: Task }>>(
+			`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks`,
+			{title},
+			{
+				headers: {
+					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
+					'API-KEY': '05ddea04-3151-4b31-a955-21fef99aa5ff'
+				}
+			}).then(res => {
+			const newTask = res.data.data.item
+			setTasks({...tasks, [todolistId]: [newTask, ...(tasks[todolistId]) || []]}) //так как или возвращает первую истину
+		})
 	}
 
 	const removeTaskHandler = (taskId: string, todolistId: string) => {
@@ -75,14 +146,14 @@ export const AppHttpRequests = () => {
 	}
 
 	return (
-		<div style={{margin: '20px'}}>
+		<div style={{margin: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 			<AddItemForm addItem={createTodolistHandler}/>
 
 			{/* Todolists */}
 			{todolists.map((tl: any) => {
 				return (
 					<div key={tl.id} style={todolist}>
-						<div>
+						<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
 							<EditableSpan
 								value={tl.title}
 								onChange={(title: string) => updateTodolistHandler(tl.id, title)}
