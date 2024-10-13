@@ -14,7 +14,6 @@ export type Todolist = {
 export type Task = {
 	description: string
 	title: string
-	completed: boolean
 	status: number
 	priority: number
 	startDate: string
@@ -23,6 +22,10 @@ export type Task = {
 	todoListId: string
 	order: number
 	addedDate: string
+}
+
+export type Tasks = {
+	[todolistId: string]: Task[] | []
 }
 
 export type getTaskResponse = {
@@ -39,8 +42,8 @@ export type Response<T> = {
 }
 
 export const AppHttpRequests = () => {
-	const [todolists, setTodolists] = useState<any>([])
-	const [tasks, setTasks] = useState<any>({})
+	const [todolists, setTodolists] = useState<Todolist[]>([])
+	const [tasks, setTasks] = useState<Tasks>({})
 
 	//Запрос на сервер что-бы получить массив тудулистов
 	useEffect(() => {
@@ -150,7 +153,7 @@ export const AppHttpRequests = () => {
 			<AddItemForm addItem={createTodolistHandler}/>
 
 			{/* Todolists */}
-			{todolists.map((tl: any) => {
+			{todolists.map((tl: Todolist) => {
 				return (
 					<div key={tl.id} style={todolist}>
 						<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -164,11 +167,11 @@ export const AppHttpRequests = () => {
 
 						{/* Tasks */}
 						{!!tasks[tl.id] &&
-							tasks[tl.id].map((task: any) => {
+							tasks[tl.id].map((task: Task) => {
 								return (
 									<div key={task.id}>
 										<Checkbox
-											checked={task.isDone}
+											checked={!!task.status}
 											onChange={e => changeTaskStatusHandler(e, task)}
 										/>
 										<EditableSpan
