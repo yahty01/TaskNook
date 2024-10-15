@@ -41,6 +41,15 @@ export type Response<T> = {
 	data: T
 }
 
+export type UpdateTaskModel = {
+	description: string
+	title: string
+	status: number
+	priority: number
+	startDate: string
+	deadline: string
+}
+
 export const AppHttpRequests = () => {
 	const [todolists, setTodolists] = useState<Todolist[]>([])
 	const [tasks, setTasks] = useState<Tasks>({})
@@ -74,7 +83,7 @@ export const AppHttpRequests = () => {
 					// мы проходимся по нему фор-ичем и последний запрос
 					// за тасками
 					// последнего тудулиста единтсвенный и останется
-					setTasks({...tasks, [tl.id]: res.data.items})
+					setTasks(prevState => ({...prevState, [tl.id]: res.data.items}))      // Потому что асинхронно!!!! Важно понимать
 				})
 			})
 
@@ -137,15 +146,53 @@ export const AppHttpRequests = () => {
 	}
 
 	const removeTaskHandler = (taskId: string, todolistId: string) => {
-		// remove task
+		axios.delete<Response<{}>>(
+			`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${taskId}`,
+			{
+				headers: {
+					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
+					'API-KEY': '05ddea04-3151-4b31-a955-21fef99aa5ff'
+				}
+			}).then((res) => {
+			setTasks({...tasks, [todolistId]: tasks[todolistId].filter(item=>item.id !== taskId)})
+		})
 	}
 
-	const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>, task: any) => {
-		// update task status
+	const changeTaskRequest = (model: UpdateTaskModel, todolistId: string, task: Task) => {
+		axios.put<Response<{ item: Task }>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${task.id}`,
+			model, { headers: {
+					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
+					'API-KEY': '05ddea04-3151-4b31-a955-21fef99aa5ff'
+				}
+			}).then((res) => {
+			const newTask = res.data.data.item
+			setTasks({...tasks, [todolistId]: tasks[todolistId].map(item=> item.id === task.id ? newTask : item)}) //так как или возвращает первую истину
+		})
+	}
+	const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>, task: Task, todolistId: string) => {
+		const model: UpdateTaskModel = {
+			title: task.title,
+			description: task.description,
+			status: e.currentTarget.checked ? 2 : 0,
+			priority: task.priority,
+			startDate:  task.startDate,
+			deadline: task.deadline,
+		}
+
+		changeTaskRequest(model, todolistId, task)
 	}
 
-	const changeTaskTitleHandler = (title: string, task: any) => {
-		// update task title
+	const changeTaskTitleHandler = (title: string, task: Task, todolistId: string) => {
+		const model: UpdateTaskModel = {
+			title: title,
+			description: task.description,
+			status: task.status,
+			priority: task.priority,
+			startDate:  task.startDate,
+			deadline: task.deadline,
+		}
+
+		changeTaskRequest(model, todolistId, task)
 	}
 
 	return (
@@ -171,12 +218,12 @@ export const AppHttpRequests = () => {
 								return (
 									<div key={task.id}>
 										<Checkbox
-											checked={!!task.status}
-											onChange={e => changeTaskStatusHandler(e, task)}
+											checked={task.status === 2}
+											onChange={e => changeTaskStatusHandler(e, task, tl.id)}
 										/>
 										<EditableSpan
 											value={task.title}
-											onChange={title => changeTaskTitleHandler(title, task)}
+											onChange={title => changeTaskTitleHandler(title, task, tl.id)}
 										/>
 										<button onClick={() => removeTaskHandler(task.id, tl.id)}>x</button>
 									</div>
