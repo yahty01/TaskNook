@@ -3,51 +3,16 @@ import React, {ChangeEvent, useEffect, useState} from 'react'
 import {AddItemForm} from '../common/components/AddItemForm/AddItemForm'
 import {EditableSpan} from '../common/components/EditableSpan/EditableSpan'
 import axios from "axios";
+import {FieldError, Todolist} from "../features/todolists/api/todolistsApi.types";
+import {getTaskResponse, Task, Tasks, UpdateTaskModel} from "../features/todolists/api/tasksApi.types";
+import {todolistsApi} from "../features/todolists/api/todolistsApi";
 
-export type Todolist = {
-	"id": string,
-	"title": string,
-	"addedDate": string,
-	"order": number
-}
-
-export type Task = {
-	description: string
-	title: string
-	status: number
-	priority: number
-	startDate: string
-	deadline: string
-	id: string
-	todoListId: string
-	order: number
-	addedDate: string
-}
-
-export type Tasks = {
-	[todolistId: string]: Task[] | []
-}
-
-export type getTaskResponse = {
-	items: Task[]
-	totalCount: number
-	error: string | null
-}
 
 export type Response<T> = {
 	resultCode: number
 	messages: string[],
-	fieldsErrors: string[],
+	fieldsErrors: FieldError[],
 	data: T
-}
-
-export type UpdateTaskModel = {
-	description: string
-	title: string
-	status: number
-	priority: number
-	startDate: string
-	deadline: string
 }
 
 export const AppHttpRequests = () => {
@@ -56,77 +21,49 @@ export const AppHttpRequests = () => {
 
 	//Запрос на сервер что-бы получить массив тудулистов
 	useEffect(() => {
-		axios.get<Todolist[]>(
-			'https://social-network.samuraijs.com/api/1.1/todo-lists',
-			{
-				headers: {
-					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
-				}
-			}).then(res => {
+		todolistsApi.getTodolists()
+			.then(res => {
 				const data = res.data
-			setTodolists(data)
-			data.forEach(tl => {
-				axios.get<getTaskResponse>(
-					`https://social-network.samuraijs.com/api/1.1/todo-lists/${tl.id}/tasks`,
-					{
-						headers: {
-							Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
-						}
-					}).then(res => {
+				setTodolists(data)
+				data.forEach(tl => {
+					axios.get<getTaskResponse>(
+						`https://social-network.samuraijs.com/api/1.1/todo-lists/${tl.id}/tasks`,
+						{
+							headers: {
+								Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
+							}
+						}).then(res => {
 						//{...tasks, tasks: res.data.items} попробовать без спред копирования !\
-					// Ответ на вопрос, почему нельзя засетать просто res.data.items
-					// Потому что сам ассоциативный массив храниться на бэке а именно вся его часть. И в нашем запросе мы
-					// получаем объект с тасками для конкретного массива и сетаем его в наш локальный массив который
-					// имеет туже структуру что  и на бэке
-					// Потому если мы засетаем в tasks - res.data.items, то мы перезатрем остальные таски и в массиве будут
-					// таски только для одного массива, а именно последнего из нашего списка тудулистов, потому что
-					// мы проходимся по нему фор-ичем и последний запрос
-					// за тасками
-					// последнего тудулиста единтсвенный и останется
-					setTasks(prevState => ({...prevState, [tl.id]: res.data.items}))      // Потому что асинхронно!!!! Важно понимать
+						// Ответ на вопрос, почему нельзя засетать просто res.data.items
+						// Потому что сам ассоциативный массив храниться на бэке а именно вся его часть. И в нашем запросе мы
+						// получаем объект с тасками для конкретного массива и сетаем его в наш локальный массив который
+						// имеет туже структуру что  и на бэке
+						// Потому если мы засетаем в tasks - res.data.items, то мы перезатрем остальные таски и в массиве будут
+						// таски только для одного массива, а именно последнего из нашего списка тудулистов, потому что
+						// мы проходимся по нему фор-ичем и последний запрос
+						// за тасками
+						// последнего тудулиста единтсвенный и останется
+						setTasks(prevState => ({...prevState, [tl.id]: res.data.items}))      // Потому что асинхронно!!!! Важно понимать
+					})
 				})
-			})
 
-		})
+			})
 	}, [])
 
 	//Запрос на создание тудулиста
 	const createTodolistHandler = (title: string) => {
-		axios.post<Response<{ item: Todolist }>>(
-			'https://social-network.samuraijs.com/api/1.1/todo-lists',
-			{title},
-			{
-				headers: {
-					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
-					'API-KEY': '05ddea04-3151-4b31-a955-21fef99aa5ff'
-				}
-			}).then(res => {
+		todolistsApi.createTodolist(title).then(res => {
 			const newTodolist = res.data.data.item
 			setTodolists([newTodolist, ...todolists])
 		})
 	}
 	const removeTodolistHandler = (id: string) => {
-		axios.delete<Response<{}>>(
-			`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`,
-			{
-				headers: {
-					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
-					'API-KEY': '05ddea04-3151-4b31-a955-21fef99aa5ff'
-				}
-			}).then((res) => {
+		todolistsApi.removeTodolist(id).then((res) => {
 			setTodolists(todolists.filter((item: Todolist) => item.id !== id))
 		})
 	}
 	const updateTodolistHandler = (id: string, title: string) => {
-		axios.put<Response<{}>>(
-			`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`,
-			{title},
-			{
-				headers: {
-					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
-					'API-KEY': '05ddea04-3151-4b31-a955-21fef99aa5ff'
-				}
-			}).then(() => {
+		todolistsApi.updateTodolist({title, id}).then(() => {
 			setTodolists(todolists.map((item: Todolist) => item.id === id ? {...item, title} : item))
 		})
 	}
@@ -154,19 +91,22 @@ export const AppHttpRequests = () => {
 					'API-KEY': '05ddea04-3151-4b31-a955-21fef99aa5ff'
 				}
 			}).then((res) => {
-			setTasks({...tasks, [todolistId]: tasks[todolistId].filter(item=>item.id !== taskId)})
+			setTasks({...tasks, [todolistId]: tasks[todolistId].filter(item => item.id !== taskId)})
 		})
 	}
 
 	const changeTaskRequest = (model: UpdateTaskModel, todolistId: string, task: Task) => {
-		axios.put<Response<{ item: Task }>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${task.id}`,
-			model, { headers: {
+		axios.put<Response<{
+			item: Task
+		}>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${task.id}`,
+			model, {
+				headers: {
 					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
 					'API-KEY': '05ddea04-3151-4b31-a955-21fef99aa5ff'
 				}
 			}).then((res) => {
 			const newTask = res.data.data.item
-			setTasks({...tasks, [todolistId]: tasks[todolistId].map(item=> item.id === task.id ? newTask : item)}) //так как или возвращает первую истину
+			setTasks({...tasks, [todolistId]: tasks[todolistId].map(item => item.id === task.id ? newTask : item)}) //так как или возвращает первую истину
 		})
 	}
 	const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>, task: Task, todolistId: string) => {
@@ -175,7 +115,7 @@ export const AppHttpRequests = () => {
 			description: task.description,
 			status: e.currentTarget.checked ? 2 : 0,
 			priority: task.priority,
-			startDate:  task.startDate,
+			startDate: task.startDate,
 			deadline: task.deadline,
 		}
 
@@ -188,7 +128,7 @@ export const AppHttpRequests = () => {
 			description: task.description,
 			status: task.status,
 			priority: task.priority,
-			startDate:  task.startDate,
+			startDate: task.startDate,
 			deadline: task.deadline,
 		}
 
