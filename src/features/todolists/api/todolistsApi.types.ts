@@ -5,7 +5,3 @@ export type Todolist = {
 	"order": number
 }
 
-export type FieldError = {
-	error: string
-	field: string
-}

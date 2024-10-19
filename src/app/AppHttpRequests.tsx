@@ -3,17 +3,13 @@ import React, {ChangeEvent, useEffect, useState} from 'react'
 import {AddItemForm} from '../common/components/AddItemForm/AddItemForm'
 import {EditableSpan} from '../common/components/EditableSpan/EditableSpan'
 import axios from "axios";
-import {FieldError, Todolist} from "../features/todolists/api/todolistsApi.types";
+import {Todolist} from "../features/todolists/api/todolistsApi.types";
 import {getTaskResponse, Task, Tasks, UpdateTaskModel} from "../features/todolists/api/tasksApi.types";
 import {todolistsApi} from "../features/todolists/api/todolistsApi";
+import {BaseResponse} from "../common/types/types";
+import {TaskStatus} from "../features/todolists/lib/enums/enums";
 
 
-export type Response<T> = {
-	resultCode: number
-	messages: string[],
-	fieldsErrors: FieldError[],
-	data: T
-}
 
 export const AppHttpRequests = () => {
 	const [todolists, setTodolists] = useState<Todolist[]>([])
@@ -68,7 +64,7 @@ export const AppHttpRequests = () => {
 		})
 	}
 	const createTaskHandler = (title: string, todolistId: string) => {
-		axios.post<Response<{ item: Task }>>(
+		axios.post<BaseResponse<{ item: Task }>>(
 			`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks`,
 			{title},
 			{
@@ -83,7 +79,7 @@ export const AppHttpRequests = () => {
 	}
 
 	const removeTaskHandler = (taskId: string, todolistId: string) => {
-		axios.delete<Response<{}>>(
+		axios.delete<BaseResponse>(
 			`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${taskId}`,
 			{
 				headers: {
@@ -96,9 +92,8 @@ export const AppHttpRequests = () => {
 	}
 
 	const changeTaskRequest = (model: UpdateTaskModel, todolistId: string, task: Task) => {
-		axios.put<Response<{
-			item: Task
-		}>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${task.id}`,
+		axios.put<BaseResponse<{ item: Task }>>(
+			`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${task.id}`,
 			model, {
 				headers: {
 					Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
@@ -110,10 +105,12 @@ export const AppHttpRequests = () => {
 		})
 	}
 	const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>, task: Task, todolistId: string) => {
+		const status = e.currentTarget.checked ? TaskStatus.Complete : TaskStatus.New
+
 		const model: UpdateTaskModel = {
+			status,
 			title: task.title,
 			description: task.description,
-			status: e.currentTarget.checked ? 2 : 0,
 			priority: task.priority,
 			startDate: task.startDate,
 			deadline: task.deadline,
@@ -124,7 +121,7 @@ export const AppHttpRequests = () => {
 
 	const changeTaskTitleHandler = (title: string, task: Task, todolistId: string) => {
 		const model: UpdateTaskModel = {
-			title: title,
+			title,
 			description: task.description,
 			status: task.status,
 			priority: task.priority,
