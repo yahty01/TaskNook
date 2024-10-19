@@ -1,15 +1,16 @@
-import React from "react";
-import {Todolist} from "./Todolist/Todolist";
-import {useAppSelector} from "../../../../common/hooks/useAppSelector";
-import {selectTodolists} from "../../model/todolistsSelectors";
+import React from "react"
+import { Todolist } from "./Todolist/Todolist"
+import { useAppSelector } from "../../../../common/hooks/useAppSelector"
+import { selectTodolists } from "../../model/todolistsSelectors"
 
 export function Todolists() {
-	const todoLists = useAppSelector(selectTodolists)
+  const todoLists = useAppSelector(selectTodolists)
 
-	return (
-		<>
-			{todoLists.map(todolist =>
-				<Todolist key={todolist.id} todolist={todolist}/>)
-			}
-		</>)
+  return (
+    <>
+      {todoLists.map((todolist) => (
+        <Todolist key={todolist.id} todolist={todolist} />
+      ))}
+    </>
+  )
 }

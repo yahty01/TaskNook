@@ -1,19 +1,18 @@
-/src                # Корневая директория исходного кода <br>
+/src # Корневая директория исходного кода <br>
 │<br>
-├── /app            # Настройки приложения и глобальные компоненты<br>
-│   ├── store.ts    # Настройка Redux store<br>
-│   └── App.tsx     # Корневой React-компонент приложения<br>
+├── /app # Настройки приложения и глобальные компоненты<br>
+│ ├── store.ts # Настройка Redux store<br>
+│ └── App.tsx # Корневой React-компонент приложения<br>
 │<br>
-├── /common         # Хуки, утилиты и переиспользуемые компоненты<br>
-│   └── [generic utilities and hooks]<br>
+├── /common # Хуки, утилиты и переиспользуемые компоненты<br>
+│ └── [generic utilities and hooks]<br>
 │<br>
-├── /features       # Фолдеры с функциональностью для каждой отдельной фичи<br>
-│   └── /todos      # Фича "todos"<br>
-│       ├── todosSlice.ts  # Redux логика для todos, слайс и действия<br>
-│       └── Todos.tsx      # React-компонент для отображения todos<br>
+├── /features # Фолдеры с функциональностью для каждой отдельной фичи<br>
+│ └── /todos # Фича "todos"<br>
+│ ├── todosSlice.ts # Redux логика для todos, слайс и действия<br>
+│ └── Todos.tsx # React-компонент для отображения todos<br>
 │<br>
-└── index.tsx  # Точка входа, рендерит дерево компонентов React<br>
-
+└── index.tsx # Точка входа, рендерит дерево компонентов React<br>
 
 # Getting Started with Create React App
 
