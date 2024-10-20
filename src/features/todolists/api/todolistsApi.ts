@@ -1,6 +1,6 @@
-import { BaseResponse } from "../../../common/types/types"
+import { BaseResponse } from "common/types/types"
 import { Todolist } from "./todolistsApi.types"
-import { instance } from "../../../common/instance/instance"
+import { instance } from "common/instance/instance"
 
 //Модульный паттерн создания объектов
 
