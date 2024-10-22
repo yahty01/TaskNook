@@ -4,7 +4,7 @@ import { AddItemForm, EditableSpan } from "common/components"
 import { Todolist } from "../features/todolists/api/todolistsApi.types"
 import { Task, Tasks, UpdateTaskModel } from "../features/todolists/api/tasksApi.types"
 import { todolistsApi } from "../features/todolists/api/todolistsApi"
-import { TaskStatus } from "../features/todolists/lib/enums/enums"
+import { TaskStatus } from "../features/todolists/lib/enums"
 import { tasksApi } from "../features/todolists/api/tasksApi"
 
 export const AppHttpRequests = () => {

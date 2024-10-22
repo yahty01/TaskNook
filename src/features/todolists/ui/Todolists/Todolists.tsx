@@ -1,6 +1,6 @@
 import React from "react"
 import { Todolist } from "./Todolist/Todolist"
-import { useAppSelector } from "../../../../common/hooks/useAppSelector"
+import { useAppSelector } from "common/hooks"
 import { selectTodolists } from "../../model/todolistsSelectors"
 
 export function Todolists() {

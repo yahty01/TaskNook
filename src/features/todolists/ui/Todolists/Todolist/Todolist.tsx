@@ -1,7 +1,6 @@
 import React from "react"
 import { Tasks } from "./Tasks/Tasks"
-import { AddItemForm } from "../../../../../common/components/AddItemForm/AddItemForm"
-import { EditableSpan } from "../../../../../common/components/EditableSpan/EditableSpan"
+import { AddItemForm, EditableSpan } from "common/components"
 import Grid from "@mui/material/Unstable_Grid2"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
@@ -13,8 +12,7 @@ import {
 } from "../../../model/todolists-reducer"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { StyledPaper } from "./Todolist.styled"
-import { useAppDispatch } from "../../../../../common/hooks/useAppDispatch"
-import { useAppSelector } from "../../../../../common/hooks/useAppSelector"
+import { useAppDispatch, useAppSelector } from "common/hooks"
 import { selectTasks } from "../../../model/tasksSelectors"
 
 export type filterValue = "all" | "completed" | "active"

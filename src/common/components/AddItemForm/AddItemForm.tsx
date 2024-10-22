@@ -3,9 +3,9 @@ import Button from "@mui/material/Button"
 import AddIcon from "@mui/icons-material/Add"
 import TextField from "@mui/material/TextField"
 import Box from "@mui/material/Box"
-import { getTheme } from "../../theme/getTheme"
-import { useAppSelector } from "../../hooks/useAppSelector"
-import { selectThemeMode } from "../../../app/model/appSelectors"
+import { getTheme } from "common/theme"
+import { useAppSelector } from "common/hooks"
+import { selectThemeMode } from "app/model/appSelectors"
 
 type AddItemFormProps = {
   addItem: (title: string) => void
