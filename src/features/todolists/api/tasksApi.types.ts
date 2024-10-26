@@ -1,4 +1,4 @@
-import { TaskPriority, TaskStatus } from "../lib/enums/enums"
+import { TaskPriority, TaskStatus } from "../lib/enums"
 
 export type Task = {
   description: string

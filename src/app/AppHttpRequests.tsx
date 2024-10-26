@@ -1,17 +1,11 @@
 import Checkbox from "@mui/material/Checkbox"
 import React, { ChangeEvent, useEffect, useState } from "react"
 import { AddItemForm, EditableSpan } from "common/components"
-import axios from "axios"
 import { Todolist } from "../features/todolists/api/todolistsApi.types"
-import {
-  getTaskResponse,
-  Task,
-  Tasks,
-  UpdateTaskModel,
-} from "../features/todolists/api/tasksApi.types"
+import { Task, Tasks, UpdateTaskModel } from "../features/todolists/api/tasksApi.types"
 import { todolistsApi } from "../features/todolists/api/todolistsApi"
-import { BaseResponse } from "common/types/types"
-import { TaskStatus } from "../features/todolists/lib/enums/enums"
+import { TaskStatus } from "../features/todolists/lib/enums"
+import { tasksApi } from "../features/todolists/api/tasksApi"
 
 export const AppHttpRequests = () => {
   const [todolists, setTodolists] = useState<Todolist[]>([])
@@ -23,33 +17,23 @@ export const AppHttpRequests = () => {
       const data = res.data
       setTodolists(data)
       data.forEach((tl) => {
-        axios
-          .get<getTaskResponse>(
-            `https://social-network.samuraijs.com/api/1.1/todo-lists/${tl.id}/tasks`,
-            {
-              headers: {
-                Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
-              },
-            },
-          )
-          .then((res) => {
-            //{...tasks, tasks: res.data.items} попробовать без спред копирования !\
-            // Ответ на вопрос, почему нельзя засетать просто res.data.items
-            // Потому что сам ассоциативный массив храниться на бэке а именно вся его часть. И в нашем запросе мы
-            // получаем объект с тасками для конкретного массива и сетаем его в наш локальный массив который
-            // имеет туже структуру что  и на бэке
-            // Потому если мы засетаем в tasks - res.data.items, то мы перезатрем остальные таски и в массиве будут
-            // таски только для одного массива, а именно последнего из нашего списка тудулистов, потому что
-            // мы проходимся по нему фор-ичем и последний запрос
-            // за тасками
-            // последнего тудулиста единтсвенный и останется
-            setTasks((prevState) => ({ ...prevState, [tl.id]: res.data.items })) // Потому что асинхронно!!!! Важно понимать
-          })
+        tasksApi.getTasks(tl.id).then((res) => {
+          //{...tasks, tasks: res.data.items} попробовать без спред копирования !\
+          // Ответ на вопрос, почему нельзя засетать просто res.data.items
+          // Потому что сам ассоциативный массив храниться на бэке а именно вся его часть. И в нашем запросе мы
+          // получаем объект с тасками для конкретного массива и сетаем его в наш локальный массив который
+          // имеет туже структуру что  и на бэке
+          // Потому если мы засетаем в tasks - res.data.items, то мы перезатрем остальные таски и в массиве будут
+          // таски только для одного массива, а именно последнего из нашего списка тудулистов, потому что
+          // мы проходимся по нему фор-ичем и последний запрос
+          // за тасками
+          // последнего тудулиста единтсвенный и останется
+          setTasks((prevState) => ({ ...prevState, [tl.id]: res.data.items })) // Потому что асинхронно!!!! Важно понимать
+        })
       })
     })
   }, [])
 
-  //Запрос на создание тудулиста
   const createTodolistHandler = (title: string) => {
     todolistsApi.createTodolist(title).then((res) => {
       const newTodolist = res.data.data.item
@@ -67,64 +51,32 @@ export const AppHttpRequests = () => {
     })
   }
   const createTaskHandler = (title: string, todolistId: string) => {
-    axios
-      .post<BaseResponse<{ item: Task }>>(
-        `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks`,
-        { title },
-        {
-          headers: {
-            Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
-            "API-KEY": "05ddea04-3151-4b31-a955-21fef99aa5ff",
-          },
-        },
-      )
-      .then((res) => {
-        const newTask = res.data.data.item
-        setTasks({
-          ...tasks,
-          [todolistId]: [newTask, ...(tasks[todolistId] || [])],
-        }) //так как или возвращает первую истину
-      })
+    tasksApi.createTask({ title, todolistId }).then((res) => {
+      const newTask = res.data.data.item
+      setTasks({
+        ...tasks,
+        [todolistId]: [newTask, ...(tasks[todolistId] || [])],
+      }) //так как или возвращает первую истину
+    })
   }
 
   const removeTaskHandler = (taskId: string, todolistId: string) => {
-    axios
-      .delete<BaseResponse>(
-        `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${taskId}`,
-        {
-          headers: {
-            Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
-            "API-KEY": "05ddea04-3151-4b31-a955-21fef99aa5ff",
-          },
-        },
-      )
-      .then((res) => {
-        setTasks({
-          ...tasks,
-          [todolistId]: tasks[todolistId].filter((item) => item.id !== taskId),
-        })
+    tasksApi.deleteTask({ taskId, todolistId }).then((res) => {
+      setTasks({
+        ...tasks,
+        [todolistId]: tasks[todolistId].filter((item) => item.id !== taskId),
       })
+    })
   }
 
   const changeTaskRequest = (model: UpdateTaskModel, todolistId: string, task: Task) => {
-    axios
-      .put<BaseResponse<{ item: Task }>>(
-        `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks/${task.id}`,
-        model,
-        {
-          headers: {
-            Authorization: `Bearer af842d5b-0440-49f0-99e8-50bd1cc0b394`,
-            "API-KEY": "05ddea04-3151-4b31-a955-21fef99aa5ff",
-          },
-        },
-      )
-      .then((res) => {
-        const newTask = res.data.data.item
-        setTasks({
-          ...tasks,
-          [todolistId]: tasks[todolistId].map((item) => (item.id === task.id ? newTask : item)),
-        }) //так как или возвращает первую истину
-      })
+    tasksApi.updateTask({ model, taskId: task.id, todolistId }).then((res) => {
+      const newTask = res.data.data.item
+      setTasks({
+        ...tasks,
+        [todolistId]: tasks[todolistId].map((item) => (item.id === task.id ? newTask : item)),
+      }) //так как или возвращает первую истину
+    })
   }
   const changeTaskStatusHandler = (
     e: ChangeEvent<HTMLInputElement>,

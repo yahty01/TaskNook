@@ -3,11 +3,10 @@ import * as React from "react"
 import IconButton from "@mui/material/IconButton"
 import Brightness7Icon from "@mui/icons-material/Brightness7"
 import Brightness4Icon from "@mui/icons-material/Brightness4"
-import { changeThemeAC } from "../../../app/model/app-reducer"
-import { getTheme } from "../../theme/getTheme"
-import { useAppDispatch } from "../../hooks/useAppDispatch"
-import { useAppSelector } from "../../hooks/useAppSelector"
-import { selectThemeMode } from "../../../app/model/appSelectors"
+import { changeThemeAC } from "app/model/app-reducer"
+import { getTheme } from "common/theme"
+import { useAppDispatch, useAppSelector } from "common/hooks"
+import { selectThemeMode } from "app/model/appSelectors"
 
 export const ButtonSwitchTheme = () => {
   const dispatch = useAppDispatch()
