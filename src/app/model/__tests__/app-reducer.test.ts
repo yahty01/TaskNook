@@ -1,5 +1,5 @@
 import { appReducer, AppStateType, changeThemeAC } from "../app-reducer"
-import { useAppSelector } from "../../../common/hooks/useAppSelector"
+import { useAppSelector } from "common/hooks"
 import { selectThemeMode } from "../appSelectors"
 
 test("themeMode", () => {

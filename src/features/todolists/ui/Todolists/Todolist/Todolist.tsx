@@ -1,33 +1,38 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Tasks } from "./Tasks/Tasks"
 import { AddItemForm, EditableSpan } from "common/components"
 import Grid from "@mui/material/Unstable_Grid2"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { addTaskAC } from "../../../model/tasks-reducer"
+import { addTaskAC, fetchTasksTC } from "../../../model/tasks-reducer"
 import {
   changeTodolistTitleAC,
+  DomainTodolist,
   removeTodolistAC,
-  TodoListType,
 } from "../../../model/todolists-reducer"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { StyledPaper } from "./Todolist.styled"
 import { useAppDispatch, useAppSelector } from "common/hooks"
 import { selectTasks } from "../../../model/tasksSelectors"
 
-export type filterValue = "all" | "completed" | "active"
+export type FilterValue = "all" | "completed" | "active"
 
 type TodoListProps = {
-  todolist: TodoListType
+  todolist: DomainTodolist
 }
 
 export function Todolist({ todolist }: TodoListProps) {
-  const allTasks = useAppSelector(selectTasks)
-  const tasks = allTasks[todolist.id]
   const dispatch = useAppDispatch()
+  const allTasks = useAppSelector(selectTasks)
+  //ThunkCreate
+  useEffect(() => {
+    dispatch(fetchTasksTC(todolist.id))
+  }, [])
+
+  const tasks = allTasks[todolist.id]
 
   const addTask = (title: string) => {
-    dispatch(addTaskAC(title, todolist.id))
+    dispatch(addTaskAC({ title, todolistId: todolist.id }))
   }
 
   const removeTodoList = () => {
@@ -41,11 +46,11 @@ export function Todolist({ todolist }: TodoListProps) {
   let tasksForFilter = tasks
 
   if (todolist.filter === "active") {
-    tasksForFilter = tasksForFilter.filter((task) => !task.isDone)
+    tasksForFilter = tasksForFilter.filter((task) => !task.status)
   }
 
   if (todolist.filter === "completed") {
-    tasksForFilter = tasksForFilter.filter((task) => task.isDone)
+    tasksForFilter = tasksForFilter.filter((task) => task.status)
   }
 
   return (

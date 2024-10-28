@@ -2,7 +2,7 @@ import Checkbox from "@mui/material/Checkbox"
 import React, { ChangeEvent, useEffect, useState } from "react"
 import { AddItemForm, EditableSpan } from "common/components"
 import { Todolist } from "../features/todolists/api/todolistsApi.types"
-import { Task, Tasks, UpdateTaskModel } from "../features/todolists/api/tasksApi.types"
+import { DomainTask, Tasks, UpdateTaskModel } from "../features/todolists/api/tasksApi.types"
 import { todolistsApi } from "../features/todolists/api/todolistsApi"
 import { TaskStatus } from "../features/todolists/lib/enums"
 import { tasksApi } from "../features/todolists/api/tasksApi"
@@ -69,7 +69,7 @@ export const AppHttpRequests = () => {
     })
   }
 
-  const changeTaskRequest = (model: UpdateTaskModel, todolistId: string, task: Task) => {
+  const changeTaskRequest = (model: UpdateTaskModel, todolistId: string, task: DomainTask) => {
     tasksApi.updateTask({ model, taskId: task.id, todolistId }).then((res) => {
       const newTask = res.data.data.item
       setTasks({
@@ -80,7 +80,7 @@ export const AppHttpRequests = () => {
   }
   const changeTaskStatusHandler = (
     e: ChangeEvent<HTMLInputElement>,
-    task: Task,
+    task: DomainTask,
     todolistId: string,
   ) => {
     const status = e.currentTarget.checked ? TaskStatus.Complete : TaskStatus.New
@@ -97,7 +97,7 @@ export const AppHttpRequests = () => {
     changeTaskRequest(model, todolistId, task)
   }
 
-  const changeTaskTitleHandler = (title: string, task: Task, todolistId: string) => {
+  const changeTaskTitleHandler = (title: string, task: DomainTask, todolistId: string) => {
     const model: UpdateTaskModel = {
       title,
       description: task.description,
@@ -142,7 +142,7 @@ export const AppHttpRequests = () => {
 
             {/* Tasks */}
             {!!tasks[tl.id] &&
-              tasks[tl.id].map((task: Task) => {
+              tasks[tl.id].map((task: DomainTask) => {
                 return (
                   <div key={task.id}>
                     <Checkbox
