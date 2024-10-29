@@ -7,11 +7,7 @@ import ListItem from "@mui/material/ListItem"
 import { SpanWrapper } from "./Task.styled"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
-import {
-  changeTaskStatusAC,
-  changeTaskTitleAC,
-  removeTaskTC,
-} from "../../../../../model/tasks-reducer"
+import { removeTaskTC, updateTaskTC } from "../../../../../model/tasks-reducer"
 import { DomainTask } from "../../../../../api/tasksApi.types"
 import { TaskStatus } from "../../../../../lib/enums"
 
@@ -20,7 +16,7 @@ type TaskProps = {
   todolistId: string
 }
 
-export function Task({ task, todolistId }: TaskProps) {
+export function Task({ todolistId, task }: TaskProps) {
   const dispatch = useAppDispatch()
 
   const removeTaskHandler = () => {
@@ -28,12 +24,13 @@ export function Task({ task, todolistId }: TaskProps) {
   }
 
   const changeTaskTitleHandler = (title: string) => {
-    dispatch(changeTaskTitleAC({ id: task.id, title, todolistId }))
+    dispatch(updateTaskTC(todolistId, task.id, title))
   }
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const newStatus = e.currentTarget.checked
-    dispatch(changeTaskStatusAC({ taskId: task.id, status: newStatus, todolistId }))
+    debugger
+    dispatch(updateTaskTC(todolistId, task.id, newStatus))
   }
 
   const isComplete = task.status === TaskStatus.Complete

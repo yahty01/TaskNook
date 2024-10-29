@@ -4,7 +4,7 @@ import { AddItemForm, EditableSpan } from "common/components"
 import Grid from "@mui/material/Unstable_Grid2"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { addTaskAC, fetchTasksTC } from "../../../model/tasks-reducer"
+import { createTaskTC, fetchTasksTC } from "../../../model/tasks-reducer"
 import {
   changeTodolistTitleAC,
   DomainTodolist,
@@ -32,7 +32,7 @@ export function Todolist({ todolist }: TodoListProps) {
   const tasks = allTasks[todolist.id]
 
   const addTask = (title: string) => {
-    dispatch(addTaskAC({ title, todolistId: todolist.id }))
+    dispatch(createTaskTC({ title, todolistId: todolist.id }))
   }
 
   const removeTodoList = () => {
