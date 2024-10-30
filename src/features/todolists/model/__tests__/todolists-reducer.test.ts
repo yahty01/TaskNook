@@ -8,36 +8,24 @@ import {
   todolistsReducer,
 } from "../todolists-reducer"
 import { FilterType } from "../../ui/Todolists/Todolist/FilterTasksButtons/FilterTasksButtons"
+import { todolistsData } from "./mock-data-test"
 
 test("correct todolist should be removed", () => {
   let todolistId1 = v1()
   let todolistId2 = v1()
 
-  // 1. Стартовый state
-  const startState: DomainTodolist[] = [
-    { id: todolistId1, title: "What to learn", filter: "all", order: 1, addedDate: "" },
-    { id: todolistId2, title: "What to buy", filter: "all", order: 1, addedDate: "" },
-  ]
+  const startState: DomainTodolist[] = { ...todolistsData }
+  startState[0].id = todolistId1
+  startState[1].id = todolistId2
+  const action = removeTodolistAC(todolistId1)
+  const endState = todolistsReducer(startState, action)
 
-  // 2. Действие
-
-  const endState = todolistsReducer(startState, removeTodolistAC(todolistId1))
-
-  // 3. Проверяем, что наши действия (изменения state) соответствуют ожиданию
-  // в массиве останется один тудулист
   expect(endState.length).toBe(1)
-  // удалится нужный тудулист, а не любой
   expect(endState[0].id).toBe(todolistId2)
 })
 
 test("correct todolist should be added", () => {
-  let todolistId1 = v1()
-  let todolistId2 = v1()
-
-  const startState: DomainTodolist[] = [
-    { id: todolistId1, title: "What to learn", filter: "all", order: 1, addedDate: "" },
-    { id: todolistId2, title: "What to buy", filter: "all", order: 1, addedDate: "" },
-  ]
+  const startState: DomainTodolist[] = { ...todolistsData }
 
   const newTitle = "New Todolist"
   const endState = todolistsReducer(startState, addTodolistAC(newTitle))
@@ -51,10 +39,9 @@ test("correct todolist should change its name", () => {
   let todolistId1 = v1()
   let todolistId2 = v1()
 
-  const startState: DomainTodolist[] = [
-    { id: todolistId1, title: "What to learn", filter: "all", order: 1, addedDate: "" },
-    { id: todolistId2, title: "What to buy", filter: "all", order: 1, addedDate: "" },
-  ]
+  const startState: DomainTodolist[] = { ...todolistsData }
+  startState[0].id = todolistId1
+  startState[1].id = todolistId2
 
   const newTitle = "New Todolist"
 
@@ -72,10 +59,9 @@ test("correct filter of todolist should be changed", () => {
   let todolistId1 = v1()
   let todolistId2 = v1()
 
-  const startState: DomainTodolist[] = [
-    { id: todolistId1, title: "What to learn", filter: "all", order: 1, addedDate: "" },
-    { id: todolistId2, title: "What to buy", filter: "all", order: 1, addedDate: "" },
-  ]
+  const startState: DomainTodolist[] = { ...todolistsData }
+  startState[0].id = todolistId1
+  startState[1].id = todolistId2
 
   let newFilter: FilterType = "active"
   const endState = todolistsReducer(
