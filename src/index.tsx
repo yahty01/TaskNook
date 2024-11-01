@@ -3,15 +3,15 @@ import ReactDOM from "react-dom/client"
 import { GlobalStyle } from "./styles/GlobalStyled"
 import { store } from "app/store"
 import { Provider } from "react-redux"
-import { AppHttpRequests } from "app/AppHttpRequests"
+import { App } from "app/App"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <GlobalStyle />
-      {/*<App/>*/}
-      <AppHttpRequests />
+      <App />
+      {/*<AppHttpRequests />*/}
     </Provider>
   </React.StrictMode>,
 )
