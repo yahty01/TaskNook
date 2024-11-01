@@ -29,7 +29,6 @@ export function Task({ todolistId, task }: TaskProps) {
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const newStatus = e.currentTarget.checked
-    debugger
     dispatch(updateTaskTC(todolistId, task.id, newStatus))
   }
 

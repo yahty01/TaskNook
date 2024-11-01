@@ -6,9 +6,9 @@ import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { createTaskTC, fetchTasksTC } from "../../../model/tasks-reducer"
 import {
-  changeTodolistTitleAC,
   DomainTodolist,
-  removeTodolistAC,
+  removeTodolistTC,
+  updateTodolistTitleTC,
 } from "../../../model/todolists-reducer"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { StyledPaper } from "./Todolist.styled"
@@ -36,11 +36,11 @@ export function Todolist({ todolist }: TodoListProps) {
   }
 
   const removeTodoList = () => {
-    dispatch(removeTodolistAC(todolist.id))
+    dispatch(removeTodolistTC(todolist.id))
   }
 
   const updateTodoListTitle = (title: string) => {
-    dispatch(changeTodolistTitleAC({ todolistId: todolist.id, title }))
+    dispatch(updateTodolistTitleTC({ id: todolist.id, title }))
   }
 
   let tasksForFilter = tasks

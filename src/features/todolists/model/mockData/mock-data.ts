@@ -2,7 +2,7 @@ import { TasksStateType } from "../tasks-reducer"
 import { v1 } from "uuid"
 import { DomainTodolist } from "../todolists-reducer"
 
-export const mockDataTest: TasksStateType = {
+export const mockDataTasks: TasksStateType = {
   todolistId1: [
     {
       description: "string",

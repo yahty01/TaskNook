@@ -7,12 +7,12 @@ import {
   TasksStateType,
   updateTaskAC,
 } from "../tasks-reducer"
-import { mockDataTest, newTaskData } from "./mock-data-test"
+import { mockDataTasks, newTaskData, todolistData } from "../mockData/mock-data"
 import { DomainTask } from "../../api/tasksApi.types"
 import { TaskStatus } from "../../lib/enums"
 
 test("correct tasks should be deleted from correct array", () => {
-  const startState: TasksStateType = { ...mockDataTest }
+  const startState: TasksStateType = { ...mockDataTasks }
   const action = removeTaskAC({ taskId: "2", todolistId: "todolistId2" })
 
   const endState = tasksReducer(startState, action)
@@ -21,7 +21,7 @@ test("correct tasks should be deleted from correct array", () => {
 })
 
 test("correct tasks should be added to correct array", () => {
-  const startState: TasksStateType = { ...mockDataTest }
+  const startState: TasksStateType = { ...mockDataTasks }
   const newTask: DomainTask = newTaskData
 
   if (newTask) {
@@ -35,7 +35,7 @@ test("correct tasks should be added to correct array", () => {
 })
 
 test("status of specified tasks should be changed", () => {
-  const startState: TasksStateType = { ...mockDataTest }
+  const startState: TasksStateType = { ...mockDataTasks }
   const newTask: DomainTask = startState["todolistId1"].filter((item) => item.id === "3")[0]
   newTask.status = TaskStatus.Complete
   newTask.id = "3"
@@ -51,7 +51,7 @@ test("status of specified tasks should be changed", () => {
 })
 
 test("title of specified tasks should be changed", () => {
-  const startState: TasksStateType = { ...mockDataTest }
+  const startState: TasksStateType = { ...mockDataTasks }
   const newTask: DomainTask = startState["todolistId2"].filter((item) => item.id === "1")[0]
   newTask.title = "new"
 
@@ -65,9 +65,9 @@ test("title of specified tasks should be changed", () => {
 })
 
 test("new array should be added when new todolist is added", () => {
-  const startState: TasksStateType = { ...mockDataTest }
-
-  const action = addTodolistAC({ title: "new todo", todolistId: "todolist2" })
+  const startState: TasksStateType = { ...mockDataTasks }
+  const newTodo = { ...todolistData, title: "new todo" }
+  const action = addTodolistAC({ todolist: newTodo })
 
   const endState = tasksReducer(startState, action)
 
@@ -82,7 +82,7 @@ test("new array should be added when new todolist is added", () => {
 })
 
 test("property with todolistId should be deleted", () => {
-  const startState: TasksStateType = { ...mockDataTest }
+  const startState: TasksStateType = { ...mockDataTasks }
 
   const action = removeTodolistAC("todolistId2")
 

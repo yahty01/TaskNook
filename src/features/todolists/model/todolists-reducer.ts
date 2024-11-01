@@ -1,4 +1,3 @@
-import { v1 } from "uuid"
 import { FilterType } from "../ui/Todolists/Todolist/FilterTasksButtons/FilterTasksButtons"
 import { FilterValue } from "../ui/Todolists/Todolist/Todolist"
 import { Todolist } from "../api/todolistsApi.types"
@@ -14,23 +13,23 @@ export const removeTodolistAC = (todolistId: string) => {
   return { type: "REMOVE-TODOLIST", payload: { todolistId } } as const
 }
 
-export const addTodolistAC = (title: string) => {
-  return { type: "ADD-TODOLIST", payload: { title, todolistId: v1() } } as const
+export const addTodolistAC = (todolist: Todolist) => {
+  return { type: "ADD-TODOLIST", payload: { todolist } } as const
 }
 
-export const changeTodolistTitleAC = (payload: { todolistId: string; title: string }) => {
+export const updateTodolistTitleAC = (payload: { id: string; title: string }) => {
   return { type: "CHANGE-TODOLIST-TITLE", payload } as const
 }
 
-export const changeTodolistFilterAC = (payload: { todolistId: string; filter: FilterType }) => {
+export const updateTodolistFilterAC = (payload: { todolistId: string; filter: FilterType }) => {
   return { type: "CHANGE-TODOLIST-FILTER", payload } as const
 }
 
 export type setTodolistAT = ReturnType<typeof setTodolistsAC>
 export type RemoveTodolistAT = ReturnType<typeof removeTodolistAC>
 export type AddTodolistAT = ReturnType<typeof addTodolistAC>
-export type ChangeTodolistTitleAT = ReturnType<typeof changeTodolistTitleAC>
-export type ChangeTodolistFilterAT = ReturnType<typeof changeTodolistFilterAC>
+export type ChangeTodolistTitleAT = ReturnType<typeof updateTodolistTitleAC>
+export type ChangeTodolistFilterAT = ReturnType<typeof updateTodolistFilterAC>
 
 //юниеан тип
 export type ActionsType =
@@ -47,6 +46,25 @@ export const fetchTodolistsTC = () => (dispatch: AppDispatch) => {
     dispatch(setTodolistsAC(todolists))
   })
 }
+
+export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
+  todolistsApi.createTodolist(title).then((res) => {
+    dispatch(addTodolistAC(res.data.data.item))
+  })
+}
+
+export const removeTodolistTC = (id: string) => (dispatch: AppDispatch) => {
+  todolistsApi.removeTodolist(id).then((res) => {
+    dispatch(removeTodolistAC(id))
+  })
+}
+
+export const updateTodolistTitleTC =
+  (arg: { id: string; title: string }) => (dispatch: AppDispatch) => {
+    todolistsApi.updateTodolist(arg).then((res) => {
+      dispatch(updateTodolistTitleAC(arg))
+    })
+  }
 
 export type DomainTodolist = Todolist & {
   filter: FilterValue
@@ -69,20 +87,20 @@ export const todolistsReducer = (
     }
 
     case "ADD-TODOLIST": {
-      const { title, todolistId } = action.payload
+      const { todolist } = action.payload
       const newTodolist: DomainTodolist = {
-        id: todolistId,
-        title: title,
+        id: todolist.id,
+        title: todolist.title,
+        addedDate: todolist.addedDate,
+        order: todolist.order,
         filter: "all",
-        addedDate: "",
-        order: 0,
       }
       return [newTodolist, ...state]
     }
 
     case "CHANGE-TODOLIST-TITLE": {
-      const { todolistId, title } = action.payload
-      return state.map((tl) => (tl.id === todolistId ? { ...tl, title } : tl))
+      const { id, title } = action.payload
+      return state.map((tl) => (tl.id === id ? { ...tl, title } : tl))
     }
 
     case "CHANGE-TODOLIST-FILTER": {
