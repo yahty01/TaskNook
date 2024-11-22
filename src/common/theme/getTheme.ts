@@ -3,13 +3,13 @@ import { ThemeModeT } from "app/model/app-reducer"
 
 export const lightThemePalette = {
   primary: {
-    main: "#1976d2",
+    main: "#10a3af",
   },
   secondary: {
     main: "#dc004e",
   },
   background: {
-    default: "#f5f5f5",
+    default: "#d2d8d4",
     paper: "#ffffff",
   },
   text: {

@@ -12,7 +12,7 @@ export function Main() {
   const addTodoList = (title: string) => dispatch(addTodolistTC(title))
 
   return (
-    <Container maxWidth="xl" style={{ marginTop: "5rem" }}>
+    <Container maxWidth="xl" style={{ marginTop: "5rem", paddingBottom: "16px" }}>
       <Grid container>
         <AddItemForm addItem={addTodoList} />
       </Grid>

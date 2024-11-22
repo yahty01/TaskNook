@@ -2,7 +2,8 @@ import { AppDispatch, RootState } from "app/store"
 import { tasksApi } from "../api/tasksApi"
 import { DomainTask, UpdateTaskModel } from "../api/tasksApi.types"
 import { TaskStatus } from "../lib/enums"
-import { Todolist } from "../api/todolistsApi.types" // функции фабрики
+import { Todolist } from "../api/todolistsApi.types"
+import { setStatusAC } from "app/model/app-reducer" // функции фабрики
 
 // функции фабрики
 export const setTasksAC = (payload: { todolistId: string; tasks: DomainTask[] }) => {
@@ -54,7 +55,7 @@ export type AddTodolistAT = ReturnType<typeof addTodolistAC>
 export type updateTaskAT = ReturnType<typeof updateTaskAC>
 
 //union type
-export type ActionsType =
+export type ActionsTasks =
   | updateTaskAT
   | SetTasksAT
   | RemoveTaskAT
@@ -63,27 +64,36 @@ export type ActionsType =
   | RemoveTodolistAT
 
 export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
+  dispatch(setStatusAC("loading"))
   tasksApi.getTasks(todolistId).then((res) => {
     const tasks = res.data.items
     dispatch(setTasksAC({ todolistId, tasks }))
+    dispatch(setStatusAC("succeeded"))
   })
 }
 
 export const removeTaskTC =
   (arg: { taskId: string; todolistId: string }) => (dispatch: AppDispatch) => {
-    tasksApi.deleteTask(arg).then((res) => dispatch(removeTaskAC(arg)))
+    dispatch(setStatusAC("loading"))
+    tasksApi.deleteTask(arg).then((res) => {
+      dispatch(removeTaskAC(arg))
+      dispatch(setStatusAC("succeeded"))
+    })
   }
 
 export const createTaskTC =
   (arg: { title: string; todolistId: string }) => (dispatch: AppDispatch) => {
+    dispatch(setStatusAC("loading"))
     tasksApi.createTask(arg).then((res) => {
       dispatch(addTaskAC({ task: res.data.data.item }))
+      dispatch(setStatusAC("succeeded"))
     })
   }
 
 export const updateTaskTC =
   (todolistId: string, taskId: string, param: string | boolean) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(setStatusAC("loading"))
     const task = getState().tasks[todolistId].find((item) => item.id === taskId)
     if (task) {
       //Вопрос ????????? В случае когда мы присваиваем значения из стейта редакс, они копируются ?
@@ -101,6 +111,7 @@ export const updateTaskTC =
         tasksApi.updateTask({ todolistId, taskId, model }).then((res) => {
           const newTask = res.data.data.item
           dispatch(updateTaskAC({ task: newTask }))
+          dispatch(setStatusAC("succeeded"))
         })
       }
 
@@ -125,7 +136,7 @@ const initialState: TasksStateType = {}
 
 export const tasksReducer = (
   state: TasksStateType = initialState,
-  action: ActionsType,
+  action: ActionsTasks,
 ): TasksStateType => {
   switch (action.type) {
     case "SET-TASKS": {

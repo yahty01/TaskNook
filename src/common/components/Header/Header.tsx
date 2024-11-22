@@ -6,8 +6,13 @@ import Button from "@mui/material/Button"
 import { ButtonSwitchTheme } from "common/components"
 import React from "react"
 import { StyledAppBar } from "./Header.styled"
+import LinearProgress from "@mui/material/LinearProgress"
+import { useAppSelector } from "common/hooks"
+import { selectStatus } from "app/model/appSelectors"
 
 export const Header = () => {
+  const status = useAppSelector(selectStatus)
+
   return (
     <StyledAppBar>
       <AppBar position="static">
@@ -22,6 +27,7 @@ export const Header = () => {
             <ButtonSwitchTheme />
           </div>
         </Toolbar>
+        {status === "loading" && <LinearProgress sx={{ height: 3 }} color="inherit" />}
       </AppBar>
     </StyledAppBar>
   )
