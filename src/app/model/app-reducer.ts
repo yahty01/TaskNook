@@ -1,7 +1,13 @@
 export type ThemeModeT = "dark" | "light"
-export type RequestStatus = "idle" | "loading" | "succeeded" | "failed"
 
-export type AppStateType = typeof initialState
+export enum RequestStatus {
+  idle = "idle",
+  loading = "loading",
+  succeeded = "succeeded",
+  failed = "failed",
+}
+
+export type Error = null | string
 
 export const changeThemeAC = (theme: ThemeModeT) => {
   return { type: "CHANGE-THEME", payload: { theme } } as const
@@ -10,14 +16,23 @@ export const changeThemeAC = (theme: ThemeModeT) => {
 export const setStatusAC = (status: RequestStatus) => {
   return { type: "SET-STATUS", payload: { status } } as const
 }
+
+export const setErrorAC = (error: Error) => {
+  return { type: "SET-ERROR", payload: { error } } as const
+}
+
 export type changeThemeAT = ReturnType<typeof changeThemeAC>
 export type setStatusAT = ReturnType<typeof setStatusAC>
+export type setErrorAT = ReturnType<typeof setErrorAC>
 
-type ActionsType = changeThemeAT | setStatusAT
+type ActionsType = changeThemeAT | setStatusAT | setErrorAT
+
+export type AppStateType = typeof initialState
 
 const initialState = {
   themeMode: "light" as ThemeModeT,
   status: "idle" as RequestStatus,
+  error: "xx" as Error,
 }
 
 export const appReducer = (
@@ -34,6 +49,10 @@ export const appReducer = (
 
     case "SET-STATUS": {
       return { ...state, status: action.payload.status }
+    }
+
+    case "SET-ERROR": {
+      return { ...state, error: action.payload.error }
     }
     default:
       return state

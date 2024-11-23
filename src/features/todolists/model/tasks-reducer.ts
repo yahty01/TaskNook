@@ -1,9 +1,9 @@
 import { AppDispatch, RootState } from "app/store"
 import { tasksApi } from "../api/tasksApi"
 import { DomainTask, UpdateTaskModel } from "../api/tasksApi.types"
-import { TaskStatus } from "../lib/enums"
+import { ResultCode, TaskStatus } from "../lib/enums"
 import { Todolist } from "../api/todolistsApi.types"
-import { setStatusAC } from "app/model/app-reducer" // функции фабрики
+import { RequestStatus, setErrorAC, setStatusAC } from "app/model/app-reducer" // функции фабрики
 
 // функции фабрики
 export const setTasksAC = (payload: { todolistId: string; tasks: DomainTask[] }) => {
@@ -64,36 +64,45 @@ export type ActionsTasks =
   | RemoveTodolistAT
 
 export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
-  dispatch(setStatusAC("loading"))
+  dispatch(setStatusAC(RequestStatus.loading))
   tasksApi.getTasks(todolistId).then((res) => {
     const tasks = res.data.items
     dispatch(setTasksAC({ todolistId, tasks }))
-    dispatch(setStatusAC("succeeded"))
+    dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
 
 export const removeTaskTC =
   (arg: { taskId: string; todolistId: string }) => (dispatch: AppDispatch) => {
-    dispatch(setStatusAC("loading"))
+    dispatch(setStatusAC(RequestStatus.loading))
     tasksApi.deleteTask(arg).then((res) => {
       dispatch(removeTaskAC(arg))
-      dispatch(setStatusAC("succeeded"))
+      dispatch(setStatusAC(RequestStatus.succeeded))
     })
   }
 
 export const createTaskTC =
   (arg: { title: string; todolistId: string }) => (dispatch: AppDispatch) => {
-    dispatch(setStatusAC("loading"))
+    dispatch(setStatusAC(RequestStatus.loading))
     tasksApi.createTask(arg).then((res) => {
-      dispatch(addTaskAC({ task: res.data.data.item }))
-      dispatch(setStatusAC("succeeded"))
+      if (res.data.resultCode === ResultCode.Success) {
+        dispatch(addTaskAC({ task: res.data.data.item }))
+        dispatch(setStatusAC(RequestStatus.succeeded))
+      } else {
+        if (res.data.messages.length) {
+          dispatch(setErrorAC(res.data.messages[0]))
+        } else {
+          dispatch(setErrorAC("Some error occurred"))
+        }
+        dispatch(setStatusAC(RequestStatus.succeeded))
+      }
     })
   }
 
 export const updateTaskTC =
   (todolistId: string, taskId: string, param: string | boolean) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(setStatusAC("loading"))
+    dispatch(setStatusAC(RequestStatus.loading))
     const task = getState().tasks[todolistId].find((item) => item.id === taskId)
     if (task) {
       //Вопрос ????????? В случае когда мы присваиваем значения из стейта редакс, они копируются ?
@@ -111,7 +120,7 @@ export const updateTaskTC =
         tasksApi.updateTask({ todolistId, taskId, model }).then((res) => {
           const newTask = res.data.data.item
           dispatch(updateTaskAC({ task: newTask }))
-          dispatch(setStatusAC("succeeded"))
+          dispatch(setStatusAC(RequestStatus.succeeded))
         })
       }
 

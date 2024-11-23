@@ -6,11 +6,14 @@ import { AppStyled } from "./App.styled"
 import { Header } from "common/components"
 import { Main } from "./Main"
 import { useAppSelector } from "common/hooks/useAppSelector"
-import { selectThemeMode } from "./model/appSelectors"
+import { selectError, selectThemeMode } from "./model/appSelectors"
+import ErrorSnackbar from "common/components/ErrorSnackbar/ErrorSnackbar"
+import { useAppDispatch } from "common/hooks"
 
 export function App() {
-  //theme
+  const dispatch = useAppDispatch()
   const themeMode = useAppSelector(selectThemeMode)
+  const error = useAppSelector(selectError)
   const theme = getTheme(themeMode)
 
   return (
@@ -19,6 +22,7 @@ export function App() {
         <AppStyled className="App">
           <Header />
           <Main />
+          <ErrorSnackbar dispatch={dispatch} error={error} />
         </AppStyled>
       </ThemeProviderStyled>
     </ThemeProviderMUI>

@@ -3,7 +3,7 @@ import { FilterValue } from "../ui/Todolists/Todolist/Todolist"
 import { Todolist } from "../api/todolistsApi.types"
 import { todolistsApi } from "../api/todolistsApi"
 import { AppDispatch } from "app/store"
-import { setStatusAC } from "app/model/app-reducer"
+import { RequestStatus, setStatusAC } from "app/model/app-reducer"
 
 // функции фабрики ActionCrate
 export const setTodolistsAC = (todolists: Todolist[]) => {
@@ -42,51 +42,52 @@ export type ActionsTodolist =
 // Санка //ThunkCreate - функция высшего порядка для fetchTodolistsThunk
 export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
   try {
-    dispatch(setStatusAC("loading"))
+    dispatch(setStatusAC(RequestStatus.loading))
     const res = await todolistsApi.getTodolists()
     dispatch(setTodolistsAC(res.data))
-    dispatch(setStatusAC("succeeded"))
+    dispatch(setStatusAC(RequestStatus.succeeded))
   } catch (e) {
     throw new Error(`${e}`)
   }
 }
 
 export const _fetchTodolistsTC = () => (dispatch: AppDispatch) => {
-  dispatch(setStatusAC("loading"))
+  dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.getTodolists().then((res) => {
     const todolists = res.data
     dispatch(setTodolistsAC(todolists))
-    dispatch(setStatusAC("succeeded"))
+    dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
 
 export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
-  dispatch(setStatusAC("loading"))
+  dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.createTodolist(title).then((res) => {
     dispatch(addTodolistAC(res.data.data.item))
-    dispatch(setStatusAC("succeeded"))
+    dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
 
 export const removeTodolistTC = (id: string) => (dispatch: AppDispatch) => {
-  dispatch(setStatusAC("loading"))
+  dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.removeTodolist(id).then((res) => {
     dispatch(removeTodolistAC(id))
-    dispatch(setStatusAC("succeeded"))
+    dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
 
 export const updateTodolistTitleTC =
   (arg: { id: string; title: string }) => (dispatch: AppDispatch) => {
-    dispatch(setStatusAC("loading"))
+    dispatch(setStatusAC(RequestStatus.loading))
     todolistsApi.updateTodolist(arg).then((res) => {
       dispatch(updateTodolistTitleAC(arg))
-      dispatch(setStatusAC("succeeded"))
+      dispatch(setStatusAC(RequestStatus.succeeded))
     })
   }
 
 export type DomainTodolist = Todolist & {
   filter: FilterValue
+  entityStatus: RequestStatus
 }
 
 const initialState: DomainTodolist[] = []
@@ -97,7 +98,11 @@ export const todolistsReducer = (
 ): DomainTodolist[] => {
   switch (action.type) {
     case "SET-TODOLIST": {
-      return action.todolists.map((tl) => ({ ...tl, filter: "all" }))
+      return action.todolists.map((tl) => ({
+        ...tl,
+        filter: "all",
+        entityStatus: RequestStatus.idle,
+      }))
     }
 
     case "REMOVE-TODOLIST": {
@@ -113,6 +118,7 @@ export const todolistsReducer = (
         addedDate: todolist.addedDate,
         order: todolist.order,
         filter: "all",
+        entityStatus: RequestStatus.idle,
       }
       return [newTodolist, ...state]
     }
