@@ -8,11 +8,11 @@ import { SpanWrapper } from "./Task.styled"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
 import { removeTaskTC, updateTaskTC } from "../../../../../model/tasks-reducer"
-import { DomainTask } from "../../../../../api/tasksApi.types"
-import { TaskStatus } from "../../../../../lib/enums"
+import { TaskRequest } from "../../../../../api/tasksApi.types"
+import { TaskStatus } from "common/lib/enums"
 
 type TaskProps = {
-  task: DomainTask
+  task: TaskRequest
   todolistId: string
 }
 

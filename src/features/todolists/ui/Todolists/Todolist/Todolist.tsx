@@ -5,11 +5,7 @@ import Grid from "@mui/material/Unstable_Grid2"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { createTaskTC, fetchTasksTC } from "../../../model/tasks-reducer"
-import {
-  DomainTodolist,
-  removeTodolistTC,
-  updateTodolistTitleTC,
-} from "../../../model/todolists-reducer"
+import { DomainTodolist, removeTodolistTC, updateTodolistTitleTC } from "../../../model/todolists-reducer"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { StyledPaper } from "./Todolist.styled"
 import { useAppDispatch, useAppSelector } from "common/hooks"
@@ -24,7 +20,7 @@ type TodoListProps = {
 export function Todolist({ todolist }: TodoListProps) {
   const dispatch = useAppDispatch()
   const allTasks = useAppSelector(selectTasks)
-  //ThunkCreate
+
   useEffect(() => {
     dispatch(fetchTasksTC(todolist.id))
   }, [])
@@ -61,7 +57,7 @@ export function Todolist({ todolist }: TodoListProps) {
         </IconButton>
         <EditableSpan value={todolist.title} onChange={updateTodoListTitle} />
         <AddItemForm addItem={addTask} />
-        <Tasks tasks={tasksForFilter} todolistId={todolist.id} />
+        <Tasks tasks={tasksForFilter} todolistId={todolist.id} taskLoaded={todolist.tasksLoaded} />
         <FilterTasksButtons id={todolist.id} filter={todolist.filter} />
       </StyledPaper>
     </Grid>

@@ -1,8 +1,9 @@
-import { TasksStateType } from "../tasks-reducer"
+import { Tasks } from "../tasks-reducer"
 import { v1 } from "uuid"
 import { DomainTodolist } from "../todolists-reducer"
+import { RequestStatus } from "common/lib/enums"
 
-export const mockDataTasks: TasksStateType = {
+export const mockDataTasks: Tasks = {
   todolistId1: [
     {
       description: "string",
@@ -100,6 +101,8 @@ export const todolistData: DomainTodolist = {
   addedDate: "00.11.23",
   order: -1,
   filter: "all",
+  entityStatus: RequestStatus.idle,
+  tasksLoaded: RequestStatus.idle,
 }
 
 export const todolistsData: DomainTodolist[] = [
@@ -109,6 +112,8 @@ export const todolistsData: DomainTodolist[] = [
     addedDate: "00.11.23",
     order: -1,
     filter: "all",
+    entityStatus: RequestStatus.idle,
+    tasksLoaded: RequestStatus.idle,
   },
   {
     id: "v2",
@@ -116,5 +121,7 @@ export const todolistsData: DomainTodolist[] = [
     addedDate: "00.11.23",
     order: -1,
     filter: "all",
+    entityStatus: RequestStatus.idle,
+    tasksLoaded: RequestStatus.idle,
   },
 ]

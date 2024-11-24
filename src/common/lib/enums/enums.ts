@@ -18,3 +18,10 @@ export enum ResultCode {
   Error = 1,
   CaptchaError = 10,
 }
+
+export enum RequestStatus {
+  idle = "idle",
+  loading = "loading",
+  succeeded = "succeeded",
+  failed = "failed",
+}

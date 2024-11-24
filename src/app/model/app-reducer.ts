@@ -1,11 +1,6 @@
-export type ThemeModeT = "dark" | "light"
+import { RequestStatus } from "common/lib/enums"
 
-export enum RequestStatus {
-  idle = "idle",
-  loading = "loading",
-  succeeded = "succeeded",
-  failed = "failed",
-}
+export type ThemeModeT = "dark" | "light"
 
 export type Error = null | string
 
@@ -32,13 +27,10 @@ export type AppStateType = typeof initialState
 const initialState = {
   themeMode: "light" as ThemeModeT,
   status: "idle" as RequestStatus,
-  error: "xx" as Error,
+  error: null as Error,
 }
 
-export const appReducer = (
-  state: AppStateType = initialState,
-  action: ActionsType,
-): AppStateType => {
+export const appReducer = (state: AppStateType = initialState, action: ActionsType): AppStateType => {
   switch (action.type) {
     case "CHANGE-THEME": {
       return {
