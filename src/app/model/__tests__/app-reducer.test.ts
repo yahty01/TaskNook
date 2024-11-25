@@ -1,9 +1,12 @@
 import { appReducer, AppStateType, changeThemeAC } from "../app-reducer"
+import { RequestStatus } from "common/types/enums"
 
 test("themeMode", () => {
   // 1. Стартовый state
   const startState: AppStateType = {
     themeMode: "light",
+    status: RequestStatus.idle,
+    error: null,
   }
 
   // Вместо хуков используем значение напрямую
