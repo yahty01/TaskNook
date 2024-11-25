@@ -4,7 +4,6 @@ export const CircularContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 250px 0;
   height: 250px; /* Минимальная высота, чтобы крутилка не выглядела сжатой */
 `
 

@@ -1,12 +1,12 @@
 import { Task } from "./Task/Task"
 import List from "@mui/material/List"
-import { TaskRequest } from "../../../../api/tasksApi.types"
-import { RequestStatus } from "common/lib/enums"
+import { TaskResponse } from "../../../../api/tasksApi.types"
+import { RequestStatus } from "common/types/enums"
 import CircularProgress from "@mui/material/CircularProgress"
 import { CircularContainer, Container } from "./Tasks.styled"
 
 type TaskProps = {
-  tasks: TaskRequest[]
+  tasks: TaskResponse[]
   todolistId: string
   taskLoaded: RequestStatus
 }

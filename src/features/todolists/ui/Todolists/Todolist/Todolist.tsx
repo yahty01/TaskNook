@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import { Tasks } from "./Tasks/Tasks"
 import { AddItemForm, EditableSpan } from "common/components"
-import Grid from "@mui/material/Unstable_Grid2"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { createTaskTC, fetchTasksTC } from "../../../model/tasks-reducer"
@@ -10,6 +9,7 @@ import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { StyledPaper } from "./Todolist.styled"
 import { useAppDispatch, useAppSelector } from "common/hooks"
 import { selectTasks } from "../../../model/tasksSelectors"
+import Grid from "@mui/material/Grid2"
 
 export type FilterValue = "all" | "completed" | "active"
 

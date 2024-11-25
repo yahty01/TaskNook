@@ -1,12 +1,12 @@
-import { TaskPriority, TaskStatus } from "common/lib/enums"
+import { TaskPriority, TaskStatus } from "common/types/enums"
 
 export type GetTaskResponse = {
-  items: TaskRequest[]
+  items: TaskResponse[]
   totalCount: number
   error: string | null
 }
 
-export type TaskRequest = {
+export type TaskResponse = {
   description: string
   title: string
   status: TaskStatus

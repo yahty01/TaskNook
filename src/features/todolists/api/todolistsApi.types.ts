@@ -1,4 +1,4 @@
-export type Todolist = {
+export type TodolistResponse = {
   id: string
   title: string
   addedDate: string

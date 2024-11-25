@@ -1,7 +1,7 @@
 import React from "react"
 import { ThemeProvider as ThemeProviderMUI } from "@mui/material/styles"
 import { ThemeProvider as ThemeProviderStyled } from "styled-components"
-import { getTheme } from "common/theme/getTheme"
+import { getTheme } from "common/lib/theme/getTheme"
 import { AppStyled } from "./App.styled"
 import { Header } from "common/components"
 import { Main } from "./Main"
@@ -22,6 +22,7 @@ export function App() {
         <AppStyled className="App">
           <Header />
           <Main />
+          {/*??*/}
           <ErrorSnackbar dispatch={dispatch} error={error} />
         </AppStyled>
       </ThemeProviderStyled>

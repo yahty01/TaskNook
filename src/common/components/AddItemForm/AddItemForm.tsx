@@ -3,7 +3,7 @@ import Button from "@mui/material/Button"
 import AddIcon from "@mui/icons-material/Add"
 import TextField from "@mui/material/TextField"
 import Box from "@mui/material/Box"
-import { getTheme } from "common/theme"
+import { getTheme } from "common/lib/theme"
 import { useAppSelector } from "common/hooks"
 import { selectThemeMode } from "app/model/appSelectors"
 

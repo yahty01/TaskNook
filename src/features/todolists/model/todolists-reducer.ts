@@ -1,46 +1,32 @@
 import { FilterType } from "../ui/Todolists/Todolist/FilterTasksButtons/FilterTasksButtons"
 import { FilterValue } from "../ui/Todolists/Todolist/Todolist"
-import { Todolist } from "../api/todolistsApi.types"
+import { TodolistResponse } from "../api/todolistsApi.types"
 import { todolistsApi } from "../api/todolistsApi"
 import { AppDispatch } from "app/store"
 import { setStatusAC } from "app/model/app-reducer"
-import { RequestStatus } from "common/lib/enums"
+import { RequestStatus } from "common/types/enums"
 
-// функции фабрики ActionCrate
-export const setTodolistsAC = (todolists: Todolist[]) => {
+// actions (функции варбрики)
+export const setTodolistsAC = (todolists: TodolistResponse[]) => {
   return { type: "SET-TODOLIST", todolists } as const
 }
-
 export const removeTodolistAC = (todolistId: string) => {
   return { type: "REMOVE-TODOLIST", payload: { todolistId } } as const
 }
-
-export const addTodolistAC = (todolist: Todolist) => {
+export const addTodolistAC = (todolist: TodolistResponse) => {
   return { type: "ADD-TODOLIST", payload: { todolist } } as const
 }
-
 export const updateTodolistTitleAC = (payload: { id: string; title: string }) => {
   return { type: "CHANGE-TODOLIST-TITLE", payload } as const
 }
-
 export const updateTodolistFilterAC = (payload: { todolistId: string; filter: FilterType }) => {
   return { type: "CHANGE-TODOLIST-FILTER", payload } as const
 }
-
 export const setTasksLoadedAC = (payload: { status: RequestStatus; todolistId: string }) => {
   return { type: "SET-TASK-LOADED", payload } as const
 }
 
-//Union type
-export type ActionsTodolist =
-  | ReturnType<typeof setTodolistsAC>
-  | ReturnType<typeof removeTodolistAC>
-  | ReturnType<typeof addTodolistAC>
-  | ReturnType<typeof updateTodolistTitleAC>
-  | ReturnType<typeof updateTodolistFilterAC>
-  | ReturnType<typeof setTasksLoadedAC>
-
-// Санка //ThunkCreate - функция высшего порядка для fetchTodolistsThunk
+//thunks (TC - функция высшего порядка для TodoT)
 export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
   try {
     dispatch(setStatusAC(RequestStatus.loading))
@@ -51,7 +37,6 @@ export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
     throw new Error(`${e}`)
   }
 }
-
 export const _fetchTodolistsTC = () => (dispatch: AppDispatch) => {
   dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.getTodolists().then((res) => {
@@ -60,7 +45,6 @@ export const _fetchTodolistsTC = () => (dispatch: AppDispatch) => {
     dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
-
 export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
   dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.createTodolist(title).then((res) => {
@@ -68,7 +52,6 @@ export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
     dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
-
 export const removeTodolistTC = (id: string) => (dispatch: AppDispatch) => {
   dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.removeTodolist(id).then((res) => {
@@ -76,7 +59,6 @@ export const removeTodolistTC = (id: string) => (dispatch: AppDispatch) => {
     dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
-
 export const updateTodolistTitleTC = (arg: { id: string; title: string }) => (dispatch: AppDispatch) => {
   dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.updateTodolist(arg).then((res) => {
@@ -85,14 +67,8 @@ export const updateTodolistTitleTC = (arg: { id: string; title: string }) => (di
   })
 }
 
-export type DomainTodolist = Todolist & {
-  filter: FilterValue
-  entityStatus: RequestStatus
-  tasksLoaded: RequestStatus
-}
-
 const initialState: DomainTodolist[] = []
-
+//Reducer
 export const todolistsReducer = (state: DomainTodolist[] = initialState, action: ActionsTodolist): DomainTodolist[] => {
   switch (action.type) {
     case "SET-TODOLIST": {
@@ -108,7 +84,6 @@ export const todolistsReducer = (state: DomainTodolist[] = initialState, action:
       const { todolistId } = action.payload
       return state.filter((tl) => tl.id !== todolistId)
     }
-
     case "ADD-TODOLIST": {
       const { todolist } = action.payload
       const newTodolist: DomainTodolist = {
@@ -122,23 +97,38 @@ export const todolistsReducer = (state: DomainTodolist[] = initialState, action:
       }
       return [newTodolist, ...state]
     }
-
     case "CHANGE-TODOLIST-TITLE": {
       const { id, title } = action.payload
       return state.map((tl) => (tl.id === id ? { ...tl, title } : tl))
     }
-
     case "CHANGE-TODOLIST-FILTER": {
       const { todolistId, filter } = action.payload
       return state.map((tl) => (tl.id === todolistId ? { ...tl, filter } : tl))
     }
-
     case "SET-TASK-LOADED": {
       const { status, todolistId } = action.payload
       return state.map((tl) => (tl.id === todolistId ? { ...tl, tasksLoaded: status } : tl))
     }
-
     default:
       return state
   }
+}
+
+//types
+
+//Union type
+export type ActionsTodolist =
+  //todos
+  | ReturnType<typeof setTodolistsAC>
+  | ReturnType<typeof removeTodolistAC>
+  | ReturnType<typeof addTodolistAC>
+  | ReturnType<typeof updateTodolistTitleAC>
+  | ReturnType<typeof updateTodolistFilterAC>
+  //tasks
+  | ReturnType<typeof setTasksLoadedAC>
+
+export type DomainTodolist = TodolistResponse & {
+  filter: FilterValue
+  entityStatus: RequestStatus
+  tasksLoaded: RequestStatus
 }

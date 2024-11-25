@@ -1,7 +1,7 @@
 import { Tasks } from "../tasks-reducer"
 import { v1 } from "uuid"
 import { DomainTodolist } from "../todolists-reducer"
-import { RequestStatus } from "common/lib/enums"
+import { RequestStatus } from "common/types/enums"
 
 export const mockDataTasks: Tasks = {
   todolistId1: [
