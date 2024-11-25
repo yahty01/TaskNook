@@ -2,7 +2,7 @@ import { FilterType } from "../ui/Todolists/Todolist/FilterTasksButtons/FilterTa
 import { FilterValue } from "../ui/Todolists/Todolist/Todolist"
 import { TodolistResponse } from "../api/todolistsApi.types"
 import { todolistsApi } from "../api/todolistsApi"
-import { AppDispatch } from "app/store"
+import { x } from "app/store"
 import { setStatusAC } from "app/model/app-reducer"
 import { RequestStatus } from "common/types/enums"
 
@@ -27,7 +27,7 @@ export const setTasksLoadedAC = (payload: { status: RequestStatus; todolistId: s
 }
 
 //thunks (TC - функция высшего порядка для TodoT)
-export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
+export const fetchTodolistsTC = () => async (dispatch: x) => {
   try {
     dispatch(setStatusAC(RequestStatus.loading))
     const res = await todolistsApi.getTodolists()
@@ -37,7 +37,7 @@ export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
     throw new Error(`${e}`)
   }
 }
-export const _fetchTodolistsTC = () => (dispatch: AppDispatch) => {
+export const _fetchTodolistsTC = () => (dispatch: x) => {
   dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.getTodolists().then((res) => {
     const todolists = res.data
@@ -45,21 +45,21 @@ export const _fetchTodolistsTC = () => (dispatch: AppDispatch) => {
     dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
-export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
+export const addTodolistTC = (title: string) => (dispatch: x) => {
   dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.createTodolist(title).then((res) => {
     dispatch(addTodolistAC(res.data.data.item))
     dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
-export const removeTodolistTC = (id: string) => (dispatch: AppDispatch) => {
+export const removeTodolistTC = (id: string) => (dispatch: x) => {
   dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.removeTodolist(id).then((res) => {
     dispatch(removeTodolistAC(id))
     dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
-export const updateTodolistTitleTC = (arg: { id: string; title: string }) => (dispatch: AppDispatch) => {
+export const updateTodolistTitleTC = (arg: { id: string; title: string }) => (dispatch: x) => {
   dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.updateTodolist(arg).then((res) => {
     dispatch(updateTodolistTitleAC(arg))

@@ -1,4 +1,4 @@
-import { AppDispatch, RootState } from "app/store"
+import { x, RootState } from "app/store"
 import { tasksApi } from "../api/tasksApi"
 import { TaskResponse, UpdateTaskModel } from "../api/tasksApi.types"
 import { RequestStatus, ResultCode, TaskStatus } from "common/types/enums"
@@ -27,14 +27,14 @@ export const removeTodolistAC = (payload: { todolistId: string }) => {
 }
 
 //thunks
-export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
+export const fetchTasksTC = (todolistId: string) => (dispatch: x) => {
   tasksApi.getTasks(todolistId).then((res) => {
     const tasks = res.data.items
     dispatch(setTasksAC({ todolistId, tasks }))
     dispatch(setTasksLoadedAC({ status: RequestStatus.succeeded, todolistId }))
   })
 }
-export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (dispatch: AppDispatch) => {
+export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (dispatch: x) => {
   dispatch(setStatusAC(RequestStatus.loading))
   // _ = res
   tasksApi.deleteTask(arg).then((_) => {
@@ -42,7 +42,7 @@ export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (di
     dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
-export const createTaskTC = (arg: { title: string; todolistId: string }) => (dispatch: AppDispatch) => {
+export const createTaskTC = (arg: { title: string; todolistId: string }) => (dispatch: x) => {
   dispatch(setStatusAC(RequestStatus.loading))
   tasksApi.createTask(arg).then((res) => {
     if (res.data.resultCode === ResultCode.Success) {
@@ -60,8 +60,7 @@ export const createTaskTC = (arg: { title: string; todolistId: string }) => (dis
 }
 // need fix (rewrite updateTaskTC to generic)
 export const updateTaskTC =
-  (todolistId: string, taskId: string, param: string | boolean) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  (todolistId: string, taskId: string, param: string | boolean) => (dispatch: x, getState: () => RootState) => {
     dispatch(setStatusAC(RequestStatus.loading))
     const task = getState().tasks[todolistId].find((item) => item.id === taskId)
     if (task) {

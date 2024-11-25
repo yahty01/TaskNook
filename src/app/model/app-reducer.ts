@@ -1,28 +1,9 @@
 import { RequestStatus } from "common/types/enums"
 
-export type ThemeModeT = "dark" | "light"
-
-export type Error = null | string
-
-export const changeThemeAC = (theme: ThemeModeT) => {
-  return { type: "CHANGE-THEME", payload: { theme } } as const
-}
-
-export const setStatusAC = (status: RequestStatus) => {
-  return { type: "SET-STATUS", payload: { status } } as const
-}
-
-export const setErrorAC = (error: Error) => {
-  return { type: "SET-ERROR", payload: { error } } as const
-}
-
-export type changeThemeAT = ReturnType<typeof changeThemeAC>
-export type setStatusAT = ReturnType<typeof setStatusAC>
-export type setErrorAT = ReturnType<typeof setErrorAC>
-
-type ActionsApp = changeThemeAT | setStatusAT | setErrorAT
-
-export type AppStateType = typeof initialState
+//actions
+export const setStatusAC = (status: RequestStatus) => ({ type: "SET-STATUS", payload: { status } }) as const
+export const changeThemeAC = (theme: ThemeModeT) => ({ type: "CHANGE-THEME", payload: { theme } }) as const
+export const setErrorAC = (error: Error) => ({ type: "SET-ERROR", payload: { error } }) as const
 
 const initialState = {
   themeMode: "light" as ThemeModeT,
@@ -30,6 +11,7 @@ const initialState = {
   error: null as Error,
 }
 
+//reducer
 export const appReducer = (state: AppStateType = initialState, action: ActionsApp): AppStateType => {
   switch (action.type) {
     case "CHANGE-THEME": {
@@ -50,3 +32,9 @@ export const appReducer = (state: AppStateType = initialState, action: ActionsAp
       return state
   }
 }
+
+//types
+type ActionsApp = ReturnType<typeof changeThemeAC> | ReturnType<typeof setStatusAC> | ReturnType<typeof setErrorAC>
+export type ThemeModeT = "dark" | "light"
+export type Error = null | string
+export type AppStateType = typeof initialState

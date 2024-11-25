@@ -1,12 +1,12 @@
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar"
 import Alert from "@mui/material/Alert"
 import { SyntheticEvent } from "react"
-import { AppDispatch } from "app/store"
+import { x } from "app/store"
 import { setErrorAC } from "app/model/app-reducer"
 
 type Props = {
   error: string | null
-  dispatch: AppDispatch
+  dispatch: x
 }
 
 export default function ErrorSnackbar(props: Props) {
