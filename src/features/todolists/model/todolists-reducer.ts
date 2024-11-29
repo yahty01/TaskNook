@@ -2,7 +2,7 @@ import { FilterType } from "../ui/Todolists/Todolist/FilterTasksButtons/FilterTa
 import { FilterValue } from "../ui/Todolists/Todolist/Todolist"
 import { TodolistResponse } from "../api/todolistsApi.types"
 import { todolistsApi } from "../api/todolistsApi"
-import { x } from "app/store"
+import { AppDispatch } from "app/store"
 import { setStatusAC } from "app/model/app-reducer"
 import { RequestStatus } from "common/types/enums"
 
@@ -25,9 +25,12 @@ export const updateTodolistFilterAC = (payload: { todolistId: string; filter: Fi
 export const setTasksLoadedAC = (payload: { status: RequestStatus; todolistId: string }) => {
   return { type: "SET-TASK-LOADED", payload } as const
 }
+export const setEntityStatus = (payload: { status: RequestStatus; todolistId: string }) => {
+  return { type: "SET-ENTITY-STATUS", payload } as const
+}
 
 //thunks (TC - функция высшего порядка для TodoT)
-export const fetchTodolistsTC = () => async (dispatch: x) => {
+export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
   try {
     dispatch(setStatusAC(RequestStatus.loading))
     const res = await todolistsApi.getTodolists()
@@ -37,7 +40,7 @@ export const fetchTodolistsTC = () => async (dispatch: x) => {
     throw new Error(`${e}`)
   }
 }
-export const _fetchTodolistsTC = () => (dispatch: x) => {
+export const _fetchTodolistsTC = () => (dispatch: AppDispatch) => {
   dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.getTodolists().then((res) => {
     const todolists = res.data
@@ -45,21 +48,23 @@ export const _fetchTodolistsTC = () => (dispatch: x) => {
     dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
-export const addTodolistTC = (title: string) => (dispatch: x) => {
+export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
   dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.createTodolist(title).then((res) => {
     dispatch(addTodolistAC(res.data.data.item))
     dispatch(setStatusAC(RequestStatus.succeeded))
   })
 }
-export const removeTodolistTC = (id: string) => (dispatch: x) => {
+export const removeTodolistTC = (todolistId: string) => (dispatch: AppDispatch) => {
+  dispatch(setEntityStatus({ status: RequestStatus.loading, todolistId }))
   dispatch(setStatusAC(RequestStatus.loading))
-  todolistsApi.removeTodolist(id).then((res) => {
-    dispatch(removeTodolistAC(id))
+  todolistsApi.removeTodolist(todolistId).then((res) => {
+    dispatch(removeTodolistAC(todolistId))
     dispatch(setStatusAC(RequestStatus.succeeded))
+    dispatch(setEntityStatus({ status: RequestStatus.succeeded, todolistId }))
   })
 }
-export const updateTodolistTitleTC = (arg: { id: string; title: string }) => (dispatch: x) => {
+export const updateTodolistTitleTC = (arg: { id: string; title: string }) => (dispatch: AppDispatch) => {
   dispatch(setStatusAC(RequestStatus.loading))
   todolistsApi.updateTodolist(arg).then((res) => {
     dispatch(updateTodolistTitleAC(arg))
@@ -109,6 +114,10 @@ export const todolistsReducer = (state: DomainTodolist[] = initialState, action:
       const { status, todolistId } = action.payload
       return state.map((tl) => (tl.id === todolistId ? { ...tl, tasksLoaded: status } : tl))
     }
+    case "SET-ENTITY-STATUS": {
+      const { status, todolistId } = action.payload
+      return state.map((tl) => (tl.id === todolistId ? { ...tl, entityStatus: status } : tl))
+    }
     default:
       return state
   }
@@ -124,6 +133,7 @@ export type ActionsTodolist =
   | ReturnType<typeof addTodolistAC>
   | ReturnType<typeof updateTodolistTitleAC>
   | ReturnType<typeof updateTodolistFilterAC>
+  | ReturnType<typeof setEntityStatus>
   //tasks
   | ReturnType<typeof setTasksLoadedAC>
 

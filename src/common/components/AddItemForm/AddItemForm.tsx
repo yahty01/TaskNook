@@ -9,9 +9,10 @@ import { selectThemeMode } from "app/model/appSelectors"
 
 type AddItemFormProps = {
   addItem: (title: string) => void
+  disabled?: boolean
 }
 
-export function AddItemForm({ addItem }: AddItemFormProps) {
+export function AddItemForm({ addItem, disabled }: AddItemFormProps) {
   const [inputItemText, setInputItemText] = useState("")
   const [error, setError] = useState<string | null>(null)
 
@@ -47,12 +48,14 @@ export function AddItemForm({ addItem }: AddItemFormProps) {
         helperText={error}
         onChange={onTitleChangeHandler}
         onKeyUp={addItemOnKeyUpHandler}
+        disabled={disabled}
       />
       <Button
         onClick={addItemHandler}
         aria-label="Add"
         variant={"contained"}
         sx={{ marginLeft: "8px", backgroundColor: theme.palette.primary.main }}
+        disabled={disabled}
       >
         <AddIcon />
       </Button>

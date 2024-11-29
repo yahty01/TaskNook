@@ -1,15 +1,14 @@
 import React, { useEffect } from "react"
 import { Tasks } from "./Tasks/Tasks"
-import { AddItemForm, EditableSpan } from "common/components"
-import IconButton from "@mui/material/IconButton"
-import DeleteIcon from "@mui/icons-material/Delete"
+import { AddItemForm } from "common/components"
 import { createTaskTC, fetchTasksTC } from "../../../model/tasks-reducer"
-import { DomainTodolist, removeTodolistTC, updateTodolistTitleTC } from "../../../model/todolists-reducer"
+import { DomainTodolist } from "../../../model/todolists-reducer"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { StyledPaper } from "./Todolist.styled"
 import { useAppDispatch, useAppSelector } from "common/hooks"
 import { selectTasks } from "../../../model/tasksSelectors"
 import Grid from "@mui/material/Grid2"
+import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 
 export type FilterValue = "all" | "completed" | "active"
 
@@ -31,14 +30,6 @@ export function Todolist({ todolist }: TodoListProps) {
     dispatch(createTaskTC({ title, todolistId: todolist.id }))
   }
 
-  const removeTodoList = () => {
-    dispatch(removeTodolistTC(todolist.id))
-  }
-
-  const updateTodoListTitle = (title: string) => {
-    dispatch(updateTodolistTitleTC({ id: todolist.id, title }))
-  }
-
   let tasksForFilter = tasks
 
   if (todolist.filter === "active") {
@@ -52,11 +43,8 @@ export function Todolist({ todolist }: TodoListProps) {
   return (
     <Grid>
       <StyledPaper elevation={5} square={false} sx={{ padding: "1rem" }}>
-        <IconButton aria-label="delete" onClick={removeTodoList}>
-          <DeleteIcon />
-        </IconButton>
-        <EditableSpan value={todolist.title} onChange={updateTodoListTitle} />
-        <AddItemForm addItem={addTask} />
+        <TodolistTitle todolist={todolist} />
+        <AddItemForm addItem={addTask} disabled={todolist.entityStatus === "loading"} />
         <Tasks tasks={tasksForFilter} todolistId={todolist.id} taskLoaded={todolist.tasksLoaded} />
         <FilterTasksButtons id={todolist.id} filter={todolist.filter} />
       </StyledPaper>

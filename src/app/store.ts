@@ -22,7 +22,7 @@ export type RootState = ReturnType<typeof store.getState>
 //Достаем из редъюсера массив типов параметров и по индексу 1 у нас и находятся все скомбинированные экшены.
 type AppActionsType = Parameters<typeof rootReducer>[1]
 
-export type x = ThunkDispatch<RootState, unknown, AppActionsType>
+export type AppDispatch = ThunkDispatch<RootState, unknown, AppActionsType>
 // UnknownAction значит любой action у которого есть свой тип !
 // export type AppDispatch = typeof store.dispatch
 
