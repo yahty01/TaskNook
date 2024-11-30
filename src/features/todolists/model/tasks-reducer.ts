@@ -3,8 +3,10 @@ import { tasksApi } from "../api/tasksApi"
 import { TaskResponse, UpdateTaskModel } from "../api/tasksApi.types"
 import { RequestStatus, ResultCode, TaskStatus } from "common/types/enums"
 import { TodolistResponse } from "../api/todolistsApi.types"
-import { setErrorAC, setStatusAC } from "app/model/app-reducer"
+import { setAppErrorAC, setAppStatusAC } from "app/model/app-reducer"
 import { setTasksLoadedAC } from "./todolists-reducer"
+import { handleServerAppError } from "common/utils/handleServerAppError"
+import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 
 // actions (функции фабрики)
 export const setTasksAC = (payload: { todolistId: string; tasks: TaskResponse[] }) => {
@@ -36,34 +38,33 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
   })
 }
 export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (dispatch: AppDispatch) => {
-  dispatch(setStatusAC(RequestStatus.loading))
+  dispatch(setAppStatusAC(RequestStatus.loading))
   // _ = res
-  tasksApi.deleteTask(arg).then((_) => {
-    dispatch(removeTaskAC(arg))
-    dispatch(setStatusAC(RequestStatus.succeeded))
-  })
+  tasksApi
+    .deleteTask(arg)
+    .then((_) => {
+      dispatch(removeTaskAC(arg))
+      dispatch(setAppStatusAC(RequestStatus.succeeded))
+    })
+    .catch((err) => handleServerNetworkError(err, dispatch))
 }
 export const createTaskTC = (arg: { title: string; todolistId: string }) => (dispatch: AppDispatch) => {
-  dispatch(setStatusAC(RequestStatus.loading))
-  tasksApi.createTask(arg).then((res) => {
-    if (res.data.resultCode === ResultCode.Success) {
-      dispatch(addTaskAC({ task: res.data.data.item }))
-      dispatch(setStatusAC(RequestStatus.succeeded))
-    } else {
-      if (res.data.messages.length) {
-        dispatch(setErrorAC(res.data.messages[0]))
-      } else {
-        dispatch(setErrorAC("Some error occurred"))
-      }
-      dispatch(setStatusAC(RequestStatus.succeeded))
-    }
-  })
+  dispatch(setAppStatusAC(RequestStatus.loading))
+  tasksApi
+    .createTask(arg)
+    .then((res) => {
+      if (res.data.resultCode === ResultCode.Success) {
+        dispatch(addTaskAC({ task: res.data.data.item }))
+        dispatch(setAppStatusAC(RequestStatus.succeeded))
+      } else handleServerAppError(res.data, dispatch)
+    })
+    .catch((err) => handleServerNetworkError(err, dispatch))
 }
 // need fix (rewrite updateTaskTC to generic)
 export const updateTaskTC =
   (todolistId: string, taskId: string, param: string | boolean) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(setStatusAC(RequestStatus.loading))
+    dispatch(setAppStatusAC(RequestStatus.loading))
     const task = getState().tasks[todolistId].find((item) => item.id === taskId)
     if (task) {
       //Вопрос ????????? В случае когда мы присваиваем значения из стейта редакс, они копируются ?
@@ -78,11 +79,14 @@ export const updateTaskTC =
         deadline,
       }
       const makeRequest = (model: UpdateTaskModel) => {
-        tasksApi.updateTask({ todolistId, taskId, model }).then((res) => {
-          const newTask = res.data.data.item
-          dispatch(updateTaskAC({ task: newTask }))
-          dispatch(setStatusAC(RequestStatus.succeeded))
-        })
+        tasksApi
+          .updateTask({ todolistId, taskId, model })
+          .then((res) => {
+            const newTask = res.data.data.item
+            dispatch(updateTaskAC({ task: newTask }))
+            dispatch(setAppStatusAC(RequestStatus.succeeded))
+          })
+          .catch((err) => handleServerNetworkError(err, dispatch))
       }
 
       const isStatus = typeof param

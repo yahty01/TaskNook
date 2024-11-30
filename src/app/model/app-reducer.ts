@@ -1,9 +1,9 @@
 import { RequestStatus } from "common/types/enums"
 
 //actions
-export const setStatusAC = (status: RequestStatus) => ({ type: "SET-STATUS", payload: { status } }) as const
+export const setAppStatusAC = (status: RequestStatus) => ({ type: "SET-STATUS", payload: { status } }) as const
 export const changeThemeAC = (theme: ThemeModeT) => ({ type: "CHANGE-THEME", payload: { theme } }) as const
-export const setErrorAC = (error: Error) => ({ type: "SET-ERROR", payload: { error } }) as const
+export const setAppErrorAC = (error: Error) => ({ type: "SET-ERROR", payload: { error } }) as const
 
 const initialState = {
   themeMode: "light" as ThemeModeT,
@@ -34,7 +34,10 @@ export const appReducer = (state: AppStateType = initialState, action: ActionsAp
 }
 
 //types
-type ActionsApp = ReturnType<typeof changeThemeAC> | ReturnType<typeof setStatusAC> | ReturnType<typeof setErrorAC>
+type ActionsApp =
+  | ReturnType<typeof changeThemeAC>
+  | ReturnType<typeof setAppStatusAC>
+  | ReturnType<typeof setAppErrorAC>
 export type ThemeModeT = "dark" | "light"
 export type Error = null | string
 export type AppStateType = typeof initialState

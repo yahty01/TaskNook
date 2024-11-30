@@ -3,8 +3,9 @@ import { FilterValue } from "../ui/Todolists/Todolist/Todolist"
 import { TodolistResponse } from "../api/todolistsApi.types"
 import { todolistsApi } from "../api/todolistsApi"
 import { AppDispatch } from "app/store"
-import { setStatusAC } from "app/model/app-reducer"
+import { setAppStatusAC } from "app/model/app-reducer"
 import { RequestStatus } from "common/types/enums"
+import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 
 // actions (функции варбрики)
 export const setTodolistsAC = (todolists: TodolistResponse[]) => {
@@ -32,43 +33,44 @@ export const setEntityStatus = (payload: { status: RequestStatus; todolistId: st
 //thunks (TC - функция высшего порядка для TodoT)
 export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
   try {
-    dispatch(setStatusAC(RequestStatus.loading))
+    dispatch(setAppStatusAC(RequestStatus.loading))
     const res = await todolistsApi.getTodolists()
     dispatch(setTodolistsAC(res.data))
-    dispatch(setStatusAC(RequestStatus.succeeded))
-  } catch (e) {
-    throw new Error(`${e}`)
+    dispatch(setAppStatusAC(RequestStatus.succeeded))
+  } catch (error) {
+    if (error instanceof Error) handleServerNetworkError({ message: error.message }, dispatch)
+    else handleServerNetworkError({ message: "Unknown error occurred" }, dispatch)
   }
 }
 export const _fetchTodolistsTC = () => (dispatch: AppDispatch) => {
-  dispatch(setStatusAC(RequestStatus.loading))
+  dispatch(setAppStatusAC(RequestStatus.loading))
   todolistsApi.getTodolists().then((res) => {
     const todolists = res.data
     dispatch(setTodolistsAC(todolists))
-    dispatch(setStatusAC(RequestStatus.succeeded))
+    dispatch(setAppStatusAC(RequestStatus.succeeded))
   })
 }
 export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
-  dispatch(setStatusAC(RequestStatus.loading))
+  dispatch(setAppStatusAC(RequestStatus.loading))
   todolistsApi.createTodolist(title).then((res) => {
     dispatch(addTodolistAC(res.data.data.item))
-    dispatch(setStatusAC(RequestStatus.succeeded))
+    dispatch(setAppStatusAC(RequestStatus.succeeded))
   })
 }
 export const removeTodolistTC = (todolistId: string) => (dispatch: AppDispatch) => {
   dispatch(setEntityStatus({ status: RequestStatus.loading, todolistId }))
-  dispatch(setStatusAC(RequestStatus.loading))
+  dispatch(setAppStatusAC(RequestStatus.loading))
   todolistsApi.removeTodolist(todolistId).then((res) => {
     dispatch(removeTodolistAC(todolistId))
-    dispatch(setStatusAC(RequestStatus.succeeded))
+    dispatch(setAppStatusAC(RequestStatus.succeeded))
     dispatch(setEntityStatus({ status: RequestStatus.succeeded, todolistId }))
   })
 }
 export const updateTodolistTitleTC = (arg: { id: string; title: string }) => (dispatch: AppDispatch) => {
-  dispatch(setStatusAC(RequestStatus.loading))
+  dispatch(setAppStatusAC(RequestStatus.loading))
   todolistsApi.updateTodolist(arg).then((res) => {
     dispatch(updateTodolistTitleAC(arg))
-    dispatch(setStatusAC(RequestStatus.succeeded))
+    dispatch(setAppStatusAC(RequestStatus.succeeded))
   })
 }
 
@@ -89,6 +91,7 @@ export const todolistsReducer = (state: DomainTodolist[] = initialState, action:
       const { todolistId } = action.payload
       return state.filter((tl) => tl.id !== todolistId)
     }
+
     case "ADD-TODOLIST": {
       const { todolist } = action.payload
       const newTodolist: DomainTodolist = {

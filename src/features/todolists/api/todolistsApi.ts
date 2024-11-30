@@ -1,6 +1,6 @@
 import { BaseResponse } from "common/types/types"
 import { TodolistResponse } from "./todolistsApi.types"
-import { instance } from "common/instance/instance"
+import { instance } from "common/lib/instance/instance"
 
 //Модульный паттерн создания объектов
 export const todolistsApi = {

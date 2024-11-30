@@ -1,5 +1,5 @@
 import { TaskResponse, GetTaskResponse, UpdateTaskModel } from "./tasksApi.types"
-import { instance } from "common/instance/instance"
+import { instance } from "common/lib/instance/instance"
 import { BaseResponse } from "common/types/types"
 
 export const tasksApi = {
