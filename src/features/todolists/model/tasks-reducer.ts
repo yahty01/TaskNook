@@ -12,6 +12,9 @@ import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 export const setTasksAC = (payload: { todolistId: string; tasks: TaskResponse[] }) => {
   return { type: "SET-TASK", payload } as const
 }
+export const setTaskEntityStatus = (payload: { status: RequestStatus; todolistId: string; taskId: string }) => {
+  return { type: "SET-TASK-ENTITY-STATUS", payload } as const
+}
 export const removeTaskAC = (payload: { taskId: string; todolistId: string }) => {
   return { type: "REMOVE-TASK", payload } as const
 }
@@ -111,15 +114,20 @@ export const tasksReducer = (state: Tasks = initialState, action: ActionsTasks):
       const { tasks, todolistId } = action.payload
       return {
         ...state,
-        [todolistId]: [...tasks],
+        [todolistId]: tasks.map((el) => ({ ...el, entityStatus: RequestStatus.idle })),
       }
+    }
+    case "SET-TASK-ENTITY-STATUS": {
+      return { ...state }
     }
     case "UPDATE-TASK": {
       const { id, todoListId } = action.payload.task
       const newTask = action.payload.task
       return {
         ...state,
-        [todoListId]: state[todoListId].map((task) => (task.id === id ? newTask : task)),
+        [todoListId]: state[todoListId].map((task) =>
+          task.id === id ? { ...newTask, entityStatus: RequestStatus.idle } : task,
+        ),
       }
     }
     case "REMOVE-TASK": {
@@ -128,7 +136,10 @@ export const tasksReducer = (state: Tasks = initialState, action: ActionsTasks):
     }
     case "ADD-TASK": {
       const newTask: TaskResponse = action.payload.task
-      return { ...state, [newTask.todoListId]: [newTask, ...state[newTask.todoListId]] }
+      return {
+        ...state,
+        [newTask.todoListId]: [{ ...newTask, entityStatus: RequestStatus.idle }, ...state[newTask.todoListId]],
+      }
     }
     case "ADD-TODOLIST": {
       const todolistId = action.payload.todolist.id
@@ -151,10 +162,15 @@ export type ActionsTasks =
   | ReturnType<typeof removeTaskAC>
   | ReturnType<typeof addTaskAC>
   | ReturnType<typeof updateTaskAC>
+  | ReturnType<typeof setTaskEntityStatus>
   //todos
   | ReturnType<typeof addTodolistAC>
   | ReturnType<typeof removeTodolistAC>
 
+export type DomainTask = TaskResponse & {
+  entityStatus: RequestStatus
+}
+
 export type Tasks = {
-  [todolistId: string]: TaskResponse[]
+  [todolistId: string]: DomainTask[]
 }

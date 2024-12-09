@@ -7,12 +7,12 @@ import ListItem from "@mui/material/ListItem"
 import { SpanWrapper } from "./Task.styled"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
-import { removeTaskTC, updateTaskTC } from "../../../../../model/tasks-reducer"
+import { DomainTask, removeTaskTC, updateTaskTC } from "../../../../../model/tasks-reducer"
 import { TaskResponse } from "../../../../../api/tasksApi.types"
 import { TaskStatus } from "common/types/enums"
 
 type TaskProps = {
-  task: TaskResponse
+  task: DomainTask
   todolistId: string
 }
 
@@ -49,7 +49,7 @@ export function Task({ todolistId, task }: TaskProps) {
       <SpanWrapper isDone={isComplete}>
         <EditableSpan value={task.title} onChange={changeTaskTitleHandler} />
       </SpanWrapper>
-      <IconButton aria-label="delete" onClick={removeTaskHandler}>
+      <IconButton aria-label="delete" onClick={removeTaskHandler} disabled={task.entityStatus === "loading"}>
         <DeleteIcon />
       </IconButton>
     </ListItem>

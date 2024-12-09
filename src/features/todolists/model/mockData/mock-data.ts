@@ -16,6 +16,7 @@ export const mockDataTasks: Tasks = {
       todoListId: "todolistId1",
       order: -1,
       addedDate: "string",
+      entityStatus: RequestStatus.idle,
     },
     {
       description: "string",
@@ -28,6 +29,7 @@ export const mockDataTasks: Tasks = {
       todoListId: "todolistId1",
       order: -1,
       addedDate: "string",
+      entityStatus: RequestStatus.idle,
     },
     {
       description: "string",
@@ -38,8 +40,10 @@ export const mockDataTasks: Tasks = {
       deadline: "string",
       id: "3",
       todoListId: "todolistId1",
+
       order: -1,
       addedDate: "string",
+      entityStatus: RequestStatus.idle,
     },
   ],
   todolistId2: [
@@ -54,6 +58,7 @@ export const mockDataTasks: Tasks = {
       todoListId: "todolistId1",
       order: -1,
       addedDate: "string",
+      entityStatus: RequestStatus.idle,
     },
     {
       description: "string",
@@ -66,6 +71,7 @@ export const mockDataTasks: Tasks = {
       todoListId: "todolistId1",
       order: -1,
       addedDate: "string",
+      entityStatus: RequestStatus.idle,
     },
     {
       description: "string",
@@ -78,6 +84,7 @@ export const mockDataTasks: Tasks = {
       todoListId: "todolistId1",
       order: -1,
       addedDate: "string",
+      entityStatus: RequestStatus.idle,
     },
   ],
 }

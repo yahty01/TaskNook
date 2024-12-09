@@ -26,7 +26,7 @@ export const updateTodolistFilterAC = (payload: { todolistId: string; filter: Fi
 export const setTasksLoadedAC = (payload: { status: RequestStatus; todolistId: string }) => {
   return { type: "SET-TASK-LOADED", payload } as const
 }
-export const setEntityStatus = (payload: { status: RequestStatus; todolistId: string }) => {
+export const setTodolistEntityStatus = (payload: { status: RequestStatus; todolistId: string }) => {
   return { type: "SET-ENTITY-STATUS", payload } as const
 }
 
@@ -58,12 +58,12 @@ export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
   })
 }
 export const removeTodolistTC = (todolistId: string) => (dispatch: AppDispatch) => {
-  dispatch(setEntityStatus({ status: RequestStatus.loading, todolistId }))
+  dispatch(setTodolistEntityStatus({ status: RequestStatus.loading, todolistId }))
   dispatch(setAppStatusAC(RequestStatus.loading))
   todolistsApi.removeTodolist(todolistId).then((res) => {
     dispatch(removeTodolistAC(todolistId))
     dispatch(setAppStatusAC(RequestStatus.succeeded))
-    dispatch(setEntityStatus({ status: RequestStatus.succeeded, todolistId }))
+    dispatch(setTodolistEntityStatus({ status: RequestStatus.succeeded, todolistId }))
   })
 }
 export const updateTodolistTitleTC = (arg: { id: string; title: string }) => (dispatch: AppDispatch) => {
@@ -136,7 +136,7 @@ export type ActionsTodolist =
   | ReturnType<typeof addTodolistAC>
   | ReturnType<typeof updateTodolistTitleAC>
   | ReturnType<typeof updateTodolistFilterAC>
-  | ReturnType<typeof setEntityStatus>
+  | ReturnType<typeof setTodolistEntityStatus>
   //tasks
   | ReturnType<typeof setTasksLoadedAC>
 

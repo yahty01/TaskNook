@@ -4,9 +4,10 @@ import { StyledInput, StyledSpan } from "./EditableSpan.styled"
 type EditableSpanProps = {
   value: string
   onChange: (newValue: string) => void
+  disabled?: boolean
 }
 
-export function EditableSpan({ value, onChange }: EditableSpanProps) {
+export function EditableSpan({ value, onChange, disabled }: EditableSpanProps) {
   const [editableMode, setEditableMode] = useState<boolean>(false)
   const [inputItemText, setInputItemText] = useState(value)
 
@@ -42,6 +43,7 @@ export function EditableSpan({ value, onChange }: EditableSpanProps) {
       autoFocus={true}
       onKeyUp={addItemOnKeyUpHandler}
       value={inputItemText}
+      disabled={disabled}
     />
   ) : (
     <StyledSpan onDoubleClick={() => setEditableMode(true)}>{value}</StyledSpan>

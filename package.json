@@ -1,5 +1,5 @@
 {
-  "name": "1-lesson",
+  "name": "todolist",
   "jest": {
     "moduleNameMapper": {
       "axios": "axios/dist/node/axios.cjs"

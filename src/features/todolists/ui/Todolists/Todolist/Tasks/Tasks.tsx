@@ -4,9 +4,10 @@ import { TaskResponse } from "../../../../api/tasksApi.types"
 import { RequestStatus } from "common/types/enums"
 import CircularProgress from "@mui/material/CircularProgress"
 import { CircularContainer, Container } from "./Tasks.styled"
+import { DomainTask } from "../../../../model/tasks-reducer"
 
 type TaskProps = {
-  tasks: TaskResponse[]
+  tasks: DomainTask[]
   todolistId: string
   taskLoaded: RequestStatus
 }
