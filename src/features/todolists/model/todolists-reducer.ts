@@ -42,14 +42,7 @@ export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
     else handleServerNetworkError({ message: "Unknown error occurred" }, dispatch)
   }
 }
-export const _fetchTodolistsTC = () => (dispatch: AppDispatch) => {
-  dispatch(setAppStatusAC(RequestStatus.loading))
-  todolistsApi.getTodolists().then((res) => {
-    const todolists = res.data
-    dispatch(setTodolistsAC(todolists))
-    dispatch(setAppStatusAC(RequestStatus.succeeded))
-  })
-}
+
 export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
   dispatch(setAppStatusAC(RequestStatus.loading))
   todolistsApi.createTodolist(title).then((res) => {
@@ -127,9 +120,7 @@ export const todolistsReducer = (state: DomainTodolist[] = initialState, action:
 }
 
 //types
-
-//Union type
-export type ActionsTodolist =
+export type ActionsTodolist = //Union type
   //todos
   | ReturnType<typeof setTodolistsAC>
   | ReturnType<typeof removeTodolistAC>
