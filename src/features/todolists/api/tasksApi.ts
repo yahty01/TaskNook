@@ -1,6 +1,6 @@
 import { TaskResponse, GetTaskResponse, UpdateTaskModel } from "./tasksApi.types"
 import { instance } from "common/lib/instance/instance"
-import { BaseResponse } from "common/types/types"
+import { BaseResponse } from "common/types/all.types"
 
 export const tasksApi = {
   getTasks(todolistId: string) {

@@ -12,11 +12,7 @@ import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 
 export type FilterValue = "all" | "completed" | "active"
 
-type TodoListProps = {
-  todolist: DomainTodolist
-}
-
-export function Todolist({ todolist }: TodoListProps) {
+export function Todolist(todolist: DomainTodolist) {
   const dispatch = useAppDispatch()
   const allTasks = useAppSelector(selectTasks)
 

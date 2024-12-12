@@ -1,4 +1,3 @@
-import * as React from "react"
 import { ChangeEvent } from "react"
 import Checkbox from "@mui/material/Checkbox"
 import IconButton from "@mui/material/IconButton"
@@ -8,7 +7,6 @@ import { SpanWrapper } from "./Task.styled"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
 import { DomainTask, removeTaskTC, updateTaskTC } from "../../../../../model/tasks-reducer"
-import { TaskResponse } from "../../../../../api/tasksApi.types"
 import { TaskStatus } from "common/types/enums"
 
 type TaskProps = {
@@ -45,9 +43,14 @@ export function Task({ todolistId, task }: TaskProps) {
         maxWidth: "100%",
       }}
     >
-      <Checkbox size="medium" checked={isComplete} onChange={changeTaskStatusHandler} />
+      <Checkbox
+        size="medium"
+        checked={isComplete}
+        onChange={changeTaskStatusHandler}
+        disabled={task.entityStatus === "loading"}
+      />
       <SpanWrapper isDone={isComplete}>
-        <EditableSpan value={task.title} onChange={changeTaskTitleHandler} />
+        <EditableSpan value={task.title} onChange={changeTaskTitleHandler} disabled={task.entityStatus === "loading"} />
       </SpanWrapper>
       <IconButton aria-label="delete" onClick={removeTaskHandler} disabled={task.entityStatus === "loading"}>
         <DeleteIcon />

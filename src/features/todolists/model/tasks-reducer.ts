@@ -12,7 +12,7 @@ import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 export const setTasksAC = (payload: { todolistId: string; tasks: TaskResponse[] }) => {
   return { type: "SET-TASK", payload } as const
 }
-export const setTaskEntityStatus = (payload: { status: RequestStatus; todolistId: string; taskId: string }) => {
+export const setTaskEntityStatusAC = (payload: { status: RequestStatus; todolistId: string; taskId: string }) => {
   return { type: "SET-TASK-ENTITY-STATUS", payload } as const
 }
 export const removeTaskAC = (payload: { taskId: string; todolistId: string }) => {
@@ -174,7 +174,7 @@ export type ActionsTasks =
   | ReturnType<typeof removeTaskAC>
   | ReturnType<typeof addTaskAC>
   | ReturnType<typeof updateTaskAC>
-  | ReturnType<typeof setTaskEntityStatus>
+  | ReturnType<typeof setTaskEntityStatusAC>
   //todos
   | ReturnType<typeof addTodolistAC>
   | ReturnType<typeof removeTodolistAC>

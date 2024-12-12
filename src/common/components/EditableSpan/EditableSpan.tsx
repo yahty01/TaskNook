@@ -7,7 +7,8 @@ type EditableSpanProps = {
   disabled?: boolean
 }
 
-export function EditableSpan({ value, onChange, disabled }: EditableSpanProps) {
+export function EditableSpan(props: EditableSpanProps) {
+  const { value, onChange, disabled } = props
   const [editableMode, setEditableMode] = useState<boolean>(false)
   const [inputItemText, setInputItemText] = useState(value)
 

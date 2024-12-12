@@ -6,13 +6,14 @@ import CircularProgress from "@mui/material/CircularProgress"
 import { CircularContainer, Container } from "./Tasks.styled"
 import { DomainTask } from "../../../../model/tasks-reducer"
 
-type TaskProps = {
+type Props = {
   tasks: DomainTask[]
   todolistId: string
   taskLoaded: RequestStatus
 }
 
-export function Tasks({ tasks, todolistId, taskLoaded }: TaskProps) {
+export function Tasks(props: Props) {
+  const { tasks, todolistId, taskLoaded } = props
   return taskLoaded !== RequestStatus.succeeded ? (
     <CircularContainer>
       <CircularProgress />

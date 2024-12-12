@@ -1,15 +1,10 @@
-// @flow
-import * as React from "react"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { EditableSpan } from "common/components"
 import { DomainTodolist, removeTodolistTC, updateTodolistTitleTC } from "../../../../model/todolists-reducer"
 import { useAppDispatch } from "common/hooks"
 
-type Props = {
-  todolist: DomainTodolist
-}
-export const TodolistTitle = ({ todolist }: Props) => {
+export const TodolistTitle = (todolist: DomainTodolist) => {
   const { title, id, entityStatus } = todolist
   const dispatch = useAppDispatch()
 

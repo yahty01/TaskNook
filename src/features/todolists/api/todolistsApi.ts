@@ -1,4 +1,4 @@
-import { BaseResponse } from "common/types/types"
+import { BaseResponse } from "common/types/all.types"
 import { TodolistResponse } from "./todolistsApi.types"
 import { instance } from "common/lib/instance/instance"
 
