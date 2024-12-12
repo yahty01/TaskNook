@@ -34,20 +34,26 @@ export const removeTodolistAC = (payload: { todolistId: string }) => {
 //thunks
 export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
   dispatch(setTasksLoadedAC({ status: RequestStatus.idle, todolistId }))
-  tasksApi.getTasks(todolistId).then((res) => {
-    const tasks = res.data.items
-    dispatch(setTasksAC({ todolistId, tasks }))
-    dispatch(setTasksLoadedAC({ status: RequestStatus.succeeded, todolistId }))
-  })
+  tasksApi
+    .getTasks(todolistId)
+    .then((res) => {
+      const tasks = res.data.items
+      dispatch(setTasksAC({ todolistId, tasks }))
+      dispatch(setTasksLoadedAC({ status: RequestStatus.succeeded, todolistId }))
+    })
+    .catch((err) => handleServerNetworkError(err, dispatch))
 }
 export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (dispatch: AppDispatch) => {
   dispatch(setAppStatusAC(RequestStatus.loading))
-  // _ = res
   tasksApi
     .deleteTask(arg)
-    .then((_) => {
-      dispatch(removeTaskAC(arg))
-      dispatch(setAppStatusAC(RequestStatus.succeeded))
+    .then((res) => {
+      if (res.data.resultCode === ResultCode.Success) {
+        dispatch(removeTaskAC(arg))
+        dispatch(setAppStatusAC(RequestStatus.succeeded))
+      } else {
+        handleServerAppError(res.data, dispatch)
+      }
     })
     .catch((err) => handleServerNetworkError(err, dispatch))
 }
@@ -59,11 +65,13 @@ export const createTaskTC = (arg: { title: string; todolistId: string }) => (dis
       if (res.data.resultCode === ResultCode.Success) {
         dispatch(addTaskAC({ task: res.data.data.item }))
         dispatch(setAppStatusAC(RequestStatus.succeeded))
-      } else handleServerAppError(res.data, dispatch)
+      } else {
+        handleServerAppError(res.data, dispatch)
+      }
     })
     .catch((err) => handleServerNetworkError(err, dispatch))
 }
-// need fix (rewrite updateTaskTC to generic)
+//todo: need fix (rewrite updateTaskTC to generic)
 export const updateTaskTC =
   (todolistId: string, taskId: string, param: string | boolean) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -85,9 +93,13 @@ export const updateTaskTC =
         tasksApi
           .updateTask({ todolistId, taskId, model })
           .then((res) => {
-            const newTask = res.data.data.item
-            dispatch(updateTaskAC({ task: newTask }))
-            dispatch(setAppStatusAC(RequestStatus.succeeded))
+            if (res.data.resultCode === ResultCode.Success) {
+              const newTask = res.data.data.item
+              dispatch(updateTaskAC({ task: newTask }))
+              dispatch(setAppStatusAC(RequestStatus.succeeded))
+            } else {
+              handleServerAppError(res.data, dispatch)
+            }
           })
           .catch((err) => handleServerNetworkError(err, dispatch))
       }
