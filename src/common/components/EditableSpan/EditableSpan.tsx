@@ -34,6 +34,12 @@ export function EditableSpan(props: EditableSpanProps) {
     }
   }
 
+  const doubleClickHandler = () => {
+    if (disabled === false) {
+      setEditableMode(true)
+    }
+  }
+
   return editableMode ? (
     <StyledInput
       onChange={onChangeHandler}
@@ -47,6 +53,6 @@ export function EditableSpan(props: EditableSpanProps) {
       disabled={disabled}
     />
   ) : (
-    <StyledSpan onDoubleClick={() => setEditableMode(true)}>{value}</StyledSpan>
+    <StyledSpan onDoubleClick={doubleClickHandler}>{value}</StyledSpan>
   )
 }

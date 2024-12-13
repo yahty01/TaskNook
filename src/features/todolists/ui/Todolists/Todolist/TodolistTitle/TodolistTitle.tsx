@@ -3,9 +3,16 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { EditableSpan } from "common/components"
 import { DomainTodolist, removeTodolistTC, updateTodolistTitleTC } from "../../../../model/todolists-reducer"
 import { useAppDispatch } from "common/hooks"
+import { RequestStatus } from "common/types/enums"
 
-export const TodolistTitle = (todolist: DomainTodolist) => {
-  const { title, id, entityStatus } = todolist
+type Props = {
+  title: string
+  id: string
+  entityStatus: RequestStatus
+}
+
+export const TodolistTitle = (props: Props) => {
+  const { title, id, entityStatus } = props
   const dispatch = useAppDispatch()
 
   const removeTodoList = () => {
@@ -18,10 +25,10 @@ export const TodolistTitle = (todolist: DomainTodolist) => {
 
   return (
     <>
-      <IconButton aria-label="delete" onClick={removeTodoList} disabled={todolist.entityStatus === "loading"}>
+      <IconButton aria-label="delete" onClick={removeTodoList} disabled={entityStatus === "loading"}>
         <DeleteIcon />
       </IconButton>
-      <EditableSpan value={title} onChange={updateTodoListTitle} disabled={todolist.entityStatus === "loading"} />
+      <EditableSpan value={title} onChange={updateTodoListTitle} disabled={entityStatus === "loading"} />
     </>
   )
 }

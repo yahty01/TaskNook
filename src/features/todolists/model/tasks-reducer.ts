@@ -43,8 +43,11 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
     })
     .catch((err) => handleServerNetworkError(err, dispatch))
 }
+
 export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (dispatch: AppDispatch) => {
+  const { todolistId, taskId } = arg
   dispatch(setAppStatusAC(RequestStatus.loading))
+  dispatch(setTaskEntityStatusAC({ status: RequestStatus.loading, todolistId, taskId }))
   tasksApi
     .deleteTask(arg)
     .then((res) => {
@@ -57,6 +60,7 @@ export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (di
     })
     .catch((err) => handleServerNetworkError(err, dispatch))
 }
+
 export const createTaskTC = (arg: { title: string; todolistId: string }) => (dispatch: AppDispatch) => {
   dispatch(setAppStatusAC(RequestStatus.loading))
   tasksApi
@@ -71,6 +75,7 @@ export const createTaskTC = (arg: { title: string; todolistId: string }) => (dis
     })
     .catch((err) => handleServerNetworkError(err, dispatch))
 }
+
 //todo: need fix (rewrite updateTaskTC to generic)
 export const updateTaskTC =
   (todolistId: string, taskId: string, param: string | boolean) =>
@@ -130,7 +135,13 @@ export const tasksReducer = (state: Tasks = initialState, action: ActionsTasks):
       }
     }
     case "SET-TASK-ENTITY-STATUS": {
-      return { ...state }
+      const { taskId, todolistId, status } = action.payload
+      return {
+        ...state,
+        [todolistId]: [
+          ...state[todolistId].map((task) => (task.id === taskId ? { ...task, entityStatus: status } : task)),
+        ],
+      }
     }
     case "UPDATE-TASK": {
       const { id, todoListId } = action.payload.task

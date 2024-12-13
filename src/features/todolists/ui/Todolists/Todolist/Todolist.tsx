@@ -5,43 +5,37 @@ import { createTaskTC, fetchTasksTC } from "../../../model/tasks-reducer"
 import { DomainTodolist } from "../../../model/todolists-reducer"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { StyledPaper } from "./Todolist.styled"
-import { useAppDispatch, useAppSelector } from "common/hooks"
-import { selectTasks } from "../../../model/tasksSelectors"
+import { useAppDispatch } from "common/hooks"
 import Grid from "@mui/material/Grid2"
 import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 
 export type FilterValue = "all" | "completed" | "active"
 
-export function Todolist(todolist: DomainTodolist) {
+type Props = {
+  todolist: DomainTodolist
+}
+
+// export function Todolist(todolist: Props) {  если убрать фигурные скобки, то
+// мы не будем деструктурировать и получем весь объект типа Props
+
+export function Todolist({ todolist }: Props) {
+  const { title, entityStatus, id, filter } = todolist
   const dispatch = useAppDispatch()
-  const allTasks = useAppSelector(selectTasks)
 
   useEffect(() => {
-    dispatch(fetchTasksTC(todolist.id))
+    dispatch(fetchTasksTC(id))
   }, [])
 
-  const tasks = allTasks[todolist.id]
-
   const addTask = (title: string) => {
-    dispatch(createTaskTC({ title, todolistId: todolist.id }))
-  }
-
-  let tasksForFilter = tasks
-
-  if (todolist.filter === "active") {
-    tasksForFilter = tasksForFilter.filter((task) => !task.status)
-  }
-
-  if (todolist.filter === "completed") {
-    tasksForFilter = tasksForFilter.filter((task) => task.status)
+    dispatch(createTaskTC({ title, todolistId: id }))
   }
 
   return (
     <Grid>
       <StyledPaper elevation={5} square={false} sx={{ padding: "1rem" }}>
-        <TodolistTitle todolist={todolist} />
+        <TodolistTitle title={title} id={id} entityStatus={entityStatus} />
         <AddItemForm addItem={addTask} disabled={todolist.entityStatus === "loading"} />
-        <Tasks tasks={tasksForFilter} todolistId={todolist.id} taskLoaded={todolist.tasksLoaded} />
+        <Tasks filterValue={filter} todolistId={todolist.id} taskLoaded={todolist.tasksLoaded} />
         <FilterTasksButtons id={todolist.id} filter={todolist.filter} />
       </StyledPaper>
     </Grid>
