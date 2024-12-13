@@ -7,14 +7,15 @@ import { SpanWrapper } from "./Task.styled"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
 import { DomainTask, removeTaskTC, updateTaskTC } from "../../../../../model/tasks-reducer"
-import { TaskStatus } from "common/types/enums"
+import { RequestStatus, TaskStatus } from "common/types/enums"
 
 type TaskProps = {
   task: DomainTask
   todolistId: string
+  todoEntityStatus: RequestStatus
 }
 
-export function Task({ todolistId, task }: TaskProps) {
+export function Task({ todolistId, task, todoEntityStatus }: TaskProps) {
   const dispatch = useAppDispatch()
 
   const removeTaskHandler = () => {
@@ -31,6 +32,7 @@ export function Task({ todolistId, task }: TaskProps) {
   }
 
   const isComplete = task.status === TaskStatus.Complete
+  const isDisabled = task.entityStatus === "loading" || todoEntityStatus === "loading"
 
   return (
     <ListItem
@@ -43,16 +45,11 @@ export function Task({ todolistId, task }: TaskProps) {
         maxWidth: "100%",
       }}
     >
-      <Checkbox
-        size="medium"
-        checked={isComplete}
-        onChange={changeTaskStatusHandler}
-        disabled={task.entityStatus === "loading"}
-      />
+      <Checkbox size="medium" checked={isComplete} onChange={changeTaskStatusHandler} disabled={isDisabled} />
       <SpanWrapper isDone={isComplete}>
-        <EditableSpan value={task.title} onChange={changeTaskTitleHandler} disabled={task.entityStatus === "loading"} />
+        <EditableSpan value={task.title} onChange={changeTaskTitleHandler} disabled={isDisabled} />
       </SpanWrapper>
-      <IconButton aria-label="delete" onClick={removeTaskHandler} disabled={task.entityStatus === "loading"}>
+      <IconButton aria-label="delete" onClick={removeTaskHandler} disabled={isDisabled}>
         <DeleteIcon />
       </IconButton>
     </ListItem>

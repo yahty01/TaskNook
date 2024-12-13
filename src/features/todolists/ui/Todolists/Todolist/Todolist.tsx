@@ -35,7 +35,12 @@ export function Todolist({ todolist }: Props) {
       <StyledPaper elevation={5} square={false} sx={{ padding: "1rem" }}>
         <TodolistTitle title={title} id={id} entityStatus={entityStatus} />
         <AddItemForm addItem={addTask} disabled={todolist.entityStatus === "loading"} />
-        <Tasks filterValue={filter} todolistId={todolist.id} taskLoaded={todolist.tasksLoaded} />
+        <Tasks
+          filterValue={filter}
+          todolistId={todolist.id}
+          taskLoaded={todolist.tasksLoaded}
+          todoEntityStatus={entityStatus}
+        />
         <FilterTasksButtons id={todolist.id} filter={todolist.filter} />
       </StyledPaper>
     </Grid>

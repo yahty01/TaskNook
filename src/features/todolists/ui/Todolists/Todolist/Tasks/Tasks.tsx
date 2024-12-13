@@ -9,12 +9,13 @@ import { FilterValue } from "../Todolist"
 
 type Props = {
   todolistId: string
-  taskLoaded: RequestStatus
   filterValue: FilterValue
+  taskLoaded: RequestStatus
+  todoEntityStatus: RequestStatus
 }
 
 export function Tasks(props: Props) {
-  const { todolistId, taskLoaded, filterValue } = props
+  const { todolistId, taskLoaded, filterValue, todoEntityStatus } = props
   const tasks = useAppSelector(selectTasks)
   let filteredTasks = tasks[todolistId]
 
@@ -38,7 +39,7 @@ export function Tasks(props: Props) {
     <Container>
       <List>
         {filteredTasks.map((task) => (
-          <Task key={task.id} task={task} todolistId={todolistId} />
+          <Task key={task.id} task={task} todolistId={todolistId} todoEntityStatus={todoEntityStatus} />
         ))}
       </List>
     </Container>
