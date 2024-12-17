@@ -42,8 +42,8 @@ test("correct todolist should change its name", () => {
 })
 
 test("correct filter of todolist should be changed", () => {
-  let todolistId1 = v1()
-  let todolistId2 = v1()
+  let todolistId1 = "v1"
+  let todolistId2 = "v2"
 
   const startState: DomainTodolist[] = [...todolistsData]
   startState[0].id = todolistId1

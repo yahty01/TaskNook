@@ -103,7 +103,7 @@ export const newTaskData = {
 }
 
 export const todolistData: DomainTodolist = {
-  id: v1(),
+  id: "oneTodo",
   title: "oldTodo",
   addedDate: "00.11.23",
   order: -1,
