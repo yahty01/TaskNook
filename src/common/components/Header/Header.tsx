@@ -5,10 +5,11 @@ import MenuIcon from "@mui/icons-material/Menu"
 import Button from "@mui/material/Button"
 import { ButtonSwitchTheme } from "common/components"
 import React from "react"
-import { StyledAppBar } from "./Header.styled"
+import { StyledAppBar, StyledLink } from "./Header.styled"
 import LinearProgress from "@mui/material/LinearProgress"
 import { useAppSelector } from "common/hooks"
 import { selectStatus } from "app/model/appSelectors"
+import { Path } from "common/routing"
 
 export const Header = () => {
   const status = useAppSelector(selectStatus)
@@ -21,7 +22,7 @@ export const Header = () => {
             <MenuIcon />
           </IconButton>
           <div>
-            <Button color="inherit">Login</Button>
+            <StyledLink to={Path.Login}>Login</StyledLink>
             <Button color="inherit">Logout</Button>
             <Button color="inherit">Faq</Button>
             <ButtonSwitchTheme />

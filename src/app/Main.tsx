@@ -1,5 +1,4 @@
 import React from "react"
-import Container from "@mui/material/Container"
 import { AddItemForm } from "common/components"
 import { addTodolistTC } from "../features/todolists/model/todolists-reducer"
 import { Todolists } from "../features/todolists/ui/Todolists/Todolists"
@@ -12,13 +11,13 @@ export function Main() {
   const addTodoList = (title: string) => dispatch(addTodolistTC(title))
 
   return (
-    <Container maxWidth="xl" style={{ marginTop: "5rem", paddingBottom: "16px" }}>
+    <>
       <Grid container>
         <AddItemForm addItem={addTodoList} />
       </Grid>
       <Grid container spacing={4}>
         <Todolists />
       </Grid>
-    </Container>
+    </>
   )
 }

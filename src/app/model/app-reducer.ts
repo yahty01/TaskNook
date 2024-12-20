@@ -6,7 +6,7 @@ export const changeThemeAC = (theme: ThemeModeT) => ({ type: "CHANGE-THEME", pay
 export const setAppErrorAC = (error: Error) => ({ type: "SET-ERROR", payload: { error } }) as const
 
 const initialState = {
-  themeMode: "light" as ThemeModeT,
+  themeMode: "dark" as ThemeModeT,
   status: "idle" as RequestStatus,
   error: null as Error,
 }

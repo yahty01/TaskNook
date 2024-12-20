@@ -1,17 +1,21 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
+import { GlobalStyle } from "./styles/GlobalStyled"
 import { store } from "app/store"
 import { Provider } from "react-redux"
-import { GlobalStyle } from "./styles/GlobalStyled"
+import { BrowserRouter } from "react-router"
 import { App } from "app/App"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <GlobalStyle />
-      <App />
-    </Provider>
+    {/* Обернкть до провайдера или после ? Ответ: Не важно, и так и так будет работать */}
+    <BrowserRouter>
+      <Provider store={store}>
+        <GlobalStyle />
+        <App />
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>,
 )
 // If you want to start measuring performance in your app, pass a function

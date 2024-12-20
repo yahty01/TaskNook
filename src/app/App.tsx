@@ -4,11 +4,12 @@ import { ThemeProvider as ThemeProviderStyled } from "styled-components"
 import { getTheme } from "common/lib/theme/getTheme"
 import { AppStyled } from "./App.styled"
 import { Header } from "common/components"
-import { Main } from "./Main"
 import { useAppSelector } from "common/hooks/useAppSelector"
 import { selectError, selectThemeMode } from "./model/appSelectors"
 import ErrorSnackbar from "common/components/ErrorSnackbar/ErrorSnackbar"
 import { useAppDispatch } from "common/hooks"
+import { Routing } from "common/routing"
+import Container from "@mui/material/Container"
 
 export function App() {
   const dispatch = useAppDispatch()
@@ -21,8 +22,9 @@ export function App() {
       <ThemeProviderStyled theme={theme}>
         <AppStyled className="App">
           <Header />
-          <Main />
-          {/*??*/}
+          <Container maxWidth="xl" style={{ marginTop: "5rem" }}>
+            <Routing />
+          </Container>
           <ErrorSnackbar dispatch={dispatch} error={error} />
         </AppStyled>
       </ThemeProviderStyled>
