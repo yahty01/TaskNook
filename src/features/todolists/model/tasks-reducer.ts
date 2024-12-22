@@ -33,7 +33,7 @@ export const removeTodolistAC = (payload: { todolistId: string }) => {
 
 //thunks
 export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
-  dispatch(setTasksLoadedAC({ status: RequestStatus.idle, todolistId }))
+  dispatch(setTasksLoadedAC({ status: RequestStatus.loading, todolistId }))
   tasksApi
     .getTasks(todolistId)
     .then((res) => {
@@ -41,7 +41,9 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
       dispatch(setTasksAC({ todolistId, tasks }))
       dispatch(setTasksLoadedAC({ status: RequestStatus.succeeded, todolistId }))
     })
-    .catch((err) => handleServerNetworkError(err, dispatch))
+    .catch((err) => {
+      handleServerNetworkError(err, dispatch)
+    })
 }
 
 export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (dispatch: AppDispatch) => {

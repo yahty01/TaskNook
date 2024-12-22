@@ -6,6 +6,7 @@ import { CircularContainer, Container } from "./Tasks.styled"
 import { useAppSelector } from "common/hooks"
 import { selectTasks } from "../../../../model/tasksSelectors"
 import { FilterValue } from "../Todolist"
+import { useState } from "react"
 
 type Props = {
   todolistId: string
@@ -27,21 +28,30 @@ export function Tasks(props: Props) {
     filteredTasks = filteredTasks.filter((task) => task.status)
   }
 
-  return taskLoaded !== RequestStatus.succeeded ? (
-    <CircularContainer>
-      <CircularProgress />
-    </CircularContainer>
-  ) : filteredTasks.length === 0 ? (
-    <Container>
-      <p>Задачи отсутствуют!</p>
-    </Container>
-  ) : (
-    <Container>
-      <List>
-        {filteredTasks.map((task) => (
-          <Task key={task.id} task={task} todolistId={todolistId} todoEntityStatus={todoEntityStatus} />
-        ))}
-      </List>
-    </Container>
-  )
+  if (taskLoaded == RequestStatus.loading) {
+    return (
+      <CircularContainer>
+        <CircularProgress />
+      </CircularContainer>
+    )
+  } else if (taskLoaded === RequestStatus.failed) {
+    return <span>Что то пошло не так :( Попробуйте снова!</span>
+  } else if (taskLoaded === RequestStatus.succeeded) {
+    return filteredTasks.length === 0 ? (
+      <Container>
+        <p>Задачи отсутствуют!</p>
+      </Container>
+    ) : (
+      <Container>
+        <List>
+          {filteredTasks.map((task) => (
+            <Task key={task.id} task={task} todolistId={todolistId} todoEntityStatus={todoEntityStatus} />
+          ))}
+        </List>
+      </Container>
+    )
+  } else {
+    return <span>idle</span>
+  }
+  // Иногда перебивает таски в ui need to fix
 }

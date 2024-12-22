@@ -38,6 +38,9 @@ type ActionsApp =
   | ReturnType<typeof changeThemeAC>
   | ReturnType<typeof setAppStatusAC>
   | ReturnType<typeof setAppErrorAC>
+
 export type ThemeModeT = "dark" | "light"
+
 export type Error = null | string
+
 export type AppStateType = typeof initialState

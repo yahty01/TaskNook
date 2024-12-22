@@ -13,9 +13,9 @@ type AddItemFormProps = {
 }
 
 export function AddItemForm({ addItem, disabled }: AddItemFormProps) {
+  //todo: rewrite to hook form
   const [inputItemText, setInputItemText] = useState("")
   const [error, setError] = useState<string | null>(null)
-
   const themeMode = useAppSelector(selectThemeMode)
   const theme = getTheme(themeMode)
 
