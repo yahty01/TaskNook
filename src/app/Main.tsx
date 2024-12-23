@@ -8,7 +8,6 @@ import { useNavigate } from "react-router"
 import { useAppSelector } from "common/hooks"
 import { selectIsLoggedIn } from "../features/auth/model/authSelectors"
 import { Path } from "common/routing"
-import { setIsLoggedInAC } from "../features/auth/model/auth-reducer"
 
 export function Main() {
   const dispatch = useAppDispatch()
@@ -16,10 +15,10 @@ export function Main() {
 
   const navigate = useNavigate()
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
+
   useEffect(() => {
-    if (isLoggedIn === false) {
-      debugger
-      navigate(Path.Main)
+    if (!isLoggedIn) {
+      navigate(Path.Login)
     }
   }, [isLoggedIn])
 

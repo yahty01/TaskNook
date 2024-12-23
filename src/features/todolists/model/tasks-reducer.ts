@@ -10,25 +10,25 @@ import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 
 // actions (функции фабрики)
 export const setTasksAC = (payload: { todolistId: string; tasks: TaskResponse[] }) => {
-  return { type: "SET-TASK", payload } as const
+  return { type: "SET_TASK", payload } as const
 }
 export const setTaskEntityStatusAC = (payload: { status: RequestStatus; todolistId: string; taskId: string }) => {
-  return { type: "SET-TASK-ENTITY-STATUS", payload } as const
+  return { type: "SET_TASK_ENTITY_STATUS", payload } as const
 }
 export const removeTaskAC = (payload: { taskId: string; todolistId: string }) => {
-  return { type: "REMOVE-TASK", payload } as const
+  return { type: "REMOVE_TASK", payload } as const
 }
 export const addTaskAC = (payload: { task: TaskResponse }) => {
-  return { type: "ADD-TASK", payload } as const
+  return { type: "ADD_TASK", payload } as const
 }
 export const updateTaskAC = (payload: { task: TaskResponse }) => {
-  return { type: "UPDATE-TASK", payload } as const
+  return { type: "UPDATE_TASK", payload } as const
 }
 export const addTodolistAC = (payload: { todolist: TodolistResponse }) => {
-  return { type: "ADD-TODOLIST", payload } as const
+  return { type: "ADD_TODOLIST", payload } as const
 }
 export const removeTodolistAC = (payload: { todolistId: string }) => {
-  return { type: "REMOVE-TODOLIST", payload } as const
+  return { type: "REMOVE_TODOLIST", payload } as const
 }
 
 //thunks
@@ -129,14 +129,14 @@ const initialState: Tasks = {}
 //Reducer
 export const tasksReducer = (state: Tasks = initialState, action: ActionsTasks): Tasks => {
   switch (action.type) {
-    case "SET-TASK": {
+    case "SET_TASK": {
       const { tasks, todolistId } = action.payload
       return {
         ...state,
         [todolistId]: tasks.map((el) => ({ ...el, entityStatus: RequestStatus.idle })),
       }
     }
-    case "SET-TASK-ENTITY-STATUS": {
+    case "SET_TASK_ENTITY_STATUS": {
       const { taskId, todolistId, status } = action.payload
       return {
         ...state,
@@ -145,7 +145,7 @@ export const tasksReducer = (state: Tasks = initialState, action: ActionsTasks):
         ],
       }
     }
-    case "UPDATE-TASK": {
+    case "UPDATE_TASK": {
       const { id, todoListId } = action.payload.task
       const newTask = action.payload.task
       return {
@@ -155,22 +155,22 @@ export const tasksReducer = (state: Tasks = initialState, action: ActionsTasks):
         ),
       }
     }
-    case "REMOVE-TASK": {
+    case "REMOVE_TASK": {
       const { taskId, todolistId } = action.payload
       return { ...state, [todolistId]: state[todolistId].filter((task) => task.id !== taskId) }
     }
-    case "ADD-TASK": {
+    case "ADD_TASK": {
       const newTask: TaskResponse = action.payload.task
       return {
         ...state,
         [newTask.todoListId]: [{ ...newTask, entityStatus: RequestStatus.idle }, ...state[newTask.todoListId]],
       }
     }
-    case "ADD-TODOLIST": {
+    case "ADD_TODOLIST": {
       const todolistId = action.payload.todolist.id
       return { ...state, [todolistId]: [] }
     }
-    case "REMOVE-TODOLIST": {
+    case "REMOVE_TODOLIST": {
       const newState = { ...state }
       delete newState[action.payload.todolistId]
       return newState

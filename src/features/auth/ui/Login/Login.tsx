@@ -11,7 +11,7 @@ import { selectThemeMode } from "app/model/appSelectors"
 import { getTheme } from "common/lib/theme"
 import styled from "styled-components"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
-import { loginTC, setIsLoggedInAC } from "../../model/auth-reducer"
+import { loginTC } from "../../model/auth-reducer"
 import { selectIsLoggedIn } from "../../model/authSelectors"
 import { useEffect } from "react"
 import { useNavigate } from "react-router"
@@ -44,7 +44,7 @@ export const Login = () => {
     if (isLoggedIn) {
       navigate(Path.Main)
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn, navigate])
 
   const {
     register, // {...register("name-input")} в внутри <div тут>, для регистрации ввода в объект

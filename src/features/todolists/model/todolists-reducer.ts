@@ -6,29 +6,29 @@ import { AppDispatch } from "app/store"
 import { setAppStatusAC } from "app/model/app-reducer"
 import { RequestStatus, ResultCode } from "common/types/enums"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
-import { handleServerAppError } from "common/utils/handleServerAppError"
+import { handleServerAppError } from "common/utils/handleServerAppError" // actions (функции варбрики)
 
 // actions (функции варбрики)
 export const setTodolistsAC = (todolists: TodolistResponse[]) => {
-  return { type: "SET-TODOLIST", todolists } as const
+  return { type: "SET_TODOLIST", todolists } as const
 }
 export const removeTodolistAC = (todolistId: string) => {
-  return { type: "REMOVE-TODOLIST", payload: { todolistId } } as const
+  return { type: "REMOVE_TODOLIST", payload: { todolistId } } as const
 }
 export const addTodolistAC = (todolist: TodolistResponse) => {
-  return { type: "ADD-TODOLIST", payload: { todolist } } as const
+  return { type: "ADD_TODOLIST", payload: { todolist } } as const
 }
 export const updateTodolistTitleAC = (payload: { id: string; title: string }) => {
-  return { type: "CHANGE-TODOLIST-TITLE", payload } as const
+  return { type: "CHANGE_TODOLIST_TITLE", payload } as const
 }
 export const updateTodolistFilterAC = (payload: { todolistId: string; filter: FilterType }) => {
-  return { type: "CHANGE-TODOLIST-FILTER", payload } as const
+  return { type: "CHANGE_TODOLIST_FILTER", payload } as const
 }
 export const setTasksLoadedAC = (payload: { status: RequestStatus; todolistId: string }) => {
-  return { type: "SET-TASK-LOADED", payload } as const
+  return { type: "SET_TASK_LOADED", payload } as const
 }
 export const setTodolistEntityStatus = (payload: { status: RequestStatus; todolistId: string }) => {
-  return { type: "SET-ENTITY-STATUS", payload } as const
+  return { type: "SET_ENTITY_STATUS", payload } as const
 }
 
 //thunks (TC - функция высшего порядка для TodoT)
@@ -94,7 +94,7 @@ const initialState: DomainTodolist[] = []
 //Reducer
 export const todolistsReducer = (state: DomainTodolist[] = initialState, action: ActionsTodolist): DomainTodolist[] => {
   switch (action.type) {
-    case "SET-TODOLIST": {
+    case "SET_TODOLIST": {
       return action.todolists.map((tl) => ({
         ...tl,
         filter: "all",
@@ -103,12 +103,12 @@ export const todolistsReducer = (state: DomainTodolist[] = initialState, action:
       }))
     }
 
-    case "REMOVE-TODOLIST": {
+    case "REMOVE_TODOLIST": {
       const { todolistId } = action.payload
       return state.filter((tl) => tl.id !== todolistId)
     }
 
-    case "ADD-TODOLIST": {
+    case "ADD_TODOLIST": {
       const { todolist } = action.payload
       const newTodolist: DomainTodolist = {
         id: todolist.id,
@@ -121,19 +121,19 @@ export const todolistsReducer = (state: DomainTodolist[] = initialState, action:
       }
       return [newTodolist, ...state]
     }
-    case "CHANGE-TODOLIST-TITLE": {
+    case "CHANGE_TODOLIST_TITLE": {
       const { id, title } = action.payload
       return state.map((tl) => (tl.id === id ? { ...tl, title } : tl))
     }
-    case "CHANGE-TODOLIST-FILTER": {
+    case "CHANGE_TODOLIST_FILTER": {
       const { todolistId, filter } = action.payload
       return state.map((tl) => (tl.id === todolistId ? { ...tl, filter } : tl))
     }
-    case "SET-TASK-LOADED": {
+    case "SET_TASK_LOADED": {
       const { status, todolistId } = action.payload
       return state.map((tl) => (tl.id === todolistId ? { ...tl, tasksLoaded: status } : tl))
     }
-    case "SET-ENTITY-STATUS": {
+    case "SET_ENTITY_STATUS": {
       const { status, todolistId } = action.payload
       return state.map((tl) => (tl.id === todolistId ? { ...tl, entityStatus: status } : tl))
     }
