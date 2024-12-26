@@ -3,6 +3,7 @@ import { tasksReducer } from "../features/todolists/model/tasks-reducer"
 import { todolistsReducer } from "../features/todolists/model/todolists-reducer"
 import { appReducer } from "./model/app-reducer"
 import { thunk, ThunkAction, ThunkDispatch } from "redux-thunk"
+import { authReducer } from "../features/auth/model/auth-reducer"
 
 //Объединяем reducer-ы с помощью combineReducers,
 //Мы создаем структуру нашего единственного объекта-состояния
@@ -10,6 +11,7 @@ export const rootReducer = combineReducers({
   tasks: tasksReducer,
   todolists: todolistsReducer,
   app: appReducer,
+  auth: authReducer,
 })
 
 //непосредственно создаем store

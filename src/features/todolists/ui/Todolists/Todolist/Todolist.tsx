@@ -22,10 +22,6 @@ export function Todolist({ todolist }: Props) {
   const { title, entityStatus, id, filter } = todolist
   const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    dispatch(fetchTasksTC(id))
-  }, [])
-
   const addTask = (title: string) => {
     dispatch(createTaskTC({ title, todolistId: id }))
   }

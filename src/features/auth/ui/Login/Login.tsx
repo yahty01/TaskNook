@@ -6,29 +6,46 @@ import FormGroup from "@mui/material/FormGroup"
 import FormLabel from "@mui/material/FormLabel"
 import Grid from "@mui/material/Grid2"
 import TextField from "@mui/material/TextField"
-import { useAppSelector } from "common/hooks"
+import { useAppDispatch, useAppSelector } from "common/hooks"
 import { selectThemeMode } from "app/model/appSelectors"
 import { getTheme } from "common/lib/theme"
-import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import styled from "styled-components"
+import { Controller, SubmitHandler, useForm } from "react-hook-form"
+import { loginTC } from "../../model/auth-reducer"
+import { selectIsLoggedIn } from "../../model/authSelectors"
+import { useEffect } from "react"
+import { useNavigate } from "react-router"
+import { Path } from "common/routing"
 
 //react hook form это настраиваемый хук для удобного управления формами.
 
 // Он принимает один объект в качестве необязательного аргумента.
 
-type Inputs = {
+export type Inputs = {
   email: string
   password: string
   rememberMe: boolean
 }
 
 const defaultFormValues = {
-  email: "",
+  email: "free@samuraijs.com",
   password: "",
   rememberMe: false,
 }
 
 export const Login = () => {
+  const themeMode = useAppSelector(selectThemeMode)
+  const theme = getTheme(themeMode)
+  const dispatch = useAppDispatch()
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  let navigate = useNavigate()
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate(Path.Main)
+    }
+  }, [isLoggedIn, navigate])
+
   const {
     register, // {...register("name-input")} в внутри <div тут>, для регистрации ввода в объект
     handleSubmit, // - эта функция получит данные формы, если валидация формы пройдет успешно
@@ -36,16 +53,14 @@ export const Login = () => {
     reset,
     control,
     formState: { errors },
-  } = useForm<Inputs>({ defaultValues: defaultFormValues }) //зачем тут def value
-  //todo: Поправить defValue
+  } = useForm<Inputs>({ defaultValues: defaultFormValues }) //def значение подставляеться пр  рендаре компаненты
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
-    reset()
+    dispatch(loginTC(data))
+    reset({ password: "" })
   }
 
-  const themeMode = useAppSelector(selectThemeMode)
-  const theme = getTheme(themeMode)
-
+  //todo: Почему при клике на чекбокс, форм лейбл окрашиваеться в мейн цвет???
   return (
     <Grid container justifyContent={"center"}>
       <Grid justifyContent={"center"}>
@@ -54,7 +69,7 @@ export const Login = () => {
             <p>
               To login get registered
               <a
-                style={{ color: theme.palette.primary.main, marginLeft: "5px" }}
+                style={{ color: theme.palette.secondary.main, marginLeft: "5px" }}
                 href={"https://social-network.samuraijs.com/"}
                 target={"_blank"}
                 rel="noreferrer"
@@ -70,6 +85,7 @@ export const Login = () => {
               <b>Password:</b> free
             </p>
           </FormLabel>
+
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup>
               <TextField
@@ -84,11 +100,23 @@ export const Login = () => {
                 })}
               />
               {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
-              <TextField type="password" label="Password" margin="normal" {...register("password")} />
+              <TextField
+                type="password"
+                label="Password"
+                margin="normal"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 3,
+                    message: "Password must be at least 3 characters long",
+                  },
+                })}
+              />
+              {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
               <FormControlLabel
+                sx={{ color: theme.palette.primary.contrastText }}
                 label={"Remember me"}
                 control={
-                  // Подробнее о тома как работает
                   <Controller
                     name={"rememberMe"}
                     control={control}

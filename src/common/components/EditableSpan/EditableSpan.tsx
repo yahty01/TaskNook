@@ -7,6 +7,8 @@ type EditableSpanProps = {
   disabled?: boolean
 }
 
+//todo: rewrite to react-hook-form
+//Не теряет ли уневерсальность компонента от использования библиотек ????
 export function EditableSpan(props: EditableSpanProps) {
   const { value, onChange, disabled } = props
   const [editableMode, setEditableMode] = useState<boolean>(false)

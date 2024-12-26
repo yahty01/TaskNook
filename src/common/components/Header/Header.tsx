@@ -7,12 +7,20 @@ import { ButtonSwitchTheme } from "common/components"
 import React from "react"
 import { StyledAppBar, StyledLink } from "./Header.styled"
 import LinearProgress from "@mui/material/LinearProgress"
-import { useAppSelector } from "common/hooks"
+import { useAppDispatch, useAppSelector } from "common/hooks"
 import { selectStatus } from "app/model/appSelectors"
 import { Path } from "common/routing"
+import { selectIsLoggedIn } from "../../../features/auth/model/authSelectors"
+import { logoutTC } from "../../../features/auth/model/auth-reducer"
 
 export const Header = () => {
+  const dispatch = useAppDispatch()
+
   const status = useAppSelector(selectStatus)
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const logout = () => {
+    dispatch(logoutTC())
+  }
 
   return (
     <StyledAppBar>
@@ -22,8 +30,7 @@ export const Header = () => {
             <MenuIcon />
           </IconButton>
           <div>
-            <StyledLink to={Path.Login}>Login</StyledLink>
-            <Button color="inherit">Logout</Button>
+            {isLoggedIn && <Button onClick={logout}>Logout</Button>}
             <Button color="inherit">Faq</Button>
             <ButtonSwitchTheme />
           </div>

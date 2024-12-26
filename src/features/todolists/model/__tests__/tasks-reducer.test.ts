@@ -1,15 +1,16 @@
 import {
   addTaskAC,
   addTodolistAC,
+  clearTasksAC,
   removeTaskAC,
   removeTodolistAC,
-  tasksReducer,
   Tasks,
+  tasksReducer,
   updateTaskAC,
 } from "../tasks-reducer"
 import { mockDataTasks, newTaskData, todolistData } from "../mockData/mock-data"
 import { TaskResponse } from "../../api/tasksApi.types"
-import { TaskStatus } from "../../../../common/types/enums"
+import { TaskStatus } from "common/types/enums"
 
 test("correct tasks should be deleted from correct array", () => {
   const startState: Tasks = { ...mockDataTasks }
@@ -39,7 +40,6 @@ test("status of specified tasks should be changed", () => {
   const newTask: TaskResponse = startState["todolistId1"].filter((item) => item.id === "3")[0]
   newTask.status = TaskStatus.Complete
   newTask.id = "3"
-  console.log(newTask)
   // const action = updateTaskAC("2", false, "todolistId2")
   const action = updateTaskAC({ task: newTask })
 
@@ -92,4 +92,14 @@ test("property with todolistId should be deleted", () => {
 
   expect(keys.length).toBe(1)
   expect(endState["todolistId2"]).not.toBeDefined()
+})
+
+test("correct clear all tasks", () => {
+  const startState: Tasks = { ...mockDataTasks }
+
+  const endState = tasksReducer(startState, clearTasksAC())
+
+  for (let i = 0; i < 100; i++) {
+    expect(endState[i]).toBe(undefined)
+  }
 })
