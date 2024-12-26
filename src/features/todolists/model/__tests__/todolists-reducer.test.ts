@@ -1,6 +1,7 @@
 import { v1 } from "uuid"
 import {
   addTodolistAC,
+  clearTodolistsAC,
   DomainTodolist,
   removeTodolistAC,
   todolistsReducer,
@@ -54,4 +55,12 @@ test("correct filter of todolist should be changed", () => {
 
   expect(endState[0].filter).toBe("all")
   expect(endState[1].filter).toBe("active")
+})
+
+test("correct clear all todolists", () => {
+  const startState: DomainTodolist[] = [...todolistsData]
+
+  const endState = todolistsReducer(startState, clearTodolistsAC())
+
+  expect(endState.length).toBe(0)
 })

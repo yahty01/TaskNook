@@ -4,13 +4,15 @@ import { useAppDispatch, useAppSelector } from "common/hooks"
 import { selectTodolists } from "../../model/todolistsSelectors"
 import { DomainTodolist, fetchTodolistsTC } from "../../model/todolists-reducer"
 import Grid from "@mui/material/Grid2"
+import { selectIsLoggedIn } from "../../../auth/model/authSelectors"
 
 export function Todolists() {
   const todoLists = useAppSelector(selectTodolists)
   const dispatch = useAppDispatch()
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
   useEffect(() => {
-    dispatch(fetchTodolistsTC())
+    if (isLoggedIn) dispatch(fetchTodolistsTC())
   }, [])
 
   return (

@@ -14,6 +14,7 @@ import { initializeAppTC } from "../features/auth/model/auth-reducer"
 import { selectIsInitialized } from "../features/auth/model/authSelectors"
 import CircularProgress from "@mui/material/CircularProgress"
 
+//todo: Полсе логаута, нужно убить данные о тудулистах в стейте
 export function App() {
   const dispatch = useAppDispatch()
   const themeMode = useAppSelector(selectThemeMode)
@@ -22,9 +23,12 @@ export function App() {
   const theme = getTheme(themeMode)
 
   useEffect(() => {
+    // useEffect срабатывает после рендера компоненты, тоесть всех ее дочерних элементов, но регестрируеться раньше
+    // useEffect в дочерних компанентах сработает раньше, ТОЛЬКО
     dispatch(initializeAppTC())
   }, [])
 
+  //todo: спозицианировать по центру и добавить 1 секунды минимальной задержи перед показом контента!
   if (!isInitialized) {
     return (
       <StyledContainer>

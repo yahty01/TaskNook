@@ -1,10 +1,16 @@
 import styled from "styled-components"
+import { Path } from "common/routing"
+import Button from "@mui/material/Button"
+import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn"
 
 export const Page404 = () => {
   return (
     <>
       <Title>404</Title>
       <SubTitle>page not found</SubTitle>
+      <Button href={Path.Main} variant="outlined" startIcon={<KeyboardReturnIcon />}>
+        На главную страницу
+      </Button>
     </>
   )
 }

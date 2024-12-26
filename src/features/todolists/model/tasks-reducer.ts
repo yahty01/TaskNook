@@ -12,6 +12,11 @@ import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 export const setTasksAC = (payload: { todolistId: string; tasks: TaskResponse[] }) => {
   return { type: "SET_TASK", payload } as const
 }
+
+export const clearTasksAC = () => {
+  return { type: "CLEAR_TASK" } as const
+}
+
 export const setTaskEntityStatusAC = (payload: { status: RequestStatus; todolistId: string; taskId: string }) => {
   return { type: "SET_TASK_ENTITY_STATUS", payload } as const
 }
@@ -136,6 +141,9 @@ export const tasksReducer = (state: Tasks = initialState, action: ActionsTasks):
         [todolistId]: tasks.map((el) => ({ ...el, entityStatus: RequestStatus.idle })),
       }
     }
+    case "CLEAR_TASK": {
+      return {}
+    }
     case "SET_TASK_ENTITY_STATUS": {
       const { taskId, todolistId, status } = action.payload
       return {
@@ -188,6 +196,7 @@ export type ActionsTasks =
   | ReturnType<typeof addTaskAC>
   | ReturnType<typeof updateTaskAC>
   | ReturnType<typeof setTaskEntityStatusAC>
+  | ReturnType<typeof clearTasksAC>
   //todos
   | ReturnType<typeof addTodolistAC>
   | ReturnType<typeof removeTodolistAC>

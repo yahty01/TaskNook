@@ -6,11 +6,15 @@ import { AppDispatch } from "app/store"
 import { setAppStatusAC } from "app/model/app-reducer"
 import { RequestStatus, ResultCode } from "common/types/enums"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
-import { handleServerAppError } from "common/utils/handleServerAppError" // actions (функции варбрики)
+import { handleServerAppError } from "common/utils/handleServerAppError"
+import { fetchTasksTC } from "./tasks-reducer" // actions (функции варбрики)
 
 // actions (функции варбрики)
 export const setTodolistsAC = (todolists: TodolistResponse[]) => {
   return { type: "SET_TODOLIST", todolists } as const
+}
+export const clearTodolistsAC = () => {
+  return { type: "CLEAR_TODOLIST" } as const
 }
 export const removeTodolistAC = (todolistId: string) => {
   return { type: "REMOVE_TODOLIST", payload: { todolistId } } as const
@@ -38,6 +42,7 @@ export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
     const res = await todolistsApi.getTodolists()
     dispatch(setTodolistsAC(res.data))
     dispatch(setAppStatusAC(RequestStatus.succeeded))
+    res.data.forEach((tl) => dispatch(fetchTasksTC(tl.id)))
   } catch (err) {
     handleServerNetworkError(err, dispatch)
   }
@@ -102,6 +107,9 @@ export const todolistsReducer = (state: DomainTodolist[] = initialState, action:
         tasksLoaded: RequestStatus.idle,
       }))
     }
+    case "CLEAR_TODOLIST": {
+      return []
+    }
 
     case "REMOVE_TODOLIST": {
       const { todolistId } = action.payload
@@ -151,6 +159,7 @@ export type ActionsTodolist = //Union type
   | ReturnType<typeof updateTodolistTitleAC>
   | ReturnType<typeof updateTodolistFilterAC>
   | ReturnType<typeof setTodolistEntityStatus>
+  | ReturnType<typeof clearTodolistsAC>
   //tasks
   | ReturnType<typeof setTasksLoadedAC>
 

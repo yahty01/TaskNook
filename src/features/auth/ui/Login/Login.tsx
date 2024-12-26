@@ -100,7 +100,19 @@ export const Login = () => {
                 })}
               />
               {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
-              <TextField type="password" label="Password" margin="normal" {...register("password")} />
+              <TextField
+                type="password"
+                label="Password"
+                margin="normal"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 3,
+                    message: "Password must be at least 3 characters long",
+                  },
+                })}
+              />
+              {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
               <FormControlLabel
                 sx={{ color: theme.palette.primary.contrastText }}
                 label={"Remember me"}

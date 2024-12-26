@@ -1,4 +1,3 @@
-// actions
 import { setAppStatusAC } from "app/model/app-reducer"
 import { AppDispatch } from "app/store"
 import { Inputs } from "../ui/Login/Login"
@@ -6,7 +5,10 @@ import { RequestStatus, ResultCode } from "common/types/enums"
 import { authApi } from "../api/authApi"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { handleServerAppError } from "common/utils/handleServerAppError"
+import { clearTodolistsAC } from "../../todolists/model/todolists-reducer"
+import { clearTasksAC } from "../../todolists/model/tasks-reducer"
 
+// actions
 export const setIsLoggedInAC = (isLoggedIn: boolean) => {
   return { type: "SET_IS_LOGGED_IN", payload: { isLoggedIn } } as const
 }
@@ -62,6 +64,8 @@ export const logoutTC = () => (dispatch: AppDispatch) => {
       if (res.data.resultCode === ResultCode.Success) {
         localStorage.removeItem("sn-token")
         dispatch(setIsLoggedInAC(false))
+        dispatch(clearTodolistsAC())
+        dispatch(clearTasksAC())
       } else {
         handleServerAppError(res.data, dispatch)
       }
