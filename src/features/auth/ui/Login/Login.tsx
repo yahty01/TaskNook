@@ -69,7 +69,7 @@ export const Login = () => {
             <p>
               To login get registered
               <a
-                style={{ color: theme.palette.secondary.main, marginLeft: "5px" }}
+                style={{ color: theme.palette.text.primary, marginLeft: "5px" }}
                 href={"https://social-network.samuraijs.com/"}
                 target={"_blank"}
                 rel="noreferrer"

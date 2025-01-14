@@ -13,6 +13,7 @@ import Container from "@mui/material/Container"
 import { initializeAppTC } from "../features/auth/model/auth-reducer"
 import { selectIsInitialized } from "../features/auth/model/authSelectors"
 import CircularProgress from "@mui/material/CircularProgress"
+import { GlobalStyle } from "../styles/GlobalStyled"
 
 //todo: Полсе логаута, нужно убить данные о тудулистах в стейте
 export function App() {
@@ -40,12 +41,13 @@ export function App() {
   return (
     <ThemeProviderMUI theme={theme}>
       <ThemeProviderStyled theme={theme}>
-        <AppStyled className="App">
+        <AppStyled className="s.App">
           <Header />
           <Container maxWidth="xl" style={{ marginTop: "5rem" }}>
             <Routing />
           </Container>
           <ErrorSnackbar dispatch={dispatch} error={error} />
+          <GlobalStyle theme={theme} />
         </AppStyled>
       </ThemeProviderStyled>
     </ThemeProviderMUI>
