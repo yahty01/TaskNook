@@ -1,8 +1,22 @@
 import { createGlobalStyle } from "styled-components"
 
-export const GlobalStyle = createGlobalStyle`
+interface GlobalStyleProps {
+  theme: {
+    palette: {
+      background: {
+        default: string
+        paper: string
+      }
+      text: {
+        primary: string
+        secondary: string
+      }
+    }
+  }
+}
+
+export const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
   *, *::before, *::after {
-    //Запись p0+m0 + TAB    
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -13,15 +27,29 @@ export const GlobalStyle = createGlobalStyle`
     line-height: 1.2;
   }
 
+  html {
+    height: 100%;
+    background-attachment: fixed; /* Фиксация градиента */
+    background-size: cover; /* Покрытие всей области */
+    background-repeat: no-repeat;
+    background-color: ${({ theme }) => theme.palette.background.default};
+  }
+
   body {
     margin: 0;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh; /* Убедитесь, что тело страницы всегда растянуто */
+    display: flex;
+    flex-direction: column;
+    background-repeat: no-repeat; /* Изображение не повторяется */
+    background-size: contain; /* Масштабируем изображение так, чтобы оно полностью помещалось */
+    background-position: center; /* Размещаем в центре элемента */
+  }
+  
 
-    & > div > div {
-      display: flex;
-      gap: 10px;
-    }
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   a {
@@ -36,6 +64,4 @@ export const GlobalStyle = createGlobalStyle`
     background-color: unset;
     border: none;
   }
-  
- 
 `

@@ -1,6 +1,5 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-import { GlobalStyle } from "./styles/GlobalStyled"
 import { store } from "app/store"
 import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router"
@@ -12,7 +11,6 @@ root.render(
     {/* Обернкть до провайдера или после ? Ответ: Не важно, и так и так будет работать */}
     <BrowserRouter>
       <Provider store={store}>
-        <GlobalStyle />
         <App />
       </Provider>
     </BrowserRouter>
