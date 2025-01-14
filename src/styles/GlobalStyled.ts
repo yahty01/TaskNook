@@ -46,11 +46,11 @@ export const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
   }
   
 
-  #root {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+  //#root {
+  //  min-height: 100vh;
+  //  display: flex;
+  //  flex-direction: column;
+  //}
 
   a {
     text-decoration: none;
