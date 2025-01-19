@@ -1,12 +1,11 @@
-import { applyMiddleware, combineReducers, legacy_createStore, UnknownAction } from "redux"
+import { combineReducers } from "redux"
 import { tasksReducer } from "../features/todolists/model/tasks-reducer"
 import { todolistsReducer } from "../features/todolists/model/todolists-reducer"
-import { appReducer } from "./model/app-reducer"
-import { thunk, ThunkAction, ThunkDispatch } from "redux-thunk"
-import { authReducer } from "../features/auth/model/auth-reducer"
+import { appReducer } from "./model/appSlice"
+import { ThunkDispatch } from "redux-thunk"
+import { authReducer } from "../features/auth/model/authSlice"
+import { configureStore } from "@reduxjs/toolkit"
 
-//Объединяем reducer-ы с помощью combineReducers,
-//Мы создаем структуру нашего единственного объекта-состояния
 export const rootReducer = combineReducers({
   tasks: tasksReducer,
   todolists: todolistsReducer,
@@ -14,8 +13,7 @@ export const rootReducer = combineReducers({
   auth: authReducer,
 })
 
-//непосредственно создаем store
-export const store = legacy_createStore(rootReducer, {}, applyMiddleware(thunk))
+export const store = configureStore({ reducer: rootReducer })
 
 //Автоматически определяет тип всего объекта состояния
 export type RootState = ReturnType<typeof store.getState>
@@ -24,9 +22,9 @@ export type RootState = ReturnType<typeof store.getState>
 //Достаем из редъюсера массив типов параметров и по индексу 1 у нас и находятся все скомбинированные экшены.
 type AppActionsType = Parameters<typeof rootReducer>[1]
 
-export type AppDispatch = ThunkDispatch<RootState, unknown, AppActionsType>
-// UnknownAction значит любой action у которого есть свой тип !
 // export type AppDispatch = typeof store.dispatch
+export type AppDispatch = ThunkDispatch<RootState, unknown, AppActionsType>
+// UnknownAction значит любой action у которого есøть свой тип !
 
 //Зачем нужен AppThunk Если и без него все работает
 // export type AppThunk<ReturnType = void> = ThunkAction<

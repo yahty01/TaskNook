@@ -1,5 +1,5 @@
-import { appReducer, AppStateType, changeThemeAC } from "../app-reducer"
 import { RequestStatus } from "common/types/enums"
+import { appReducer, AppStateType, changeTheme } from "app/model/appSlice"
 
 test("themeMode", () => {
   // 1. Стартовый state
@@ -13,7 +13,7 @@ test("themeMode", () => {
   const themeMode = startState.themeMode
 
   // 2. Действие
-  const endState = appReducer(startState, changeThemeAC(themeMode))
+  const endState = appReducer(startState, changeTheme({ themeMode: "dark" }))
 
   // 3. Проверяем, что наши действия (изменения state) соответствуют ожиданию
   expect(endState.themeMode).toBe("dark")

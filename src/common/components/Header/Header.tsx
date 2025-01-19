@@ -9,7 +9,7 @@ import LinearProgress from "@mui/material/LinearProgress"
 import { useAppDispatch, useAppSelector } from "common/hooks"
 import { selectStatus } from "app/model/appSelectors"
 import { selectIsLoggedIn } from "../../../features/auth/model/authSelectors"
-import { logoutTC } from "../../../features/auth/model/auth-reducer"
+import { logoutTC } from "../../../features/auth/model/authSlice"
 
 export const Header = () => {
   const dispatch = useAppDispatch()

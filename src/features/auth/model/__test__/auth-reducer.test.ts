@@ -1,9 +1,17 @@
 // src/store/__tests__/auth-reducer.test.ts
 
-import { authReducer, AuthState, setIsInitializedAC, setIsLoggedInAC } from "../auth-reducer"
+import { authReducer, setIsInitialized, setIsLoggedIn } from "../authSlice"
+
+type authState = {
+  isLoggedIn: boolean
+  isInitialized: boolean
+}
 
 describe("authReducer tests", () => {
-  let startState: AuthState
+  let startState: authState = {
+    isLoggedIn: false,
+    isInitialized: false,
+  }
 
   beforeEach(() => {
     startState = { isLoggedIn: false, isInitialized: false }
@@ -12,7 +20,7 @@ describe("authReducer tests", () => {
   // Тест: изменение статуса isLoggedIn на true
   it("должен корректно изменить статус isLoggedIn на true", () => {
     // Arrange
-    const action = setIsLoggedInAC(true)
+    const action = setIsLoggedIn({ isLoggedIn: true })
 
     // Act
     const endState = authReducer(startState, action)
@@ -24,7 +32,7 @@ describe("authReducer tests", () => {
   // Тест: изменение статуса isInitialized на true
   it("должен корректно изменить статус isInitialized на true", () => {
     // Arrange
-    const action = setIsInitializedAC(true)
+    const action = setIsInitialized({ isInitialized: true })
 
     // Act
     const endState = authReducer(startState, action)
@@ -61,7 +69,7 @@ describe("authReducer tests", () => {
   it("должен корректно изменить статус isLoggedIn на false", () => {
     // Arrange
     startState.isLoggedIn = true
-    const action = setIsLoggedInAC(false)
+    const action = setIsLoggedIn({ isLoggedIn: false })
 
     // Act
     const endState = authReducer(startState, action)
@@ -74,7 +82,7 @@ describe("authReducer tests", () => {
   it("должен корректно изменить статус isInitialized на false", () => {
     // Arrange
     startState.isInitialized = true
-    const action = setIsInitializedAC(false)
+    const action = setIsInitialized({ isInitialized: false })
 
     // Act
     const endState = authReducer(startState, action)

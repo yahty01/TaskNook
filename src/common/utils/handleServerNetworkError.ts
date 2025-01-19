@@ -1,14 +1,14 @@
 import { Dispatch } from "redux"
-import { setAppErrorAC, setAppStatusAC } from "app/model/app-reducer"
+import { setAppError, setAppStatus } from "app/model/appSlice"
 import { RequestStatus } from "common/types/enums"
 
 export const handleServerNetworkError = (error: unknown, dispatch: Dispatch) => {
   if (error instanceof Error) {
-    dispatch(setAppErrorAC(error.message))
+    dispatch(setAppError({ error: error.message }))
   } else if (typeof error === "object" && error !== null && "message" in error) {
-    dispatch(setAppErrorAC((error as { message: string }).message))
+    dispatch(setAppError({ error: (error as { message: string }).message }))
   } else {
-    dispatch(setAppErrorAC("Unknown error occurred"))
+    dispatch(setAppError({ error: "Unknown error occurred" }))
   }
-  dispatch(setAppStatusAC(RequestStatus.failed))
+  dispatch(setAppStatus({ status: RequestStatus.failed }))
 }

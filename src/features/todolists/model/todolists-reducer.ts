@@ -3,11 +3,11 @@ import { FilterValue } from "../ui/Todolists/Todolist/Todolist"
 import { TodolistResponse } from "../api/todolistsApi.types"
 import { todolistsApi } from "../api/todolistsApi"
 import { AppDispatch } from "app/store"
-import { setAppStatusAC } from "app/model/app-reducer"
 import { RequestStatus, ResultCode } from "common/types/enums"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { handleServerAppError } from "common/utils/handleServerAppError"
-import { fetchTasksTC } from "./tasks-reducer" // actions (функции варбрики)
+import { fetchTasksTC } from "./tasks-reducer"
+import { setAppStatus } from "app/model/appSlice" // actions (функции варбрики)
 
 // actions (функции варбрики)
 export const setTodolistsAC = (todolists: TodolistResponse[]) => {
@@ -38,10 +38,10 @@ export const setTodolistEntityStatus = (payload: { status: RequestStatus; todoli
 //thunks (TC - функция высшего порядка для TodoT)
 export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
   try {
-    dispatch(setAppStatusAC(RequestStatus.loading))
+    dispatch(setAppStatus({ status: RequestStatus.loading }))
     const res = await todolistsApi.getTodolists()
     dispatch(setTodolistsAC(res.data))
-    dispatch(setAppStatusAC(RequestStatus.succeeded))
+    dispatch(setAppStatus({ status: RequestStatus.succeeded }))
     res.data.forEach((tl) => dispatch(fetchTasksTC(tl.id)))
   } catch (err) {
     handleServerNetworkError(err, dispatch)
@@ -49,13 +49,13 @@ export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
 }
 
 export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
-  dispatch(setAppStatusAC(RequestStatus.loading))
+  dispatch(setAppStatus({ status: RequestStatus.loading }))
   todolistsApi
     .createTodolist(title)
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
         dispatch(addTodolistAC(res.data.data.item))
-        dispatch(setAppStatusAC(RequestStatus.succeeded))
+        dispatch(setAppStatus({ status: RequestStatus.succeeded }))
       } else {
         handleServerAppError(res.data, dispatch)
       }
@@ -64,30 +64,30 @@ export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
 }
 export const removeTodolistTC = (todolistId: string) => (dispatch: AppDispatch) => {
   dispatch(setTodolistEntityStatus({ status: RequestStatus.loading, todolistId }))
-  dispatch(setAppStatusAC(RequestStatus.loading))
+  dispatch(setAppStatus({ status: RequestStatus.loading }))
   todolistsApi
     .removeTodolist(todolistId)
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
         dispatch(removeTodolistAC(todolistId))
-        dispatch(setAppStatusAC(RequestStatus.succeeded))
+        dispatch(setAppStatus({ status: RequestStatus.succeeded }))
       } else {
         handleServerAppError(res.data, dispatch)
       }
     })
     .catch((res) => {
       dispatch(setTodolistEntityStatus({ status: RequestStatus.failed, todolistId }))
-      dispatch(setAppStatusAC(RequestStatus.failed))
+      dispatch(setAppStatus({ status: RequestStatus.failed }))
     })
 }
 export const updateTodolistTitleTC = (arg: { id: string; title: string }) => (dispatch: AppDispatch) => {
-  dispatch(setAppStatusAC(RequestStatus.loading))
+  dispatch(setAppStatus({ status: RequestStatus.loading }))
   todolistsApi
     .updateTodolist(arg)
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
         dispatch(updateTodolistTitleAC(arg))
-        dispatch(setAppStatusAC(RequestStatus.succeeded))
+        dispatch(setAppStatus({ status: RequestStatus.succeeded }))
       } else {
         handleServerAppError(res.data, dispatch)
       }
