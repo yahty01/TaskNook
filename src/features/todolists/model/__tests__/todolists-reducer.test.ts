@@ -1,19 +1,18 @@
-import { v1 } from "uuid"
 import {
-  addTodolistAC,
-  clearTodolistsAC,
+  addTodolist,
+  clearTodolists,
   DomainTodolist,
-  removeTodolistAC,
+  removeTodolist,
   todolistsReducer,
-  updateTodolistFilterAC,
-  updateTodolistTitleAC,
-} from "../todolists-reducer"
+  updateTodolistFilter,
+  updateTodolistTitle,
+} from "../todolistsSlice"
 import { FilterType } from "../../ui/Todolists/Todolist/FilterTasksButtons/FilterTasksButtons"
 import { todolistData, todolistsData } from "../mockData/mock-data"
 
 test("correct todolist should be removed", () => {
   const startState: DomainTodolist[] = [...todolistsData]
-  const endState = todolistsReducer(startState, removeTodolistAC("v1"))
+  const endState = todolistsReducer(startState, removeTodolist({ todolistId: "v1" }))
 
   expect(endState.length).toBe(1)
   expect(endState[0].id).toBe("v2")
@@ -23,7 +22,7 @@ test("correct todolist should be added", () => {
   const startState: DomainTodolist[] = [...todolistsData]
   const newTitle = "New Todolist"
   const newTodo = { ...todolistData, title: newTitle }
-  const endState = todolistsReducer(startState, addTodolistAC(newTodo))
+  const endState = todolistsReducer(startState, addTodolist({ todolist: newTodo }))
 
   expect(endState.length).toBe(3)
   expect(endState[0].title).toBe(newTitle)
@@ -35,7 +34,7 @@ test("correct todolist should change its name", () => {
 
   const newTitle = "New Todolist"
 
-  const endState = todolistsReducer(startState, updateTodolistTitleAC({ id: "v2", title: newTitle }))
+  const endState = todolistsReducer(startState, updateTodolistTitle({ todolistId: "v2", title: newTitle }))
 
   expect(endState[0].title).toBe("oldTod1")
   expect(endState[1].title).toBe(newTitle)
@@ -43,15 +42,10 @@ test("correct todolist should change its name", () => {
 })
 
 test("correct filter of todolist should be changed", () => {
-  let todolistId1 = "v1"
-  let todolistId2 = "v2"
-
   const startState: DomainTodolist[] = [...todolistsData]
-  startState[0].id = todolistId1
-  startState[1].id = todolistId2
 
   let newFilter: FilterType = "active"
-  const endState = todolistsReducer(startState, updateTodolistFilterAC({ todolistId: todolistId2, filter: newFilter }))
+  const endState = todolistsReducer(startState, updateTodolistFilter({ todolistId: "v2", filter: newFilter }))
 
   expect(endState[0].filter).toBe("all")
   expect(endState[1].filter).toBe("active")
@@ -60,7 +54,7 @@ test("correct filter of todolist should be changed", () => {
 test("correct clear all todolists", () => {
   const startState: DomainTodolist[] = [...todolistsData]
 
-  const endState = todolistsReducer(startState, clearTodolistsAC())
+  const endState = todolistsReducer(startState, clearTodolists())
 
   expect(endState.length).toBe(0)
 })

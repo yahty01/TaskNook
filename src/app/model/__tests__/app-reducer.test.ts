@@ -1,9 +1,9 @@
 import { RequestStatus } from "common/types/enums"
-import { appReducer, AppStateType, changeTheme } from "app/model/appSlice"
+import { AppInitialState, appReducer, changeTheme } from "app/model/appSlice"
 
 test("themeMode", () => {
   // 1. Стартовый state
-  const startState: AppStateType = {
+  const startState: AppInitialState = {
     themeMode: "light",
     status: RequestStatus.idle,
     error: null,

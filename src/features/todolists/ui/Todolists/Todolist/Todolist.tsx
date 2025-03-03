@@ -1,8 +1,8 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Tasks } from "./Tasks/Tasks"
 import { AddItemForm } from "common/components"
-import { createTaskTC, fetchTasksTC } from "../../../model/tasks-reducer"
-import { DomainTodolist } from "../../../model/todolists-reducer"
+import { createTaskTC } from "../../../model/tasks-reducer"
+import { DomainTodolist } from "../../../model/todolistsSlice"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { StyledPaper } from "./Todolist.styled"
 import { useAppDispatch } from "common/hooks"
@@ -29,7 +29,7 @@ export function Todolist({ todolist }: Props) {
   return (
     <Grid>
       <StyledPaper elevation={5} square={false} sx={{ padding: "1rem" }}>
-        <TodolistTitle title={title} id={id} entityStatus={entityStatus} />
+        <TodolistTitle title={title} todolistId={id} entityStatus={entityStatus} />
         <AddItemForm addItem={addTask} disabled={todolist.entityStatus === "loading"} />
         <Tasks
           filterValue={filter}

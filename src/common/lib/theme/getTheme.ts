@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles"
-import { ThemeModeT } from "app/model/appSlice"
+import { ThemeMode } from "app/model/appSlice"
 
 export const lightThemePalette = {
   primary: {
@@ -55,7 +55,7 @@ export const darkThemePalette = {
   },
 }
 
-export const getTheme = (mode: ThemeModeT) => {
+export const getTheme = (mode: ThemeMode) => {
   return createTheme({
     palette: {
       mode,

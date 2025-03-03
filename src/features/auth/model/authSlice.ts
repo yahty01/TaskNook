@@ -4,10 +4,10 @@ import { RequestStatus, ResultCode } from "common/types/enums"
 import { authApi } from "../api/authApi"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { handleServerAppError } from "common/utils/handleServerAppError"
-import { clearTodolistsAC } from "../../todolists/model/todolists-reducer"
 import { clearTasksAC } from "../../todolists/model/tasks-reducer"
 import { createSlice } from "@reduxjs/toolkit"
 import { setAppStatus } from "app/model/appSlice"
+import { clearTodolists } from "../../todolists/model/todolistsSlice"
 
 export const authSlice = createSlice({
   name: "auth",
@@ -15,9 +15,25 @@ export const authSlice = createSlice({
     isLoggedIn: false,
     isInitialized: false,
   },
-  //Подредьюсеры или экшены
+
+  // reducers: {  <------- Старый ситаксис 1.0
+  //   // Объект payload. Типизация через PayloadAction
+  //   setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
+  //     // логику в подредьюсерах пишем мутабельным образом,
+  //     // т.к. иммутабельность достигается благодаря immer.js
+  //     state.isLoggedIn = action.payload.isLoggedIn
+  //   },
+  //   setIsInitialized: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
+  //     state.isInitialized = action.payload.isInitialized
+  //   },
+  // },
+
+  // reducers состоит из подредьюсеров, каждый из которых эквивалентен одному
+  // оператору case в switch, как мы делали раньше (обычный redux)
   reducers: (create) => ({
     setIsLoggedIn: create.reducer<{ isLoggedIn: boolean }>((state, action) => {
+      // логику в подредьюсерах пишем мутабельным образом,
+      // т.к. иммутабельность достигается благодаря immer.js
       state.isLoggedIn = action.payload.isLoggedIn
     }),
     setIsInitialized: create.reducer<{ isInitialized: boolean }>((state, action) => {
@@ -26,7 +42,9 @@ export const authSlice = createSlice({
   }),
 })
 
+// Action creator также достаем с помощью slice
 export const { setIsLoggedIn, setIsInitialized } = authSlice.actions
+// Создаем reducer при помощи slice
 export const authReducer = authSlice.reducer
 
 // thunks
@@ -75,7 +93,7 @@ export const logoutTC = () => (dispatch: AppDispatch) => {
       if (res.data.resultCode === ResultCode.Success) {
         localStorage.removeItem("sn-token")
         dispatch(setIsLoggedIn({ isLoggedIn: false }))
-        dispatch(clearTodolistsAC())
+        dispatch(clearTodolists())
         dispatch(clearTasksAC())
       } else {
         handleServerAppError(res.data, dispatch)
@@ -86,12 +104,3 @@ export const logoutTC = () => (dispatch: AppDispatch) => {
       dispatch(setAppStatus({ status: RequestStatus.failed }))
     })
 }
-//RTK 1.0
-// reducers: {
-//   setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
-//     state.isLoggedIn = action.payload.isLoggedIn
-//   },
-//   setIsInitialized: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
-//     state.isInitialized = action.payload.isInitialized
-//   },
-// },

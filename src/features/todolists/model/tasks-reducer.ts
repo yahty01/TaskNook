@@ -4,9 +4,9 @@ import { TaskResponse, UpdateTaskModel } from "../api/tasksApi.types"
 import { RequestStatus, ResultCode, TaskStatus } from "common/types/enums"
 import { TodolistResponse } from "../api/todolistsApi.types"
 import { setAppStatus } from "app/model/appSlice"
-import { setTasksLoadedAC } from "./todolists-reducer"
 import { handleServerAppError } from "common/utils/handleServerAppError"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
+import { updateTasksLoaded } from "./todolistsSlice"
 
 // actions (функции фабрики)
 export const setTasksAC = (payload: { todolistId: string; tasks: TaskResponse[] }) => {
@@ -38,13 +38,13 @@ export const removeTodolistAC = (payload: { todolistId: string }) => {
 
 //thunks
 export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
-  dispatch(setTasksLoadedAC({ status: RequestStatus.loading, todolistId }))
+  dispatch(updateTasksLoaded({ status: RequestStatus.loading, todolistId }))
   tasksApi
     .getTasks(todolistId)
     .then((res) => {
       const tasks = res.data.items
       dispatch(setTasksAC({ todolistId, tasks }))
-      dispatch(setTasksLoadedAC({ status: RequestStatus.succeeded, todolistId }))
+      dispatch(updateTasksLoaded({ status: RequestStatus.succeeded, todolistId }))
     })
     .catch((err) => {
       handleServerNetworkError(err, dispatch)
