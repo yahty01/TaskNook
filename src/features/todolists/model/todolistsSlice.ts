@@ -12,6 +12,9 @@ import { createSlice } from "@reduxjs/toolkit"
 export const todolistsSlice = createSlice({
   name: "todolists",
   initialState: [] as DomainTodolist[],
+  selectors: {
+    selectTodolists: (state) => state,
+  },
   reducers: (create) => ({
     // Delete / splice
     removeTodolist: create.reducer<{ todolistId: string }>((state, action) => {
@@ -89,7 +92,7 @@ export const {
 } = todolistsSlice.actions
 
 export const todolistsReducer = todolistsSlice.reducer
-
+export const { selectTodolists } = todolistsSlice.selectors
 //thunks (TC - функция высшего порядка для TodoT)
 export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
   try {

@@ -11,6 +11,9 @@ import { createSlice } from "@reduxjs/toolkit"
 export const tasksSlice = createSlice({
   name: "tasks",
   initialState: {} as Tasks,
+  selectors: {
+    selectTasks: (state) => state,
+  },
   reducers: (create) => ({
     setTasks: create.reducer<{ todolistId: string; tasks: ResponseTask[] }>((state, action) => {
       state[action.payload.todolistId] = action.payload.tasks.map((task) => ({
@@ -57,6 +60,7 @@ export const tasksSlice = createSlice({
 
 export const { addTask, updateTask, clearTasks, removeTask, setTasks } = tasksSlice.actions
 export const tasksReducer = tasksSlice.reducer
+export const { selectTasks } = tasksSlice.selectors
 
 //thunks
 export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {

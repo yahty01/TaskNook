@@ -15,6 +15,10 @@ export const authSlice = createSlice({
     isLoggedIn: false,
     isInitialized: false,
   },
+  selectors: {
+    selectIsLoggedIn: (state) => state.isLoggedIn,
+    selectIsInitialized: (state) => state.isInitialized,
+  },
 
   // reducers: {  <------- Старый ситаксис 1.0
   //   // Объект payload. Типизация через PayloadAction
@@ -46,6 +50,8 @@ export const authSlice = createSlice({
 export const { setIsLoggedIn, setIsInitialized } = authSlice.actions
 // Создаем reducer при помощи slice
 export const authReducer = authSlice.reducer
+
+export const { selectIsLoggedIn, selectIsInitialized } = authSlice.selectors
 
 // thunks
 //todo: Ok, оно работает но при обнавление на странице мейн, происходит мини редирект
