@@ -1,7 +1,8 @@
-import { addTask, removeTask, Tasks, tasksReducer, tasksSlice, updateTask } from "../tasksSlice"
+import { addTask, clearTasks, removeTask, Tasks, tasksReducer, updateTask } from "../tasksSlice"
 import { mockDataTasks, newTaskData, todolistData } from "../mockData/mock-data"
 import { RequestStatus, TaskStatus } from "common/types/enums"
 import { ResponseTask } from "../../api/tasksApi.types"
+import { addTodolist, removeTodolist } from "../todolistsSlice"
 
 test("correct tasks should be deleted from correct array", () => {
   const startState: Tasks = { ...mockDataTasks }
@@ -29,7 +30,7 @@ test("correct tasks should be added to correct array", () => {
 
 test("status of specified tasks should be changed", () => {
   const startState: Tasks = { ...mockDataTasks }
-  const action = updateTask({ todolistId: "1", taskId: "3", domainModel: { status: TaskStatus.Complete } })
+  const action = updateTask({ todolistId: "todolistId1", taskId: "3", domainModel: { status: TaskStatus.Complete } })
 
   const endState = tasksReducer(startState, action)
 
@@ -40,25 +41,25 @@ test("status of specified tasks should be changed", () => {
 
 test("title of specified tasks should be changed", () => {
   const startState: Tasks = { ...mockDataTasks }
-  const newTask: ResponseTask = startState["todolistId2"].filter((item) => item.id === "1")[0]
-  newTask.title = "new"
 
-  const action = updateTask({ task: newTask })
-  const action = updateTask({ todolistId: "1", taskId: "3", domainModel: { status: TaskStatus.Complete } })
+  const action = updateTask({ todolistId: "todolistId2", taskId: "1", domainModel: { status: TaskStatus.Complete } })
+  const action2 = updateTask({ todolistId: "todolistId2", taskId: "1", domainModel: { title: "new" } })
 
-  const endState = tasksSlice(startState, action)
+  const prewState = tasksReducer(startState, action)
+  const endState = tasksReducer(prewState, action2)
 
-  expect(endState["todolistId2"][0].status).toBe(TaskStatus.New)
+  expect(endState["todolistId2"][0].status).toBe(TaskStatus.Complete)
   expect(endState["todolistId2"][0].title).toBe("new")
+  expect(endState["todolistId2"][2].status).toBe(TaskStatus.New)
   expect(endState["todolistId2"][2].title).toBe("2")
 })
 
 test("new array should be added when new todolist is added", () => {
   const startState: Tasks = { ...mockDataTasks }
   const newTodo = { ...todolistData, title: "new todo" }
-  const action = addTodolistAC({ todolist: newTodo })
+  const action = addTodolist({ todolist: newTodo })
 
-  const endState = tasksSlice(startState, action)
+  const endState = tasksReducer(startState, action)
 
   const keys = Object.keys(endState)
   const newKey = keys.find((k) => k != "todolistId1" && k != "todolistId2")
@@ -73,9 +74,9 @@ test("new array should be added when new todolist is added", () => {
 test("property with todolistId should be deleted", () => {
   const startState: Tasks = { ...mockDataTasks }
 
-  const action = removeTodolistAC({ todolistId: "todolistId2" })
+  const action = removeTodolist({ todolistId: "todolistId2" })
 
-  const endState = tasksSlice(startState, action)
+  const endState = tasksReducer(startState, action)
 
   const keys = Object.keys(endState)
 
@@ -86,7 +87,7 @@ test("property with todolistId should be deleted", () => {
 test("correct clear all tasks", () => {
   const startState: Tasks = { ...mockDataTasks }
 
-  const endState = tasksSlice(startState, clearTasksAC())
+  const endState = tasksReducer(startState, clearTasks())
 
   for (let i = 0; i < 100; i++) {
     expect(endState[i]).toBe(undefined)

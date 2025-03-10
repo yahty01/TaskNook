@@ -7,7 +7,7 @@ export type MocTasks = {
 }
 
 export const mockDataTasks: MocTasks = {
-  "1": [
+  ["todolistId1"]: [
     {
       description: "string",
       title: "0",
@@ -48,7 +48,7 @@ export const mockDataTasks: MocTasks = {
       entityStatus: RequestStatus.idle,
     },
   ],
-  todolistId2: [
+  ["todolistId2"]: [
     {
       description: "string",
       title: "0",
