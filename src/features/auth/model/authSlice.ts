@@ -4,10 +4,10 @@ import { RequestStatus, ResultCode } from "common/types/enums"
 import { authApi } from "../api/authApi"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { handleServerAppError } from "common/utils/handleServerAppError"
-import { clearTasksAC } from "../../todolists/model/tasks-reducer"
 import { createSlice } from "@reduxjs/toolkit"
 import { setAppStatus } from "app/model/appSlice"
 import { clearTodolists } from "../../todolists/model/todolistsSlice"
+import { clearTasks } from "../../todolists/model/tasksSlice"
 
 export const authSlice = createSlice({
   name: "auth",
@@ -94,7 +94,7 @@ export const logoutTC = () => (dispatch: AppDispatch) => {
         localStorage.removeItem("sn-token")
         dispatch(setIsLoggedIn({ isLoggedIn: false }))
         dispatch(clearTodolists())
-        dispatch(clearTasksAC())
+        dispatch(clearTasks())
       } else {
         handleServerAppError(res.data, dispatch)
       }

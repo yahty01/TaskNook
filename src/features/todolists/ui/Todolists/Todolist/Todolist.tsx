@@ -1,7 +1,7 @@
 import React from "react"
 import { Tasks } from "./Tasks/Tasks"
 import { AddItemForm } from "common/components"
-import { createTaskTC } from "../../../model/tasks-reducer"
+import { createTaskTC } from "../../../model/tasksSlice"
 import { DomainTodolist } from "../../../model/todolistsSlice"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { StyledPaper } from "./Todolist.styled"

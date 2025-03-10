@@ -1,5 +1,5 @@
 import { combineReducers } from "redux"
-import { tasksReducer } from "../features/todolists/model/tasks-reducer"
+import { tasksReducer } from "../features/todolists/model/tasksSlice"
 import { appReducer } from "./model/appSlice"
 import { ThunkDispatch } from "redux-thunk"
 import { authReducer } from "../features/auth/model/authSlice"

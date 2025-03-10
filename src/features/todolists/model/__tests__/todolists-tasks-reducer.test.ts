@@ -1,5 +1,5 @@
 import { addTodolist, DomainTodolist, todolistsSlice } from "../todolistsSlice"
-import { Tasks, tasksReducer } from "../tasks-reducer"
+import { Tasks, tasksSlice } from "../tasksSlice"
 import { todolistData } from "../mockData/mock-data"
 
 test("ids should be equals", () => {
@@ -8,7 +8,7 @@ test("ids should be equals", () => {
   const newTodo = { ...todolistData, title: "new todolist" }
   const action = addTodolist({ todolist: newTodo })
 
-  const endTasksState = tasksReducer(startTasksState, action)
+  const endTasksState = tasksSlice(startTasksState, action)
   const endTodolistsState = todolistsSlice(startTodolistsState, action)
 
   const keys = Object.keys(endTasksState)

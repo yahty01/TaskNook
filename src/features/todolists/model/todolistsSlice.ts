@@ -5,7 +5,7 @@ import { AppDispatch } from "app/store"
 import { RequestStatus, ResultCode } from "common/types/enums"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { handleServerAppError } from "common/utils/handleServerAppError"
-import { fetchTasksTC } from "./tasks-reducer"
+import { fetchTasksTC } from "./tasksSlice"
 import { setAppStatus } from "app/model/appSlice"
 import { createSlice } from "@reduxjs/toolkit"
 

@@ -6,8 +6,9 @@ import ListItem from "@mui/material/ListItem"
 import { SpanWrapper } from "./Task.styled"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
-import { DomainTask, removeTaskTC, updateTaskTC } from "../../../../../model/tasks-reducer"
+import { removeTaskTC, updateTaskTC } from "../../../../../model/tasksSlice"
 import { RequestStatus, TaskStatus } from "common/types/enums"
+import { DomainTask } from "../../../../../api/tasksApi.types"
 
 type TaskProps = {
   task: DomainTask
@@ -23,12 +24,12 @@ export function Task({ todolistId, task, todoEntityStatus }: TaskProps) {
   }
 
   const changeTaskTitleHandler = (title: string) => {
-    dispatch(updateTaskTC(todolistId, task.id, title))
+    dispatch(updateTaskTC({ todolistId, taskId: task.id, domainModel: { title } }))
   }
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const newStatus = e.currentTarget.checked
-    dispatch(updateTaskTC(todolistId, task.id, newStatus))
+    const newStatus = e.currentTarget.checked ? TaskStatus.Complete : TaskStatus.New
+    dispatch(updateTaskTC({ todolistId, taskId: task.id, domainModel: { status: newStatus } }))
   }
 
   const isComplete = task.status === TaskStatus.Complete
