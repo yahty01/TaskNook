@@ -4,9 +4,8 @@ import { RequestStatus } from "common/types/enums"
 import CircularProgress from "@mui/material/CircularProgress"
 import { CircularContainer, Container } from "./Tasks.styled"
 import { useAppSelector } from "common/hooks"
-import { selectTasks } from "../../../../model/tasksSelectors"
 import { FilterValue } from "../Todolist"
-import { useState } from "react"
+import { selectTasks } from "../../../../model/tasksSlice"
 
 type Props = {
   todolistId: string

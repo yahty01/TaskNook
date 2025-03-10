@@ -5,7 +5,7 @@ import { Main } from "app/Main"
 import { Page404 } from "common/components/Page404/Page404"
 import ProtectedRoute from "common/routing/protectedRoute"
 import { useAppSelector } from "common/hooks"
-import { selectIsLoggedIn } from "../../features/auth/model/authSelectors"
+import { selectIsLoggedIn } from "../../features/auth/model/authSlice"
 
 export const Path = {
   Main: "/",

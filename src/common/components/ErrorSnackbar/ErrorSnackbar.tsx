@@ -2,7 +2,7 @@ import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar"
 import Alert from "@mui/material/Alert"
 import { SyntheticEvent } from "react"
 import { AppDispatch } from "app/store"
-import { setAppErrorAC } from "app/model/app-reducer"
+import { setAppError } from "app/model/appSlice"
 
 type Props = {
   error: string | null
@@ -14,7 +14,7 @@ export default function ErrorSnackbar(props: Props) {
     if (reason === "clickaway") {
       return
     }
-    props.dispatch(setAppErrorAC(null))
+    props.dispatch(setAppError({ error: null }))
   }
 
   return (

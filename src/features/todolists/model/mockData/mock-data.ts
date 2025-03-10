@@ -1,10 +1,13 @@
-import { Tasks } from "../tasks-reducer"
-import { v1 } from "uuid"
-import { DomainTodolist } from "../todolists-reducer"
+import { DomainTodolist } from "../todolistsSlice"
 import { RequestStatus } from "common/types/enums"
+import { DomainTask } from "../../api/tasksApi.types"
 
-export const mockDataTasks: Tasks = {
-  todolistId1: [
+export type MocTasks = {
+  [todolistId: string]: DomainTask[]
+}
+
+export const mockDataTasks: MocTasks = {
+  ["todolistId1"]: [
     {
       description: "string",
       title: "0",
@@ -32,7 +35,6 @@ export const mockDataTasks: Tasks = {
       entityStatus: RequestStatus.idle,
     },
     {
-      description: "string",
       title: "2",
       status: 0,
       priority: 0,
@@ -40,13 +42,13 @@ export const mockDataTasks: Tasks = {
       deadline: "string",
       id: "3",
       todoListId: "todolistId1",
-
+      description: "string",
       order: -1,
       addedDate: "string",
       entityStatus: RequestStatus.idle,
     },
   ],
-  todolistId2: [
+  ["todolistId2"]: [
     {
       description: "string",
       title: "0",

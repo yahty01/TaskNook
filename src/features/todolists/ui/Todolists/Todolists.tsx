@@ -1,10 +1,9 @@
 import React, { useEffect } from "react"
 import { Todolist } from "./Todolist/Todolist"
 import { useAppDispatch, useAppSelector } from "common/hooks"
-import { selectTodolists } from "../../model/todolistsSelectors"
-import { DomainTodolist, fetchTodolistsTC } from "../../model/todolists-reducer"
+import { DomainTodolist, fetchTodolistsTC, selectTodolists } from "../../model/todolistsSlice"
 import Grid from "@mui/material/Grid2"
-import { selectIsLoggedIn } from "../../../auth/model/authSelectors"
+import { selectIsLoggedIn } from "../../../auth/model/authSlice"
 
 export function Todolists() {
   const todoLists = useAppSelector(selectTodolists)

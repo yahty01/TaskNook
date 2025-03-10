@@ -4,7 +4,7 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction"
 import AllOutIcon from "@mui/icons-material/AllOut"
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank"
 import CheckBoxIcon from "@mui/icons-material/CheckBox"
-import { updateTodolistFilterAC } from "../../../../model/todolists-reducer"
+import { updateTodolistFilter } from "../../../../model/todolistsSlice"
 import { useAppDispatch } from "common/hooks"
 
 export type FilterType = "all" | "active" | "completed"
@@ -20,7 +20,7 @@ export function FilterTasksButtons({ filter, id }: FilterButtonProps) {
   const dispatch = useAppDispatch()
 
   const handleChange = (event: SyntheticEvent, newValue: FilterType) => {
-    dispatch(updateTodolistFilterAC({ todolistId: id, filter: newValue }))
+    dispatch(updateTodolistFilter({ todolistId: id, filter: newValue }))
     setValue(newValue)
   }
 
