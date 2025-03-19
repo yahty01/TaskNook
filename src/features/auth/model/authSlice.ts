@@ -6,8 +6,7 @@ import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { handleServerAppError } from "common/utils/handleServerAppError"
 import { createSlice } from "@reduxjs/toolkit"
 import { setAppStatus } from "app/model/appSlice"
-import { clearTodolists } from "../../todolists/model/todolistsSlice"
-import { clearTasks } from "../../todolists/model/tasksSlice"
+import { clearTodolistsData } from "common/actions/common.actions"
 
 export const authSlice = createSlice({
   name: "auth",
@@ -95,12 +94,11 @@ export const logoutTC = () => (dispatch: AppDispatch) => {
   authApi
     .logout()
     .then((res) => {
-      dispatch(setAppStatus({ status: RequestStatus.succeeded }))
       if (res.data.resultCode === ResultCode.Success) {
         localStorage.removeItem("sn-token")
         dispatch(setIsLoggedIn({ isLoggedIn: false }))
-        dispatch(clearTodolists())
-        dispatch(clearTasks())
+        dispatch(clearTodolistsData({ tasks: {}, todolists: [] }))
+        dispatch(setAppStatus({ status: RequestStatus.succeeded }))
       } else {
         handleServerAppError(res.data, dispatch)
       }
