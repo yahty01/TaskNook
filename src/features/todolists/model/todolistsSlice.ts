@@ -8,6 +8,7 @@ import { handleServerAppError } from "common/utils/handleServerAppError"
 import { fetchTasksTC } from "./tasksSlice"
 import { setAppStatus } from "app/model/appSlice"
 import { createSlice } from "@reduxjs/toolkit"
+import { clearTodolistsData } from "common/actions/common.actions"
 
 export const todolistsSlice = createSlice({
   name: "todolists",
@@ -73,17 +74,17 @@ export const todolistsSlice = createSlice({
         state[index].entityStatus = action.payload.status
       }
     }),
-
-    clearTodolists: create.reducer(() => {
-      return []
-    }),
   }),
+  extraReducers: (builder) => {
+    builder.addCase(clearTodolistsData, (state, action) => {
+      return action.payload.todolists
+    })
+  },
 })
 
 export const {
   removeTodolist,
   addTodolist,
-  clearTodolists,
   updateTodolistEntityStatus,
   setTodolists,
   updateTasksLoaded,
