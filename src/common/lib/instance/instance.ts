@@ -12,6 +12,6 @@ export const instance = axios.create({
 //Можно реализовать с помощью if else, но как правило так делаеют редко
 instance.interceptors.request.use(function (config) {
   // Do something before request is sent
-  config.headers.Authorization = "Bearer " + localStorage.getItem("sn-token")
+  config.headers.Authorization = `Bearer ${localStorage.getItem("auth-token")}`
   return config
 })

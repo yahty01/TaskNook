@@ -7,6 +7,7 @@ import { handleServerAppError } from "common/utils/handleServerAppError"
 import { createSlice } from "@reduxjs/toolkit"
 import { setAppStatus } from "app/model/appSlice"
 import { clearTodolistsData } from "common/actions/common.actions"
+import { AUTH_TOKEN } from "common/constants"
 
 export const authSlice = createSlice({
   name: "auth",
@@ -18,26 +19,14 @@ export const authSlice = createSlice({
     selectIsLoggedIn: (state) => state.isLoggedIn,
     selectIsInitialized: (state) => state.isInitialized,
   },
-
-  // reducers: {  <------- Старый ситаксис 1.0
-  //   // Объект payload. Типизация через PayloadAction
-  //   setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
-  //     // логику в подредьюсерах пишем мутабельным образом,
-  //     // т.к. иммутабельность достигается благодаря immer.js
-  //     state.isLoggedIn = action.payload.isLoggedIn
-  //   },
-  //   setIsInitialized: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
-  //     state.isInitialized = action.payload.isInitialized
-  //   },
-  // },
-
   // reducers состоит из подредьюсеров, каждый из которых эквивалентен одному
   // оператору case в switch, как мы делали раньше (обычный redux)
   reducers: (create) => ({
     setIsLoggedIn: create.reducer<{ isLoggedIn: boolean }>((state, action) => {
       // логику в подредьюсерах пишем мутабельным образом,
       // т.к. иммутабельность достигается благодаря immer.js
-      state.isLoggedIn = action.payload.isLoggedIn
+      if (state.isLoggedIn !== action.payload.isLoggedIn) state.isLoggedIn = action.payload.isLoggedIn
+      else return
     }),
     setIsInitialized: create.reducer<{ isInitialized: boolean }>((state, action) => {
       state.isInitialized = action.payload.isInitialized
@@ -78,7 +67,9 @@ export const loginTC = (data: Inputs) => async (dispatch: AppDispatch) => {
     const res = await authApi.login(data)
     dispatch(setAppStatus({ status: RequestStatus.succeeded }))
     if (res.data.resultCode === ResultCode.Success) {
-      localStorage.setItem("sn-token", res.data.data.token)
+      localStorage.setItem(AUTH_TOKEN, res.data.data.token)
+      console.log(localStorage.getItem(AUTH_TOKEN))
+      console.log(localStorage.getItem("auth-token"))
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
     } else {
       handleServerAppError(res.data, dispatch)
@@ -95,7 +86,7 @@ export const logoutTC = () => (dispatch: AppDispatch) => {
     .logout()
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
-        localStorage.removeItem("sn-token")
+        localStorage.removeItem(AUTH_TOKEN)
         dispatch(setIsLoggedIn({ isLoggedIn: false }))
         dispatch(clearTodolistsData({ tasks: {}, todolists: [] }))
         dispatch(setAppStatus({ status: RequestStatus.succeeded }))

@@ -1,6 +1,6 @@
 import { FilterValue } from "../ui/Todolists/Todolist/Todolist"
 import { TodolistResponse } from "../api/todolistsApi.types"
-import { todolistsApi } from "../api/todolistsApi"
+import { _todolistsApi } from "../api/todolistsApi"
 import { AppDispatch } from "app/store"
 import { RequestStatus, ResultCode } from "common/types/enums"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
@@ -98,7 +98,7 @@ export const { selectTodolists } = todolistsSlice.selectors
 export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
   try {
     dispatch(setAppStatus({ status: RequestStatus.loading }))
-    const res = await todolistsApi.getTodolists()
+    const res = await _todolistsApi.getTodolists()
     dispatch(setTodolists({ todolists: res.data }))
     dispatch(setAppStatus({ status: RequestStatus.succeeded }))
     res.data.forEach((tl) => dispatch(fetchTasksTC(tl.id)))
@@ -109,7 +109,7 @@ export const fetchTodolistsTC = () => async (dispatch: AppDispatch) => {
 
 export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
   dispatch(setAppStatus({ status: RequestStatus.loading }))
-  todolistsApi
+  _todolistsApi
     .createTodolist(title)
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
@@ -124,7 +124,7 @@ export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
 export const removeTodolistTC = (todolistId: string) => (dispatch: AppDispatch) => {
   dispatch(updateTodolistEntityStatus({ status: RequestStatus.loading, todolistId }))
   dispatch(setAppStatus({ status: RequestStatus.loading }))
-  todolistsApi
+  _todolistsApi
     .removeTodolist(todolistId)
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
@@ -141,7 +141,7 @@ export const removeTodolistTC = (todolistId: string) => (dispatch: AppDispatch) 
 }
 export const updateTodolistTitleTC = (arg: { todolistId: string; title: string }) => (dispatch: AppDispatch) => {
   dispatch(setAppStatus({ status: RequestStatus.loading }))
-  todolistsApi
+  _todolistsApi
     .updateTodolist({ id: arg.todolistId, title: arg.title })
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {

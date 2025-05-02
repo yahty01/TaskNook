@@ -16,18 +16,16 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router"
 import { Path } from "common/routing"
 
-//react hook form это настраиваемый хук для удобного управления формами.
-
-// Он принимает один объект в качестве необязательного аргумента.
-
 export type Inputs = {
   email: string
   password: string
   rememberMe: boolean
 }
 
-const defaultFormValues = {
-  email: "free@samuraijs.com",
+const rememberEmail = localStorage.getItem("rememberEmail") || "free@samuraijs.com"
+
+const defaultFormValues: Inputs = {
+  email: rememberEmail,
   password: "",
   rememberMe: false,
 }
@@ -39,27 +37,42 @@ export const Login = () => {
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
   let navigate = useNavigate()
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<Inputs>({
+    defaultValues: defaultFormValues,
+  })
+
+  // При монтировании подгружаем состояние rememberMe из localStorage
+  useEffect(() => {
+    const remember = localStorage.getItem("rememberMe") === "true"
+    if (remember) {
+      reset({ ...defaultFormValues, rememberMe: true })
+    }
+  }, [reset])
+
   useEffect(() => {
     if (isLoggedIn) {
       navigate(Path.Main)
     }
   }, [isLoggedIn, navigate])
 
-  const {
-    register, // {...register("name-input")} в внутри <div тут>, для регистрации ввода в объект
-    handleSubmit, // - эта функция получит данные формы, если валидация формы пройдет успешно
-    // watch, // - функция отслеживает ввод в определенном поле или всей формы
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<Inputs>({ defaultValues: defaultFormValues }) //def значение подставляеться пр  рендаре компаненты
-
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     dispatch(loginTC(data))
+    if (data.rememberMe) {
+      localStorage.setItem("rememberMe", data.rememberMe.toString())
+      localStorage.setItem("rememberEmail", data.email)
+    } else if (!data.rememberMe) {
+      localStorage.removeItem("rememberMe")
+      localStorage.removeItem("rememberEmail")
+    }
     reset({ password: "" })
   }
 
-  //todo: Почему при клике на чекбокс, форм лейбл окрашиваеться в мейн цвет???
   return (
     <Grid container justifyContent={"center"}>
       <Grid justifyContent={"center"}>
@@ -99,6 +112,7 @@ export const Login = () => {
                 })}
               />
               {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+
               <TextField
                 type="password"
                 label="Password"
@@ -119,9 +133,14 @@ export const Login = () => {
                   <Controller
                     name={"rememberMe"}
                     control={control}
-                    // render={({ field: { value, ...rest } }) => <Checkbox {...rest} checked={value} />}
                     render={({ field: { onChange, value } }) => (
-                      <Checkbox onChange={(e) => onChange(e.target.checked)} checked={value} />
+                      <Checkbox
+                        onChange={(e) => {
+                          const checked = e.target.checked
+                          onChange(checked)
+                        }}
+                        checked={value}
+                      />
                     )}
                   />
                 }

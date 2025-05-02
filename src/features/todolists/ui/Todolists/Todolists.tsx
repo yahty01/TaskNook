@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import { Todolist } from "./Todolist/Todolist"
 import { useAppDispatch, useAppSelector } from "common/hooks"
 import { DomainTodolist, fetchTodolistsTC, selectTodolists } from "../../model/todolistsSlice"
@@ -10,7 +10,11 @@ export function Todolists() {
   const dispatch = useAppDispatch()
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
+  const effectRan = useRef(false)
+
   useEffect(() => {
+    if (effectRan.current) return
+    effectRan.current = true
     if (isLoggedIn) dispatch(fetchTodolistsTC())
   }, [])
 
