@@ -7,14 +7,16 @@ import FormLabel from "@mui/material/FormLabel"
 import Grid from "@mui/material/Grid2"
 import TextField from "@mui/material/TextField"
 import { useAppDispatch, useAppSelector } from "common/hooks"
-import { selectThemeMode } from "app/model/appSelectors"
 import { getTheme } from "common/lib/theme"
 import styled from "styled-components"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
-import { loginTC, selectIsLoggedIn } from "../../model/authSlice"
 import { useEffect } from "react"
 import { useNavigate } from "react-router"
 import { Path } from "common/routing"
+import { selectIsLoggedIn, selectThemeMode, setIsLoggedIn } from "app/model/appSlice"
+import { useLoginMutation } from "../../api/authApi"
+import { AUTH_TOKEN } from "common/constants"
+import { ResultCode } from "common/types/enums"
 
 export type Inputs = {
   email: string
@@ -31,6 +33,7 @@ const defaultFormValues: Inputs = {
 }
 
 export const Login = () => {
+  const [login] = useLoginMutation()
   const themeMode = useAppSelector(selectThemeMode)
   const theme = getTheme(themeMode)
   const dispatch = useAppDispatch()
@@ -62,15 +65,20 @@ export const Login = () => {
   }, [isLoggedIn, navigate])
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    dispatch(loginTC(data))
-    if (data.rememberMe) {
-      localStorage.setItem("rememberMe", data.rememberMe.toString())
-      localStorage.setItem("rememberEmail", data.email)
-    } else if (!data.rememberMe) {
-      localStorage.removeItem("rememberMe")
-      localStorage.removeItem("rememberEmail")
-    }
-    reset({ password: "" })
+    login(data).then((res) => {
+      if (res.data?.resultCode === ResultCode.Success) {
+        dispatch(setIsLoggedIn({ isLoggedIn: true }))
+        localStorage.setItem(AUTH_TOKEN, res.data.data.token)
+        if (data.rememberMe) {
+          localStorage.setItem("rememberMe", data.rememberMe.toString())
+          localStorage.setItem("rememberEmail", data.email)
+        } else if (!data.rememberMe) {
+          localStorage.removeItem("rememberMe")
+          localStorage.removeItem("rememberEmail")
+        }
+        reset({ password: "" })
+      }
+    })
   }
 
   return (

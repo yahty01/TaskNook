@@ -1,9 +1,9 @@
 import { RequestStatus, TaskPriority, TaskStatus } from "common/types/enums"
 
-export type GetTasksResponse = {
+export type GetTasksResponse<T> = {
   error: string | null
   totalCount: number
-  items: ResponseTask[]
+  items: T[]
 }
 
 export type ResponseTask = {

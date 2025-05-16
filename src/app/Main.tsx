@@ -1,21 +1,22 @@
 import React from "react"
 import { AddItemForm } from "common/components"
-import { addTodolistTC } from "../features/todolists/model/todolistsSlice"
 import { Todolists } from "../features/todolists/ui/Todolists/Todolists"
-import { useAppDispatch } from "common/hooks/useAppDispatch"
 import Grid from "@mui/material/Grid2"
 import styled from "styled-components"
 // @ts-ignore
 import starOne from "../common/utils/starOne.svg"
+import { useCreateTodolistMutation } from "../features/todolists/api/todolistsApi"
 
 export function Main() {
-  const dispatch = useAppDispatch()
-  const addTodoList = (title: string) => dispatch(addTodolistTC(title))
+  const [createTodolist] = useCreateTodolistMutation()
 
+  const createTodolistHandler = (title: string) => {
+    createTodolist({ title })
+  }
   return (
     <StyledMai>
       <CreateTodolist>
-        <AddItemForm addItem={addTodoList} />
+        <AddItemForm addItem={createTodolistHandler} />
       </CreateTodolist>
       {/*<img src={starOne} alt="Star" />*/}
       <Grid container spacing={4}>

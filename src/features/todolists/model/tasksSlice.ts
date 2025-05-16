@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from "app/store"
-import { tasksApi } from "../api/tasksApi"
+import { _tasksApi } from "../api/tasksApi"
 import { DomainTask, ResponseTask, UpdateTaskDomainModel, UpdateTaskModel } from "../api/tasksApi.types"
 import { RequestStatus, ResultCode } from "common/types/enums"
 import { setAppStatus } from "app/model/appSlice"
@@ -66,7 +66,7 @@ export const { selectTasks } = tasksSlice.selectors
 //thunks
 export const fetchTasksTC = (todolistId: string) => (dispatch: AppDispatch) => {
   dispatch(updateTasksLoaded({ status: RequestStatus.loading, todolistId }))
-  tasksApi
+  _tasksApi
     .getTasks(todolistId)
     .then((res) => {
       const tasks = res.data.items
@@ -82,7 +82,7 @@ export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (di
   const { todolistId, taskId } = arg
   dispatch(setAppStatus({ status: RequestStatus.loading }))
   dispatch(updateTask({ todolistId, taskId, domainModel: { entityStatus: RequestStatus.loading } }))
-  tasksApi
+  _tasksApi
     .deleteTask(arg)
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
@@ -97,7 +97,7 @@ export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (di
 
 export const createTaskTC = (arg: { title: string; todolistId: string }) => (dispatch: AppDispatch) => {
   dispatch(setAppStatus({ status: RequestStatus.loading }))
-  tasksApi
+  _tasksApi
     .createTask(arg)
     .then((res) => {
       if (res.data.resultCode === ResultCode.Success) {
@@ -132,7 +132,7 @@ export const updateTaskTC =
       }
 
       dispatch(setAppStatus({ status: RequestStatus.loading }))
-      tasksApi
+      _tasksApi
         .updateTask({ taskId, todolistId, model })
         .then((res) => {
           if (res.data.resultCode === ResultCode.Success) {

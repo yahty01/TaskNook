@@ -19,7 +19,7 @@ export function FilterTasksButtons({ filter, id }: FilterButtonProps) {
 
   const dispatch = useAppDispatch()
 
-  const handleChange = (event: SyntheticEvent, newValue: FilterType) => {
+  const handleChange = (_: SyntheticEvent, newValue: FilterType) => {
     dispatch(updateTodolistFilter({ todolistId: id, filter: newValue }))
     setValue(newValue)
   }
