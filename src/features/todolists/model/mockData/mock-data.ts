@@ -1,6 +1,6 @@
-import { DomainTodolist } from "../todolistsSlice"
 import { RequestStatus } from "common/types/enums"
 import { DomainTask } from "../../api/tasksApi.types"
+import { DomainTodolist } from "common/actions/common.actions"
 
 export type MocTasks = {
   [todolistId: string]: DomainTask[]

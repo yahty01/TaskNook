@@ -1,8 +1,8 @@
 import React from "react"
 import { Todolist } from "./Todolist/Todolist"
-import { DomainTodolist } from "../../model/todolistsSlice"
 import Grid from "@mui/material/Grid2"
 import { useGetTodolistsQuery } from "../../api/todolistsApi"
+import { DomainTodolist } from "common/actions/common.actions"
 
 export function Todolists() {
   const { data: todolists } = useGetTodolistsQuery()

@@ -1,15 +1,13 @@
-import { tasksReducer, tasksSlice } from "../features/todolists/model/tasksSlice"
 import { appReducer, appSlice } from "./model/appSlice"
 import { configureStore } from "@reduxjs/toolkit"
-import { todolistsReducer, todolistsSlice } from "../features/todolists/model/todolistsSlice"
 import { todolistsApi } from "../features/todolists/api/todolistsApi"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { baseApi } from "app/baseApi"
 
 export const store = configureStore({
   reducer: {
-    [tasksSlice.name]: tasksReducer,
-    [todolistsSlice.name]: todolistsReducer,
+    // [tasksSlice.name]: tasksReducer,
+    // [todolistsSlice.name]: todolistsReducer,
     [appSlice.name]: appReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },

@@ -3,7 +3,7 @@ import { RequestStatus, TaskStatus } from "common/types/enums"
 import CircularProgress from "@mui/material/CircularProgress"
 import { CircularContainer, Container } from "./Tasks.styled"
 import { useGetTasksQuery } from "../../../../api/tasksApi"
-import { DomainTodolist } from "../../../../model/todolistsSlice"
+import { DomainTodolist } from "common/actions/common.actions"
 import { Task } from "./Task/Task"
 import { QueryStatus } from "@reduxjs/toolkit/query"
 
@@ -14,6 +14,7 @@ type Props = {
 export function Tasks({ todolist }: Props) {
   const { id, filter } = todolist
   const { data, status } = useGetTasksQuery(id)
+  console.log("render todolist")
 
   let filteredTasks = data?.items
 
@@ -23,7 +24,6 @@ export function Tasks({ todolist }: Props) {
   if (filter === "completed") {
     filteredTasks = filteredTasks?.filter((task) => task.status === TaskStatus.Complete)
   }
-  console.log(data)
   if (status === QueryStatus.pending) {
     return (
       <CircularContainer>

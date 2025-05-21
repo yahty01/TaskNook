@@ -12,20 +12,24 @@ import { useLogoutMutation } from "../../../features/auth/api/authApi"
 import { ResultCode } from "common/types/enums"
 import { useDispatch } from "react-redux"
 import { AUTH_TOKEN } from "common/constants"
-import { clearTodolistsData } from "common/actions/common.actions"
+import { baseApi } from "app/baseApi"
 
 export const Header = () => {
   const [logout] = useLogoutMutation()
   const dispatch = useDispatch()
 
   const logoutHandler = () => {
-    logout().then((res) => {
-      if (res.data?.resultCode === ResultCode.Success) {
-        dispatch(setIsLoggedIn({ isLoggedIn: false }))
-        localStorage.removeItem(AUTH_TOKEN)
-        dispatch(clearTodolistsData({ tasks: {}, todolists: [] }))
-      }
-    })
+    logout()
+      .then((res) => {
+        if (res.data?.resultCode === ResultCode.Success) {
+          dispatch(setIsLoggedIn({ isLoggedIn: false }))
+          localStorage.removeItem(AUTH_TOKEN)
+          // dispatch(baseApi.util.resetApiState())
+        }
+      })
+      .then(() => {
+        dispatch(baseApi.util.invalidateTags(["Todolist", "Task"]))
+      })
   }
 
   const status = useAppSelector(selectStatus)
