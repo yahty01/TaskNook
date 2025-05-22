@@ -1,5 +1,5 @@
 import { RequestStatus } from "common/types/enums"
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit"
 
 export const appSlice = createSlice({
   name: "app",
@@ -29,6 +29,17 @@ export const appSlice = createSlice({
       state.isLoggedIn = action.payload.isLoggedIn
     }),
   }),
+  extraReducers: (builder) => {
+    builder.addMatcher(isPending, (state) => {
+      state.status = RequestStatus.loading
+    })
+    builder.addMatcher(isFulfilled, (state) => {
+      state.status = RequestStatus.succeeded
+    })
+    builder.addMatcher(isRejected, (state) => {
+      state.status = RequestStatus.failed
+    })
+  },
 })
 
 export const { setAppError, changeTheme, setAppStatus, setIsLoggedIn } = appSlice.actions
