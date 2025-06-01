@@ -3,8 +3,6 @@ import { AddItemForm } from "common/components"
 import { Todolists } from "../features/todolists/ui/Todolists/Todolists"
 import Grid from "@mui/material/Grid2"
 import styled from "styled-components"
-// @ts-ignore
-import starOne from "../common/utils/starOne.svg"
 import { useCreateTodolistMutation } from "../features/todolists/api/todolistsApi"
 
 export function Main() {
@@ -14,7 +12,7 @@ export function Main() {
     createTodolist({ title })
   }
   return (
-    <StyledMai>
+    <div>
       <CreateTodolist>
         <AddItemForm addItem={createTodolistHandler} />
       </CreateTodolist>
@@ -22,13 +20,10 @@ export function Main() {
       <Grid container spacing={4}>
         <Todolists />
       </Grid>
-    </StyledMai>
+    </div>
   )
 }
 
-export const StyledMai = styled.div`
-  background-image: ${starOne};
-`
 export const CreateTodolist = styled.div`
   display: flex;
   justify-content: center;

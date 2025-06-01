@@ -7,7 +7,7 @@ import React from "react"
 import { StyledAppBar } from "./Header.styled"
 import LinearProgress from "@mui/material/LinearProgress"
 import { useAppSelector } from "common/hooks"
-import { selectIsLoggedIn, selectStatus, setIsLoggedIn } from "app/model/appSlice"
+import { selectIsLoggedIn, selectStatus, setAppError, setIsLoggedIn } from "app/model/appSlice"
 import { useLogoutMutation } from "../../../features/auth/api/authApi"
 import { ResultCode } from "common/types/enums"
 import { useDispatch } from "react-redux"
@@ -44,6 +44,12 @@ export const Header = () => {
         <div>
           {isLoggedIn && <Button onClick={logoutHandler}>Logout</Button>}
           <Button color="inherit">Faq</Button>
+          <Button color="inherit" onClick={() => dispatch(setAppError({ error: "test error" }))}>
+            add error
+          </Button>{" "}
+          <Button color="inherit" onClick={() => dispatch(setAppError({ error: null }))}>
+            delete error
+          </Button>
           <ButtonSwitchTheme />
         </div>
       </Toolbar>
