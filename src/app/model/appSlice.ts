@@ -22,7 +22,7 @@ export const appSlice = createSlice({
       state.status = action.payload.status
     }),
     changeTheme: create.reducer<{ themeMode: ThemeMode }>((state, action) => {
-      state.themeMode = action.payload.themeMode
+      state.themeMode = action.payload.themeMode === "dark" ? "light" : "dark"
     }),
     setAppError: create.reducer<{ error: Error }>((state, action) => {
       state.error = action.payload.error
