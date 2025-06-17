@@ -1,4 +1,4 @@
-import { isErrorWithMessage } from "./isErrorWithMessage"
+import { isErrorWithMessage } from "common/utils"
 import { BaseQueryApi, FetchBaseQueryError, FetchBaseQueryMeta, QueryReturnValue } from "@reduxjs/toolkit/query/react"
 import { setAppError } from "app/model/appSlice"
 import { ResultCode } from "common/types/enums"
