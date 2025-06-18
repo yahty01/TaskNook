@@ -2,11 +2,15 @@ import { BaseResponse } from "common/types/all.types"
 import { DomainTask, GetTasksResponse, ResponseTask, UpdateTaskDomainModel } from "./tasksApi.types"
 import { baseApi } from "app/baseApi"
 import { RequestStatus } from "common/types/enums"
+import { PAGE_SIZE } from "common/constants"
 
 export const tasksApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getTasks: build.query<GetTasksResponse<DomainTask>, string>({
-      query: (todolistId) => `todo-lists/${todolistId}/tasks`,
+    getTasks: build.query<GetTasksResponse<DomainTask>, { todolistId: string; params: { page: number } }>({
+      query: ({ todolistId, params }) => ({
+        url: `todo-lists/${todolistId}/tasks`,
+        params: { ...params, count: PAGE_SIZE },
+      }),
       transformResponse: (res: GetTasksResponse<ResponseTask>): GetTasksResponse<DomainTask> => ({
         error: res.error,
         totalCount: res.totalCount,
@@ -15,7 +19,7 @@ export const tasksApi = baseApi.injectEndpoints({
           entityStatus: RequestStatus.idle,
         })),
       }),
-      providesTags: (_res, _error, todolistId, _meta) => [{ type: "Task", id: todolistId }],
+      providesTags: (_res, _error, { todolistId }, _meta) => [{ type: "Task", id: todolistId }],
     }),
     createTask: build.mutation<BaseResponse<{ item: ResponseTask }>, { title: string; todolistId: string }>({
       query: (payload) => ({

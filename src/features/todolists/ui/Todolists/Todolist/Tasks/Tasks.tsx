@@ -1,21 +1,29 @@
 import List from "@mui/material/List"
 import { RequestStatus, TaskStatus } from "common/types/enums"
-import CircularProgress from "@mui/material/CircularProgress"
-import { CircularContainer, Container } from "./Tasks.styled"
+import { Container } from "./Tasks.styled"
 import { useGetTasksQuery } from "../../../../api/tasksApi"
 import { DomainTodolist } from "common/actions/common.actions"
 import { Task } from "./Task/Task"
-import { QueryStatus } from "@reduxjs/toolkit/query"
+import { useState } from "react"
+import { TasksPagination } from "./TasksPagination/TasksPagination"
+import { TasksSkeleton } from "./TasksSkeleton/TasksSkeleton"
 
 type Props = {
   todolist: DomainTodolist
 }
 
 export function Tasks({ todolist }: Props) {
+  const [page, setPage] = useState<number>(1)
   const { id, filter } = todolist
-  const { data, status } = useGetTasksQuery(id)
+
+  const { data, status, isLoading } = useGetTasksQuery({
+    todolistId: id,
+    params: { page },
+  })
+
   console.log("render todolist")
 
+  //todo: Вынести фильтрацию в отдельный компонент
   let filteredTasks = data?.items
 
   if (filter === "active") {
@@ -24,14 +32,17 @@ export function Tasks({ todolist }: Props) {
   if (filter === "completed") {
     filteredTasks = filteredTasks?.filter((task) => task.status === TaskStatus.Complete)
   }
-  if (status === QueryStatus.pending) {
+  if (isLoading) {
     return (
-      <CircularContainer>
-        <CircularProgress />
-      </CircularContainer>
+      <>
+        <TasksSkeleton />
+        <TasksSkeleton />
+        <TasksSkeleton />
+        <TasksSkeleton />
+      </>
     )
   } else if (todolist.tasksLoaded === RequestStatus.failed) {
-    return <span>Что то пошло не так :( Попробуйте снова!</span> ///Переписать на rtkquery
+    return <span>Что то пошло не так :( Попробуйте снова!</span> ///todo:Переписать на rtkquery
   } else if (data?.totalCount === 0) {
     return (
       <Container>
@@ -46,6 +57,7 @@ export function Tasks({ todolist }: Props) {
             <Task key={task.id} task={task} todolistId={id} todoEntityStatus={todolist.entityStatus} />
           ))}
         </List>
+        <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />
       </Container>
     )
   }
