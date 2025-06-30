@@ -1,6 +1,6 @@
-import { DomainTodolist } from "../todolistsSlice"
 import { RequestStatus } from "common/types/enums"
 import { DomainTask } from "../../api/tasksApi.types"
+import { DomainTodolist } from "common/actions/common.actions"
 
 export type MocTasks = {
   [todolistId: string]: DomainTask[]
@@ -111,7 +111,6 @@ export const todolistData: DomainTodolist = {
   order: -1,
   filter: "all",
   entityStatus: RequestStatus.idle,
-  tasksLoaded: RequestStatus.idle,
 }
 
 export const todolistsData: DomainTodolist[] = [
@@ -122,7 +121,6 @@ export const todolistsData: DomainTodolist[] = [
     order: -1,
     filter: "all",
     entityStatus: RequestStatus.idle,
-    tasksLoaded: RequestStatus.idle,
   },
   {
     id: "v2",
@@ -131,6 +129,5 @@ export const todolistsData: DomainTodolist[] = [
     order: -1,
     filter: "all",
     entityStatus: RequestStatus.idle,
-    tasksLoaded: RequestStatus.idle,
   },
 ]

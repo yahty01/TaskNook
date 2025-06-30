@@ -7,18 +7,16 @@ import FormLabel from "@mui/material/FormLabel"
 import Grid from "@mui/material/Grid2"
 import TextField from "@mui/material/TextField"
 import { useAppDispatch, useAppSelector } from "common/hooks"
-import { selectThemeMode } from "app/model/appSelectors"
 import { getTheme } from "common/lib/theme"
 import styled from "styled-components"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
-import { loginTC, selectIsLoggedIn } from "../../model/authSlice"
 import { useEffect } from "react"
 import { useNavigate } from "react-router"
 import { Path } from "common/routing"
-
-//react hook form это настраиваемый хук для удобного управления формами.
-
-// Он принимает один объект в качестве необязательного аргумента.
+import { selectIsLoggedIn, selectThemeMode, setIsLoggedIn } from "app/model/appSlice"
+import { useLoginMutation } from "../../api/authApi"
+import { AUTH_TOKEN } from "common/constants"
+import { ResultCode } from "common/types/enums"
 
 export type Inputs = {
   email: string
@@ -26,18 +24,39 @@ export type Inputs = {
   rememberMe: boolean
 }
 
-const defaultFormValues = {
-  email: "free@samuraijs.com",
+const rememberEmail = localStorage.getItem("rememberEmail") || "free@samuraijs.com"
+
+const defaultFormValues: Inputs = {
+  email: rememberEmail,
   password: "",
   rememberMe: false,
 }
 
 export const Login = () => {
+  const [login] = useLoginMutation()
   const themeMode = useAppSelector(selectThemeMode)
   const theme = getTheme(themeMode)
   const dispatch = useAppDispatch()
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
   let navigate = useNavigate()
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<Inputs>({
+    defaultValues: defaultFormValues,
+  })
+
+  // При монтировании подгружаем состояние rememberMe из localStorage
+  useEffect(() => {
+    const remember = localStorage.getItem("rememberMe") === "true"
+    if (remember) {
+      reset({ ...defaultFormValues, rememberMe: true })
+    }
+  }, [reset])
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -45,21 +64,23 @@ export const Login = () => {
     }
   }, [isLoggedIn, navigate])
 
-  const {
-    register, // {...register("name-input")} в внутри <div тут>, для регистрации ввода в объект
-    handleSubmit, // - эта функция получит данные формы, если валидация формы пройдет успешно
-    // watch, // - функция отслеживает ввод в определенном поле или всей формы
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<Inputs>({ defaultValues: defaultFormValues }) //def значение подставляеться пр  рендаре компаненты
-
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    dispatch(loginTC(data))
-    reset({ password: "" })
+    login(data).then((res) => {
+      if (res.data?.resultCode === ResultCode.Success) {
+        dispatch(setIsLoggedIn({ isLoggedIn: true }))
+        localStorage.setItem(AUTH_TOKEN, res.data.data.token)
+        if (data.rememberMe) {
+          localStorage.setItem("rememberMe", data.rememberMe.toString())
+          localStorage.setItem("rememberEmail", data.email)
+        } else if (!data.rememberMe) {
+          localStorage.removeItem("rememberMe")
+          localStorage.removeItem("rememberEmail")
+        }
+        reset({ password: "" })
+      }
+    })
   }
 
-  //todo: Почему при клике на чекбокс, форм лейбл окрашиваеться в мейн цвет???
   return (
     <Grid container justifyContent={"center"}>
       <Grid justifyContent={"center"}>
@@ -99,6 +120,7 @@ export const Login = () => {
                 })}
               />
               {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+
               <TextField
                 type="password"
                 label="Password"
@@ -119,9 +141,14 @@ export const Login = () => {
                   <Controller
                     name={"rememberMe"}
                     control={control}
-                    // render={({ field: { value, ...rest } }) => <Checkbox {...rest} checked={value} />}
                     render={({ field: { onChange, value } }) => (
-                      <Checkbox onChange={(e) => onChange(e.target.checked)} checked={value} />
+                      <Checkbox
+                        onChange={(e) => {
+                          const checked = e.target.checked
+                          onChange(checked)
+                        }}
+                        checked={value}
+                      />
                     )}
                   />
                 }

@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles"
-import { ThemeMode } from "app/model/appSlice"
+import { ThemeMode } from "common/utils/theme/themeUtils"
 
 export const lightThemePalette = {
   primary: {
@@ -30,7 +30,6 @@ export const lightThemePalette = {
 
 export const darkThemePalette = {
   primary: {
-    // main: "linear-gradient(90deg, #6a11cb 0%, #2575fc 100%)", // Градиент фиолетового и синего
     main: "#2575fc", // Градиент фиолетового и синего
     contrastText: "#ffffff", // Белый текст на кнопках
   },

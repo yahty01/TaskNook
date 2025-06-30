@@ -1,32 +1,39 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { ThemeProvider as ThemeProviderMUI } from "@mui/material/styles"
 import styled, { ThemeProvider as ThemeProviderStyled } from "styled-components"
 import { getTheme } from "common/lib/theme/getTheme"
 import { AppStyled } from "./App.styled"
 import { Header } from "common/components"
 import { useAppSelector } from "common/hooks/useAppSelector"
-import { selectError, selectThemeMode } from "./model/appSelectors"
 import ErrorSnackbar from "common/components/ErrorSnackbar/ErrorSnackbar"
 import { useAppDispatch } from "common/hooks"
 import { Routing } from "common/routing"
 import Container from "@mui/material/Container"
-import { initializeAppTC, selectIsInitialized } from "../features/auth/model/authSlice"
 import CircularProgress from "@mui/material/CircularProgress"
 import { GlobalStyle } from "../styles/GlobalStyled"
+import { useMeQuery } from "../features/auth/api/authApi"
+import { ResultCode } from "common/types/enums"
+import { selectError, selectThemeMode, setIsLoggedIn } from "app/model/appSlice"
 
 //todo: Полсе логаута, нужно убить данные о тудулистах в стейте
 export function App() {
+  const [isInitialized, setIsInitialized] = useState(false)
+  const { data, isLoading } = useMeQuery()
+
   const dispatch = useAppDispatch()
+
   const themeMode = useAppSelector(selectThemeMode)
   const error = useAppSelector(selectError)
-  const isInitialized = useAppSelector(selectIsInitialized)
+
   const theme = getTheme(themeMode)
 
   useEffect(() => {
-    // useEffect срабатывает после рендера компоненты, тоесть всех ее дочерних элементов, но регестрируеться раньше
-    // useEffect в дочерних компанентах сработает раньше, ТОЛЬКО
-    dispatch(initializeAppTC())
-  }, [])
+    if (isLoading) return
+    setIsInitialized(true)
+    if (data?.resultCode === ResultCode.Success) {
+      dispatch(setIsLoggedIn({ isLoggedIn: true }))
+    }
+  }, [isLoading])
 
   //todo: спозицианировать по центру и добавить 1 секунды минимальной задержи перед показом контента!
   if (!isInitialized) {

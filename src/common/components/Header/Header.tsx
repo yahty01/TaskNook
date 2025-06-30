@@ -6,18 +6,34 @@ import { ButtonSwitchTheme } from "common/components"
 import React from "react"
 import { StyledAppBar } from "./Header.styled"
 import LinearProgress from "@mui/material/LinearProgress"
-import { useAppDispatch, useAppSelector } from "common/hooks"
-import { selectStatus } from "app/model/appSelectors"
-import { logoutTC, selectIsLoggedIn } from "../../../features/auth/model/authSlice"
+import { useAppSelector } from "common/hooks"
+import { selectIsLoggedIn, selectStatus, setAppError, setIsLoggedIn } from "app/model/appSlice"
+import { useLogoutMutation } from "../../../features/auth/api/authApi"
+import { ResultCode } from "common/types/enums"
+import { useDispatch } from "react-redux"
+import { AUTH_TOKEN } from "common/constants"
+import { baseApi } from "app/baseApi"
 
 export const Header = () => {
-  const dispatch = useAppDispatch()
+  const [logout] = useLogoutMutation()
+  const dispatch = useDispatch()
+
+  const logoutHandler = () => {
+    logout()
+      .then((res) => {
+        if (res.data?.resultCode === ResultCode.Success) {
+          dispatch(setIsLoggedIn({ isLoggedIn: false }))
+          localStorage.removeItem(AUTH_TOKEN)
+          // dispatch(baseApi.util.resetApiState())
+        }
+      })
+      .then(() => {
+        dispatch(baseApi.util.invalidateTags(["Todolist", "Task"]))
+      })
+  }
 
   const status = useAppSelector(selectStatus)
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
-  const logout = () => {
-    dispatch(logoutTC())
-  }
 
   return (
     <StyledAppBar position={"static"}>
@@ -26,8 +42,14 @@ export const Header = () => {
           <MenuIcon />
         </IconButton>
         <div>
-          {isLoggedIn && <Button onClick={logout}>Logout</Button>}
+          {isLoggedIn && <Button onClick={logoutHandler}>Logout</Button>}
           <Button color="inherit">Faq</Button>
+          <Button color="inherit" onClick={() => dispatch(setAppError({ error: "test error" }))}>
+            add error
+          </Button>{" "}
+          <Button color="inherit" onClick={() => dispatch(setAppError({ error: null }))}>
+            delete error
+          </Button>
           <ButtonSwitchTheme />
         </div>
       </Toolbar>

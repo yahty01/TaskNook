@@ -1,27 +1,20 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Todolist } from "./Todolist/Todolist"
-import { useAppDispatch, useAppSelector } from "common/hooks"
-import { DomainTodolist, fetchTodolistsTC, selectTodolists } from "../../model/todolistsSlice"
 import Grid from "@mui/material/Grid2"
-import { selectIsLoggedIn } from "../../../auth/model/authSlice"
+import { useGetTodolistsQuery } from "../../api/todolistsApi"
+import { TodolistSkeleton } from "./TodolistSkeleton/TodolistSkeleton"
 
 export function Todolists() {
-  const todoLists = useAppSelector(selectTodolists)
-  const dispatch = useAppDispatch()
-  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const { data: todolists, isLoading } = useGetTodolistsQuery()
 
-  useEffect(() => {
-    if (isLoggedIn) dispatch(fetchTodolistsTC())
-  }, [])
+  const viewTodolist = () =>
+    isLoading
+      ? [...Array(6)].map((_, id) => <TodolistSkeleton key={id} />)
+      : todolists?.map((t) => <Todolist key={t.id} todolist={t} />)
 
   return (
-    <Grid container rowSpacing={8} columns={{ xs: 4, sm: 8, md: 12 }} sx={{ padding: "0 60px" }}>
-      {todoLists.map((todolist: DomainTodolist) => (
-        <Grid key={todolist.id} size={{ xs: 2, sm: 4, md: 4 }}>
-          {" "}
-          <Todolist key={todolist.id} todolist={todolist} />
-        </Grid>
-      ))}
+    <Grid gap={4} container rowSpacing={8} columns={{ xs: 4, sm: 8, md: 12 }} sx={{ padding: "0 60px" }}>
+      {viewTodolist()}
     </Grid>
   )
 }

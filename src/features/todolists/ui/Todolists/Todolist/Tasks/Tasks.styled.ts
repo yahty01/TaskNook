@@ -8,7 +8,6 @@ export const CircularContainer = styled.div`
 `
 
 export const Container = styled.div`
-  height: 250px; /* Максимальная высота контейнера */
-  overflow-y: auto; /* Добавляет прокрутку при превышении высоты */
+  min-height: 250px; /* Максимальная высота контейнера */
   transition: max-height 0.3s ease; /* Плавный переход высоты */
 `

@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField"
 import Box from "@mui/material/Box"
 import { getTheme } from "common/lib/theme"
 import { useAppSelector } from "common/hooks"
-import { selectThemeMode } from "app/model/appSelectors"
+import { selectThemeMode } from "app/model/appSlice"
 
 type AddItemFormProps = {
   addItem: (title: string) => void

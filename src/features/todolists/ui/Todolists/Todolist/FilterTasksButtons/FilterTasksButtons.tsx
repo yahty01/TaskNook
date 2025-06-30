@@ -4,23 +4,38 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction"
 import AllOutIcon from "@mui/icons-material/AllOut"
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank"
 import CheckBoxIcon from "@mui/icons-material/CheckBox"
-import { updateTodolistFilter } from "../../../../model/todolistsSlice"
+import { todolistsApi } from "../../../../api/todolistsApi"
 import { useAppDispatch } from "common/hooks"
 
 export type FilterType = "all" | "active" | "completed"
 
-interface FilterButtonProps {
+type Props = {
   id: string
   filter: FilterType
 }
 
-export function FilterTasksButtons({ filter, id }: FilterButtonProps) {
+export function FilterTasksButtons({ filter, id }: Props) {
   const [value, setValue] = useState<FilterType>(filter)
 
   const dispatch = useAppDispatch()
 
-  const handleChange = (event: SyntheticEvent, newValue: FilterType) => {
-    dispatch(updateTodolistFilter({ todolistId: id, filter: newValue }))
+  const handleChange = (_: SyntheticEvent, newValue: FilterType) => {
+    // dispatch(updateTodolistFilter({ todolistId: id, filter: newValue }))
+    dispatch(
+      todolistsApi.util.updateQueryData(
+        // название эндпоинта, в котором нужно обновить кэш
+        "getTodolists",
+        // аргументы для эндпоинта
+        undefined,
+        // `updateRecipe` - коллбэк для обновления закэшированного стейта мутабельным образом
+        (state) => {
+          const todolist = state.find((tl) => tl.id === id)
+          if (todolist) {
+            todolist.filter = newValue
+          }
+        },
+      ),
+    )
     setValue(newValue)
   }
 
