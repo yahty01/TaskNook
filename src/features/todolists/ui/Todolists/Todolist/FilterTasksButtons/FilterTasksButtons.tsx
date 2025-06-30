@@ -28,8 +28,8 @@ export function FilterTasksButtons({ filter, id }: Props) {
         // аргументы для эндпоинта
         undefined,
         // `updateRecipe` - коллбэк для обновления закэшированного стейта мутабельным образом
-        (draft) => {
-          const todolist = draft.find((tl) => tl.id === id)
+        (state) => {
+          const todolist = state.find((tl) => tl.id === id)
           if (todolist) {
             todolist.filter = newValue
           }

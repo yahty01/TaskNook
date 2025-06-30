@@ -111,7 +111,6 @@ export const todolistData: DomainTodolist = {
   order: -1,
   filter: "all",
   entityStatus: RequestStatus.idle,
-  tasksLoaded: RequestStatus.idle,
 }
 
 export const todolistsData: DomainTodolist[] = [
@@ -122,7 +121,6 @@ export const todolistsData: DomainTodolist[] = [
     order: -1,
     filter: "all",
     entityStatus: RequestStatus.idle,
-    tasksLoaded: RequestStatus.idle,
   },
   {
     id: "v2",
@@ -131,6 +129,5 @@ export const todolistsData: DomainTodolist[] = [
     order: -1,
     filter: "all",
     entityStatus: RequestStatus.idle,
-    tasksLoaded: RequestStatus.idle,
   },
 ]

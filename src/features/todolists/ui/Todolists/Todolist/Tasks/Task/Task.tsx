@@ -13,9 +13,10 @@ type TaskProps = {
   task: DomainTask
   todolistId: string
   todoEntityStatus: RequestStatus
+  page: number
 }
 
-export function Task({ todolistId, task, todoEntityStatus }: TaskProps) {
+export function Task({ todolistId, task, todoEntityStatus, page }: TaskProps) {
   const buildUpdatedModel = (updates: Partial<UpdateTaskModel>): UpdateTaskModel => ({
     title: task.title,
     status: task.status,
@@ -35,13 +36,13 @@ export function Task({ todolistId, task, todoEntityStatus }: TaskProps) {
 
   const changeTaskTitle = (title: string) => {
     const model = buildUpdatedModel({ title })
-    updateTask({ todolistId, taskId: task.id, model })
+    updateTask({ todolistId, taskId: task.id, model, page })
   }
 
   const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
     const newStatus = e.currentTarget.checked ? TaskStatus.Complete : TaskStatus.New
     const model = buildUpdatedModel({ status: newStatus })
-    updateTask({ todolistId, taskId: task.id, model })
+    updateTask({ todolistId, taskId: task.id, model, page })
   }
 
   const isComplete = task.status === TaskStatus.Complete

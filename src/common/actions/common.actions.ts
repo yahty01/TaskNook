@@ -11,7 +11,6 @@ export type Tasks = {
 export type DomainTodolist = TodolistResponse & {
   filter: FilterValue
   entityStatus: RequestStatus
-  tasksLoaded: RequestStatus
 }
 
 export type ClearTodolistsData = {

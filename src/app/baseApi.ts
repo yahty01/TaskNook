@@ -5,6 +5,12 @@ import { handleError } from "common/utils"
 export const baseApi = createApi({
   reducerPath: "baseTodolistApi",
   tagTypes: ["Todolist", "Task"],
+  // Сохраняет кэшированные данные в течение 5 секунд после того, как компонент отписался
+  keepUnusedDataFor: 14400, // 4 hours
+  // // Автоматически перезапрашивает данные при возврате фокуса на окно (например, после переключения вкладки)
+  // refetchOnFocus: false,
+  // // Автоматически перезапрашивает данные при восстановлении соединения с интернетом
+  // refetchOnReconnect: false,
   baseQuery: async (args, api, extraOptions) => {
     const result = await fetchBaseQuery({
       baseUrl: process.env.REACT_APP_BASE_URL,

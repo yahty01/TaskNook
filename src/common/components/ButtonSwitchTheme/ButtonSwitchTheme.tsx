@@ -11,7 +11,6 @@ export const ButtonSwitchTheme = () => {
   const theme = getTheme(themeMode)
 
   const toggleColorMode = () => {
-    debugger
     dispatch(changeTheme({ themeMode }))
   }
 

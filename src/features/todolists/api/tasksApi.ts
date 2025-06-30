@@ -38,7 +38,7 @@ export const tasksApi = baseApi.injectEndpoints({
     }),
     updateTask: build.mutation<
       BaseResponse<{ item: ResponseTask }>,
-      { todolistId: string; taskId: string; model: UpdateTaskDomainModel }
+      { todolistId: string; taskId: string; model: UpdateTaskDomainModel; page: number }
     >({
       query(payload) {
         const { todolistId, taskId, model } = payload
@@ -49,6 +49,26 @@ export const tasksApi = baseApi.injectEndpoints({
         }
       },
       invalidatesTags: (_result, _error, { todolistId }, _meta) => [{ type: "Task", id: todolistId }],
+      onQueryStarted: async (payload, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          tasksApi.util.updateQueryData(
+            "getTasks",
+            { todolistId: payload.todolistId, params: { page: payload.page } },
+            (state) => {
+              const tasks = state.items
+              const index = tasks.findIndex((el) => el.id === payload.taskId)
+              if (index !== -1) {
+                tasks[index] = { ...tasks[index], ...payload.model }
+              }
+            },
+          ),
+        )
+        try {
+          await queryFulfilled
+        } catch (error) {
+          patchResult.undo()
+        }
+      },
     }),
   }),
 })
