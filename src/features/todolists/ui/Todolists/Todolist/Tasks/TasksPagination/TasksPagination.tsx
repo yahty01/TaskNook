@@ -1,8 +1,8 @@
 import Pagination from "@mui/material/Pagination"
 import Typography from "@mui/material/Typography"
 import { ChangeEvent } from "react"
-import styles from "./TasksPagination.module.css"
 import { PAGE_SIZE } from "common/constants"
+import styled from "styled-components"
 
 type Props = {
   totalCount: number
@@ -17,17 +17,28 @@ export const TasksPagination = ({ totalCount, page, setPage }: Props) => {
 
   return (
     <>
-      <Pagination
+      <StyledPagination
         count={Math.ceil(totalCount / PAGE_SIZE)}
         page={page}
         onChange={changePage}
         shape="rounded"
         color="primary"
-        className={styles.pagination}
       />
-      <div className={styles.totalCount}>
+      <StyledTotalCount>
         <Typography variant="caption">Total: {totalCount}</Typography>
-      </div>
+      </StyledTotalCount>
     </>
   )
 }
+
+const StyledPagination = styled(Pagination)`
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+`
+
+const StyledTotalCount = styled.div`
+  display: flex;
+  justify-content: right;
+  margin-right: 16px;
+`
