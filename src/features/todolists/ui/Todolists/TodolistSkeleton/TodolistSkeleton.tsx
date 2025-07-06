@@ -1,8 +1,7 @@
 import Box from "@mui/material/Box"
-import Paper from "@mui/material/Paper"
 import Skeleton from "@mui/material/Skeleton"
 import { containerSx } from "common/styles"
-import styled from "styled-components"
+import { CreateItemFormWrapper, StyledPaper, TasksWrapper, TitleWrapper } from "./TodolistSkeleton.styled"
 
 export function TodolistSkeleton() {
   return (
@@ -36,26 +35,3 @@ export function TodolistSkeleton() {
     </StyledPaper>
   )
 }
-
-const StyledPaper = styled(Paper)`
-  width: 305px;
-  padding: 10px 20px;
-`
-
-const CommonWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-
-const TitleWrapper = styled(CommonWrapper)`
-  gap: 15px;
-  align-items: center;
-`
-
-const CreateItemFormWrapper = styled(CommonWrapper)`
-  align-items: center;
-`
-
-const TasksWrapper = styled(CommonWrapper)`
-  gap: 15px;
-`
