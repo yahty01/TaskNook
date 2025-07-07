@@ -7,6 +7,7 @@ import { Task } from "./Task/Task"
 import { useState } from "react"
 import { TasksPagination } from "./TasksPagination/TasksPagination"
 import { TasksSkeleton } from "./TasksSkeleton/TasksSkeleton"
+import { PAGE_SIZE } from "common/constants"
 
 type Props = {
   todolist: DomainTodolist
@@ -45,7 +46,7 @@ export function Tasks({ todolist }: Props) {
 
   if (data?.totalCount === 0) {
     content = <p>Задачи отсутствуют!</p>
-  } else {
+  } else if (data && data?.totalCount <= PAGE_SIZE) {
     content = (
       <List>
         {filteredTasks?.map((task) => (
@@ -53,12 +54,18 @@ export function Tasks({ todolist }: Props) {
         ))}
       </List>
     )
+  } else {
+    content = (
+      <>
+        <List>
+          {filteredTasks?.map((task) => (
+            <Task key={task.id} task={task} todolistId={id} todoEntityStatus={todolist.entityStatus} page={page} />
+          ))}
+        </List>
+        <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />
+      </>
+    )
   }
 
-  return (
-    <Container>
-      {content}
-      <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />
-    </Container>
-  )
+  return <Container>{content}</Container>
 }

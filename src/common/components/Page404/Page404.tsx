@@ -1,7 +1,7 @@
-import styled from "styled-components"
 import { Path } from "common/routing"
 import Button from "@mui/material/Button"
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn"
+import { SubTitle, Title } from "common/components/Page404/Page404.styled"
 
 export const Page404 = () => {
   return (
@@ -14,16 +14,3 @@ export const Page404 = () => {
     </>
   )
 }
-
-const Title = styled.h2`
-  margin: 0;
-  text-align: center;
-  font-size: 250px;
-`
-
-const SubTitle = styled.h2`
-  text-align: center;
-  font-size: 50px;
-  margin: 0;
-  text-transform: uppercase;
-`

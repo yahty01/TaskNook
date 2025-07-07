@@ -1,26 +1,11 @@
 import { createGlobalStyle } from "styled-components"
 
-interface GlobalStyleProps {
-  theme: {
-    palette: {
-      background: {
-        default: string
-        paper: string
-      }
-      text: {
-        primary: string
-        secondary: string
-      }
-    }
-  }
-}
-
-export const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
+export const GlobalStyle = createGlobalStyle`
   *, *::before, *::after {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: "Fira Code", monospace;
+    font-family: "Fira Code", monospace;ы
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;

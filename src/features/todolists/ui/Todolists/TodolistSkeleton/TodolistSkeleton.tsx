@@ -1,28 +1,27 @@
 import Box from "@mui/material/Box"
-import Paper from "@mui/material/Paper"
 import Skeleton from "@mui/material/Skeleton"
-import styles from "./TodolistSkeleton.module.css"
 import { containerSx } from "common/styles"
+import { CreateItemFormWrapper, StyledPaper, TasksWrapper, TitleWrapper } from "./TodolistSkeleton.styled"
 
 export function TodolistSkeleton() {
   return (
-    <Paper className={styles.container}>
-      <div className={styles.title}>
+    <StyledPaper>
+      <TitleWrapper>
         <Skeleton width={150} height={50} />
         <Skeleton width={20} height={40} />
-      </div>
-      <div className={styles.createItemForm}>
+      </TitleWrapper>
+      <CreateItemFormWrapper>
         <Skeleton width={230} height={60} />
         <Skeleton width={20} height={40} />
-      </div>
+      </CreateItemFormWrapper>
       {Array(4)
         .fill(null)
         .map((_, id) => (
           <Box key={id} sx={containerSx}>
-            <div className={styles.tasks}>
+            <TasksWrapper>
               <Skeleton width={20} height={40} />
               <Skeleton width={150} height={40} />
-            </div>
+            </TasksWrapper>
             <Skeleton width={20} height={40} />
           </Box>
         ))}
@@ -33,6 +32,6 @@ export function TodolistSkeleton() {
             <Skeleton key={id} width={80} height={60} />
           ))}
       </Box>
-    </Paper>
+    </StyledPaper>
   )
 }
