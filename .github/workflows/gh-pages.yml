@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]    # триггер при каждом пуше в main
+  workflow_dispatch:    # + возможность запустить вручную из вкладки Actions
+
+permissions:
+  contents: write       # нужно, чтобы экшн мог коммитить в ветку gh-pages
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"        # не допускаем параллельных публикаций
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn          # смените на npm, pnpm и т.д.
+
+      - run: yarn install --frozen-lockfile
+      - run: yarn build        # или npm run build
+
+      - uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./dist         # если CRA — ./build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
