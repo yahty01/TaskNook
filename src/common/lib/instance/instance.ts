@@ -1,9 +1,9 @@
 import axios from "axios"
 //Позволяет упаковать baseUrl и headers +много чего еще
 export const instance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: process.env.VITE_BASE_URL,
   headers: {
-    "API-KEY": process.env.REACT_APP_API_KEY,
+    "API-KEY": process.env.VITE_API_KEY,
   },
 })
 

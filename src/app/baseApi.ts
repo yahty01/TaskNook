@@ -13,9 +13,9 @@ export const baseApi = createApi({
   // refetchOnReconnect: false,
   baseQuery: async (args, api, extraOptions) => {
     const result = await fetchBaseQuery({
-      baseUrl: process.env.REACT_APP_BASE_URL,
+      baseUrl: import.meta.env.VITE_BASE_URL,
       prepareHeaders: (headers) => {
-        headers.set("API-KEY", process.env.REACT_APP_API_KEY || "api-key-not-found")
+        headers.set("API-KEY", import.meta.env.VITE_API_KEY || "api-key-not-found")
         headers.set("Authorization", `Bearer ${localStorage.getItem(AUTH_TOKEN)}`)
       },
     })(args, api, extraOptions)
